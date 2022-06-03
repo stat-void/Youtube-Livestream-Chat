@@ -35,9 +35,8 @@ https://www.youtube.com/watch?v={VIDEO_ID}. Copy the "VIDEO_ID" area from the ac
 
 As of right now, this project is still in pre-development. An MVP of this can be ran by opening it through Unity and creating a build, but there are some convenience functions still missing before I would consider making the first public build available. Some of these examples include:
 
-- Being able to save the API Key between sessions.
 - Modifiable delay before checking for any new messages (currently only between 3 second intervals.)
-- Restoring screen size instead of starting fullscreen every time.
+- Restoring window screen size to what it was before entering fullscreen, when exiting fullscreen.
 - Having all UI elements be somewhat normally viewable whenever the screen is resized.
 - etc...
 
