@@ -21,7 +21,7 @@ public class ChatItem : AListItem
         transform.SetParent(active);
 
         // Set Timestamp
-        Timestamp.text = node.TimeStamp.ToString("HH:mm:ss");
+        Timestamp.text = node.Timestamp.ToString("HH:mm:ss");
 
         // Prepare user color
         string userColor;

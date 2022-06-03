@@ -1,62 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using Void.YoutubeAPI;
-using Void.YoutubeAPI.LiveStreamChat.Messages;
+
 
 public class MainPresenter : MonoBehaviour
 {
-    // All of this could be separatable as the "startup screen"
-    [SerializeField] protected GameObject OpeningScreen;
-    [SerializeField] protected TMP_InputField API_InputField;
-    [SerializeField] protected TMP_InputField VideoID_InputField;
-    [SerializeField] protected TMP_Text FeedbackField;
-    [SerializeField] protected TMP_Text FeedbackPlaceHolder;
-    [SerializeField] protected Button ConnectionButton;
-
-    [SerializeField] protected YoutubeLiveChatMessages Chatter;
-    [SerializeField] protected YoutubeAPITimer YoutubeTimer;
+    [SerializeField] protected StartupDisplayPresenter StartPresenter;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
-        //PlayerSettings.resizableWindow = true;
+
+        //TODO: Determine fullscreen and window size status based on states when it was closed down.
 
         PreloadViews();
-
-        ConnectionButton.onClick.AddListener(AttemptInit);
-        YoutubeLiveChatMessages.Feedback += OnFeedback;
     }
 
-    //TODO: You could also make this a combined startup/settings screen?
-    private async void AttemptInit()
+    private void Start()
     {
-        Chatter.SetAPIKey(API_InputField.text);
-
-        if (!await Chatter.GetChatIDAsync(VideoID_InputField.text))
-            return;
-
-        var res = await Chatter.InitializeChatAsync();
-
-        if (res)
-        {
-            YoutubeTimer.StartTimer();
-
-            // TODO: Temporary, remove this once the general system is in place
-            ChatDisplayPresenter presenter = FindObjectOfType<ChatDisplayPresenter>();
-            presenter.Open();
-
-            YoutubeLiveChatMessages.Feedback -= OnFeedback;
-            OpeningScreen.SetActive(false);
-        }
-    }
-
-    private void OnFeedback(string msg)
-    {
-        FeedbackField.text = msg;
-        FeedbackPlaceHolder.gameObject.SetActive(false);
+        StartPresenter.Open();
     }
 
     private void PreloadViews()
@@ -71,9 +31,7 @@ public class MainPresenter : MonoBehaviour
     Update Unity LTS whenever possible until those random crashes stop.
 
     Check out the IEnumerator for chat display in build
-        Part of an issue with async is the lack of a WaitForEndOfFrame option, but even with this, the editor build can throw
-            some of the errors I'm trying to avoid when losing focus. Check if full build does that?
-        ChatDisplayPresenter - line 156, ArgumentOutOfRangeException
+        There was one extremely rare case of a timestamp that could not be parsed.
 
 
     API Key saving (alongside other data like restoring Query state and resetting that)

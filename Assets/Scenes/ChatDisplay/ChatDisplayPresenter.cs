@@ -55,6 +55,8 @@ public class ChatDisplayPresenter : AContentPresenter
 
         _open = true;
         ChatMessageListener.ChatMessages += OnNewMessages;
+
+        _apiTimer.StartTimer();
     }
 
     
@@ -72,6 +74,7 @@ public class ChatDisplayPresenter : AContentPresenter
             item.Unbind(PoolContent);
         }
 
+        _apiTimer.PauseTimer();
         BaseCanvas.gameObject.SetActive(false);
     }
 
@@ -102,7 +105,7 @@ public class ChatDisplayPresenter : AContentPresenter
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
             if (ChatMessageListener.WaitMessages && i < newMessages.Count - 1)
             {
-                float waitTime = (float)newMessages[i].TimeStamp.Subtract(newMessages[i + 1].TimeStamp).TotalSeconds;
+                float waitTime = (float)newMessages[i].Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
 
                 if (totalTimeWaitedSeconds + waitTime < _apiTimer.APIRequestDelay - 0.5f)
                 {

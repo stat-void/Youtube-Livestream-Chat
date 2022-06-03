@@ -39,13 +39,6 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             YoutubeAPITimer.OnAPIMessagesRequested += GetChatMessages;
         }
 
-
-        //TODO: Put this somewhere else?
-        public void SetAPIKey(string key)
-        {
-            _quotaManager.APIKey = key;
-        }
-
         /// <summary>
         /// Get the livestream Chat ID based on the given Video ID.
         /// If successful, Chat ID is stored locally in this class.

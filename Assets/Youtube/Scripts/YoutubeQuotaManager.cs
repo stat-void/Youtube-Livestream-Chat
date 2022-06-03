@@ -14,7 +14,7 @@ namespace Void.YoutubeAPI
         internal string APIKey
         {
             get { return _apiKey; }
-            set => _apiKey = value;
+            private set => _apiKey = value;
         }
 
         public int CurrentQuota { get; private set; }
@@ -33,6 +33,26 @@ namespace Void.YoutubeAPI
             string quitTime = PlayerPrefs.GetString("YT_QuitTime", "");
             //TODO: If quitTime exists, have additional checks to verify if the quota reset time is reached.
 
+        }
+
+        public void SetAPIKey(string key, bool save)
+        {
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                if (!string.IsNullOrWhiteSpace(_apiKey))
+                {
+                    CurrentQuota = 0;
+                    OnQuotaUpdate?.Invoke(CurrentQuota);
+                }
+
+                _apiKey = key;
+            }
+
+            if (save && !string.IsNullOrWhiteSpace(_apiKey))
+                SaveAPIKey(_apiKey);
+
+            if (!save)
+                PlayerPrefs.DeleteKey("YT_APIKey");
         }
 
         

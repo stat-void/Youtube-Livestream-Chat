@@ -13,7 +13,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         public string ChannelID;
         public string Username;
         public string ProfileImageURL;
-        public DateTime TimeStamp;
+        public DateTime Timestamp;
 
         /// <summary> User display message or relevant event notification. </summary>
         public string Message = string.Empty;
@@ -30,7 +30,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
         public YoutubeChatMessage(JSONNode item, DateTime time)
         {
-            TimeStamp = time;
+            Timestamp = time;
             Initialize(item);
         }
 
@@ -57,8 +57,8 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             AuthorDetails.IsModerator   = item["authorDetails"]["isChatModerator"].AsBool;
 
             // Message timestamp
-            if (TimeStamp == null)
-                TimeStamp = DateTime.ParseExact(item["snippet"]["publishedAt"].Value.Substring(0, 22), "yyyy-MM-ddTHH:mm:ss.FF", System.Globalization.CultureInfo.InvariantCulture);
+            if (Timestamp == null)
+                Timestamp = DateTime.ParseExact(item["snippet"]["publishedAt"].Value.Substring(0, 22), "yyyy-MM-ddTHH:mm:ss.FF", System.Globalization.CultureInfo.InvariantCulture);
 
 
             // Initialization of type-specific fields:
