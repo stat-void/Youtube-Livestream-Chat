@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -10,68 +13,83 @@ namespace Void.YoutubeAPI
     {
 
         public event Action<int> OnQuotaUpdate;
-
-        internal string APIKey
-        {
-            get { return _apiKey; }
-            private set => _apiKey = value;
-        }
-
-        public int CurrentQuota { get; private set; }
-        private int _maxQuota;
-        private string _apiKey;
-
         
+        public int CurrentQuota { get; private set; }
+        public int MaxQuota     { get; private set; }
+        internal string APIKey  { get; private set; }
+
+        private Timer _newDayTimer;
 
 
         private void Awake()
         {
             CurrentQuota = PlayerPrefs.GetInt("YT_CurrentQuota", 0);
-            _maxQuota = PlayerPrefs.GetInt("YT_MaxQuota", 10000);
-            _apiKey = PlayerPrefs.GetString("YT_APIKey", "");
+            MaxQuota = PlayerPrefs.GetInt("YT_MaxQuota", 10000);
+            APIKey = PlayerPrefs.GetString("YT_APIKey", "");
 
-            string quitTime = PlayerPrefs.GetString("YT_QuitTime", "");
-            //TODO: If quitTime exists, have additional checks to verify if the quota reset time is reached.
+            // Check if PST midnight has arrived from quit time (Google quota reset)
+            VerifyNewDayPST(PlayerPrefs.GetString("YT_QuitTime", ""));
 
+            // Start internal timer to also reset quota during runtime when PST midnight arrives.
+            StartQuotaResetTimer();
         }
 
+       /*
+       -------------------------
+       -------------------------
+       API key related functions
+       -------------------------
+       -------------------------
+       */
+
+        /// <summary> Set the API Key used for fetching messages. </summary>
+        /// <param name="key"> The string received from Credentials in the Google Cloud Service. </param>
+        /// <param name="save"> Should this key be remembered for future runs? </param>
         public void SetAPIKey(string key, bool save)
         {
             if (!string.IsNullOrWhiteSpace(key))
             {
-                if (!string.IsNullOrWhiteSpace(_apiKey))
-                {
-                    CurrentQuota = 0;
-                    OnQuotaUpdate?.Invoke(CurrentQuota);
-                }
+                if (!string.IsNullOrWhiteSpace(APIKey))
+                    ResetQuota();
 
-                _apiKey = key;
+                APIKey = key;
             }
 
-            if (save && !string.IsNullOrWhiteSpace(_apiKey))
-                SaveAPIKey(_apiKey);
+            if (save && !string.IsNullOrWhiteSpace(APIKey))
+                SaveAPIKey(APIKey);
 
             if (!save)
                 PlayerPrefs.DeleteKey("YT_APIKey");
         }
 
+        /// <summary> Store the currently used API key to... somewhere (whereever PlayerPrefs data is stored on the currently used system) </summary>
+        /// <param name="key"> The API key value to recall. </param>
+        private void SaveAPIKey(string key) =>
+            PlayerPrefs.SetString("YT_APIKey", key);
         
-        //TODO:
+
+        /// <summary> Remove all currently saved PlayerPrefs information related to the stored API key. </summary>
+        public void DeleteAPIKeyInfo()
+        {
+            PlayerPrefs.DeleteKey("YT_APIKey");
+            PlayerPrefs.DeleteKey("YT_CurrentQuota");
+            PlayerPrefs.DeleteKey("YT_MaxQuota");
+        }
+
+
         /*
-
-        For this part, 
-        In some way keep track on what the latest time requested,
-        and possibly have a way to reset local quota usage when UTC+0 07:00 reached? But only if saved
-
-        Quota should be a thing that some UI visual should be able to use.
-
+        -----------------------
+        -----------------------
+        Quota related functions
+        -----------------------
+        -----------------------
         */
 
         internal void AddQuota(int change)
         {
             if (change < 0)
             {
-                Debug.LogWarning("Quotas can't go smaller when they're used.");
+                Debug.LogWarning("AddQuota - Quotas can't go smaller when they're used.");
                 return;
             }
 
@@ -79,29 +97,85 @@ namespace Void.YoutubeAPI
             OnQuotaUpdate?.Invoke(CurrentQuota);
         }
 
-        /// <summary> Store the currently used API key to... somewhere (where PlayerPrefs data is stored on the currently used system) </summary>
-        /// <param name="key"> The API key value to recall. </param>
-        private void SaveAPIKey(string key)
+        private void ResetQuota()
         {
-            //TODO: Check if there is a more secure way to keep API keys stored.
-            PlayerPrefs.SetString("YT_APIKey", key);
+            CurrentQuota = 0;
+            OnQuotaUpdate?.Invoke(CurrentQuota);
         }
 
-        /// <summary> Remove all currently saved PlayerPrefs information. Should not affect  </summary>
-        public void DeleteAllInfo()
+        internal void SetMaxQuota(int value)
         {
-            PlayerPrefs.DeleteAll();
+            MaxQuota = value;
         }
 
+
+        /*
+        ------------------------------------------
+        ------------------------------------------
+        Quota internal resetting related functions
+        ------------------------------------------
+        ------------------------------------------
+        */
+
+        private void VerifyNewDayPST(string quitTimeUTC)
+        {
+            if (!string.IsNullOrWhiteSpace(quitTimeUTC))
+            {
+                // Quit time was saved as UTC, so is also recovered in it.
+                DateTime quitDateUTC = DateTime.ParseExact(quitTimeUTC, "yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture);
+                DateTime quitDatePST = quitDateUTC.AddHours(-8);
+                DateTime nowDatePST = DateTime.UtcNow.AddHours(-8);
+
+                if (nowDatePST.Date != quitDatePST.Date)
+                    ResetQuota();
+            }
+        }
+
+        private void RuntimeNewDayPST(object state) =>
+            ResetQuota();
+        
+
+        private void StartQuotaResetTimer()
+        {
+            if (_newDayTimer != null)
+                DisposeQuotaResetTimer();
+
+            DateTime nowDatePST = DateTime.UtcNow.AddHours(-8);
+            DateTime nextDatePST = nowDatePST.Date.AddDays(1);
+            TimeSpan timeToNewDayPST = nextDatePST.Subtract(nowDatePST);
+
+            _newDayTimer = new Timer(RuntimeNewDayPST, null, timeToNewDayPST, TimeSpan.FromDays(1));
+        }
+
+        private void DisposeQuotaResetTimer()
+        {
+            if (_newDayTimer != null)
+            {
+                _newDayTimer.Dispose();
+                _newDayTimer = null;
+            }
+        }
+
+
+        /*
+        ------------------------
+        ------------------------
+        Post-application cleanup
+        ------------------------
+        ------------------------
+        */
 
         private void OnApplicationQuit()
         {
             if (!string.IsNullOrWhiteSpace(PlayerPrefs.GetString("YT_APIKey", "")))
             {
                 PlayerPrefs.SetInt("YT_CurrentQuota", CurrentQuota);
-                PlayerPrefs.SetInt("YT_MaxQuota", _maxQuota);
-                PlayerPrefs.SetString("YT_QuitTime", DateTime.Now.ToString());
+                PlayerPrefs.SetInt("YT_MaxQuota", MaxQuota);
             }
+
+            PlayerPrefs.SetString("YT_QuitTime", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture));
+
+            DisposeQuotaResetTimer();
         }
     }
 }
