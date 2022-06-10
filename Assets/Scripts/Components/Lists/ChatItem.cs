@@ -57,13 +57,13 @@ public class ChatItem : AListItem
     
     public override void UpdateFit()
     {
-        RectTransform.sizeDelta = new Vector2(RectTransform.sizeDelta.x, UserData.preferredHeight + 10);
-        //Separator.sizeDelta = new Vector2(Separator.sizeDelta.x, UserData.preferredHeight/4);
+        if (RectTransform)
+            RectTransform.sizeDelta = new Vector2(RectTransform.sizeDelta.x, UserData.preferredHeight + 10);
     }
 
     public override float GetHeight()
     {
-        if (RectTransform != null)
+        if (RectTransform)
             return RectTransform.sizeDelta.y;
         else
             return 0;

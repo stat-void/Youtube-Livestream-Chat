@@ -4,20 +4,34 @@ using UnityEngine.UI;
 using Void.YoutubeAPI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
 
-public class StartupDisplayPresenter : AContentPresenter
+public class StartupDisplayPresenter : AModePresenter
 {
+    [SerializeField] protected ModeManagerPresenter ModeManager;
+
+    [Header("Inputs")]
     [SerializeField] protected TMP_InputField API_InputField;
     [SerializeField] protected TMP_InputField VideoID_InputField;
     [SerializeField] protected Toggle SaveAPIKeyToggle;
-    
-
-    [SerializeField] protected TMP_Text FeedbackField;
-    [SerializeField] protected TMP_Text FeedbackPlaceHolder;
+    [SerializeField] protected Toggle AutostartChatToggle;
     [SerializeField] protected Button ConnectionButton;
 
+    [Header("Feedback")]
+    [SerializeField] protected TMP_Text FeedbackField;
+    [SerializeField] protected TMP_Text FeedbackPlaceHolder;
+
+    [Header("Youtube Chat Connectors")]
     [SerializeField] protected YoutubeLiveChatMessages Chatter;
     [SerializeField] protected YoutubeQuotaManager QuotaManager;
-    
+
+    public override string GetName()
+    {
+        return "Startup Display Presenter";
+    }
+
+    public override string GetDescription()
+    {
+        return "";
+    }
 
     public override void Open()
     {
@@ -28,7 +42,7 @@ public class StartupDisplayPresenter : AContentPresenter
 
         if (!string.IsNullOrWhiteSpace(QuotaManager.APIKey))
         {
-            API_InputField.placeholder.GetComponent<TMP_Text>().text = "Saved API Key found. Write new to override (Hidden)";
+            API_InputField.placeholder.GetComponent<TMP_Text>().text = "API Key found. Write new if you want to override (Hidden)";
         }
     }
 
@@ -53,9 +67,8 @@ public class StartupDisplayPresenter : AContentPresenter
 
         if (res)
         {
-            // TODO: Temporary, remove this once the general system is in place
-            ChatDisplayPresenter presenter = FindObjectOfType<ChatDisplayPresenter>();
-            presenter.Open();
+            if (AutostartChatToggle.isOn)
+                ModeManager.OpenByName("Chat");
 
             Close();
         }

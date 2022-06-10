@@ -9,8 +9,6 @@ public class MainPresenter : MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        //TODO: Determine fullscreen and window size status based on states when it was closed down.
-
         PreloadViews();
     }
 
@@ -21,24 +19,16 @@ public class MainPresenter : MonoBehaviour
 
     private void PreloadViews()
     {
-        ViewSystem.Open("ChatDisplay/ChatDisplay");
+        ViewSystem.Open("ModeSelector/ModeSelector");           // Scene that displays all possible "modes" in a list that the user can pick from.
+        ViewSystem.Open("ModeScenes/ChatDisplay/ChatDisplay");  // Generic chat displayer
     }
 
 
     /*
     TODO List
 
-    Update Unity LTS whenever possible until those random crashes stop.
-
     Check out the IEnumerator for chat display in build
         There was one extremely rare case of a timestamp that could not be parsed.
-
-
-    API Key saving (alongside other data like restoring Query state and resetting that)
-        To make this entire app far less annoying to start using after the first session
-        Just make sure to add options to permanently delete the key as well (Settings),
-            but for now, having a checkmark next to it should be enough?
-
 
     Do I need a disclaimer for API Key usage guidelines?
         Youtube mentioned it somewhere, but where should I?
@@ -58,15 +48,19 @@ public class MainPresenter : MonoBehaviour
         Has a general "Start/Open" that MainPresenter will call once ready. From there,
             ChatDisplayPresenter will be opened up as the first submenu.
 
+    Max Quota Warning
+        When the chat system is 1000 points away from reaching the limit, the quota should become yellow?
+        Going over the limit turns it to red. This way, there is visual feedback.
+
 
     Settings screen
         Modifiable duration value, with the option to pick the "recommended" dynamic wait time from Youtube as well
         Options to delete saved data
+        Options to delete the API Key
 
 
     Resizing
-        Fix some of the elements with janky resizing so you can enable freeform resizing. (mainly query panel)
-        Resized value is remembered to recall into later. (This class, Awake)
+        Fix some of the elements with janky resizing so freeform resizing can be smaller width-wise without overlap2. (mainly query panel)
 
 
     Text
