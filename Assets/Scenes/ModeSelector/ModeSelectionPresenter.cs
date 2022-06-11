@@ -28,6 +28,7 @@ public class ModeSelectionPresenter : MonoBehaviour
     {
         _modeManager = FindObjectOfType<ModeManagerPresenter>();
         _modeManager.AddModeButton.onClick.AddListener(Open);
+        _modeManager.CloseModeButton.onClick.AddListener(Close);
 
         BaseCanvas.gameObject.SetActive(false);
 
@@ -61,8 +62,6 @@ public class ModeSelectionPresenter : MonoBehaviour
 
     private void Close()
     {
-
-
         BaseCanvas.gameObject.SetActive(false);
         _open = false;
     }

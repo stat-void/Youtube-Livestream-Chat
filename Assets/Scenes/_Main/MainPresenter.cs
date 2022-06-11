@@ -60,7 +60,7 @@ public class MainPresenter : MonoBehaviour
 
 
     Resizing
-        Fix some of the elements with janky resizing so freeform resizing can be smaller width-wise without overlap2. (mainly query panel)
+        Fix some of the elements with janky resizing so freeform resizing can be smaller width-wise without overlap. (mainly query panel)
 
 
     Text

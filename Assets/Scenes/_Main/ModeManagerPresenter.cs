@@ -10,6 +10,7 @@ public class ModeManagerPresenter : MonoBehaviour
 
     [Header("View specific functions")]
     [SerializeField] public Button AddModeButton;
+    [SerializeField] public Button CloseModeButton;
 
     private Dictionary<string, AModePresenter> _modes = new();
     private AModePresenter _currentMode = null;
@@ -18,6 +19,9 @@ public class ModeManagerPresenter : MonoBehaviour
     {
         AModePresenter.OnLoaded += OnNewModeAdded;
         SelectableModeItem.OnClick += OpenDirect;
+
+        AddModeButton.onClick.AddListener(AddButtonPressed);
+        CloseModeButton.onClick.AddListener(CloseButtonPressed);
     }
 
     private void OnNewModeAdded(AModePresenter presenter)
@@ -45,6 +49,19 @@ public class ModeManagerPresenter : MonoBehaviour
         mode.Open();
 
         //TODO: Check if this mode is already added as a tab and if not, do so.
+    }
+
+
+    private void AddButtonPressed()
+    {
+        AddModeButton.gameObject.SetActive(false);
+        CloseModeButton.gameObject.SetActive(true);
+    }
+
+    private void CloseButtonPressed()
+    {
+        AddModeButton.gameObject.SetActive(true);
+        CloseModeButton.gameObject.SetActive(false);
     }
 
     public List<AModePresenter> GetAllModes()

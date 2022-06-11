@@ -22,6 +22,7 @@ public class ChatDisplayPresenter : AModePresenter
 
     private bool _open = false;
     private IEnumerator _currentDisplay;
+    private HashSet<IEnumerator> _disposables = new();
 
     private void Awake()
     {
@@ -90,14 +91,13 @@ public class ChatDisplayPresenter : AModePresenter
 
         if (_currentDisplay != null)
         {
-            StopCoroutine(_currentDisplay);
+            _disposables.Add(_currentDisplay);
             _currentDisplay = null;
         }  
 
         _apiTimer.PauseTimer();
         BaseCanvas.gameObject.SetActive(false);
     }
-
 
     private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
     {
@@ -119,6 +119,7 @@ public class ChatDisplayPresenter : AModePresenter
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)
     {
+        IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
@@ -132,6 +133,13 @@ public class ChatDisplayPresenter : AModePresenter
                 {
                     totalTimeWaitedSeconds += waitTime;
                     yield return new WaitForSeconds(waitTime);
+
+                    // Verify if this view was closed and stop if needed.
+                    if (_disposables.Contains(thisCoroutine))
+                    {
+                        _disposables.Remove(thisCoroutine);
+                        yield break;
+                    }
                 }
             }
 
