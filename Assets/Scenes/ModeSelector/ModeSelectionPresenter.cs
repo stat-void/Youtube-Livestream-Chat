@@ -37,9 +37,6 @@ public class ModeSelectionPresenter : MonoBehaviour
         ScreenResizeListener.OnResize += OnScreenResize;
     }
 
-    
-    
-
     private void Open()
     {
         // First time Scrollbar initialization
@@ -69,8 +66,12 @@ public class ModeSelectionPresenter : MonoBehaviour
     private void OnChoiceHovered(string desc) =>
         DescriptorText.text = desc;
 
-    private void OnChoiceClicked(AModePresenter obj) =>
+    private void OnChoiceClicked(AModePresenter obj)
+    {
+        _modeManager.CloseButtonPressed();
         Close();
+    }
+        
 
 
     private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)

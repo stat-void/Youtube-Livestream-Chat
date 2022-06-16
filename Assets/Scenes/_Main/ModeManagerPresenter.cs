@@ -7,18 +7,29 @@ using UnityEngine.UI;
 public class ModeManagerPresenter : MonoBehaviour
 {
     [SerializeField] protected GameObject ComponentPanel;
+    [SerializeField] protected Transform ActiveTabs;
+    [SerializeField] protected Transform TabPool;
+    [SerializeField] protected TabItem TabPrefab;
 
     [Header("View specific functions")]
-    [SerializeField] public Button AddModeButton;
-    [SerializeField] public Button CloseModeButton;
+    public Button AddModeButton;
+    public Button CloseModeButton;
 
+    // For holding all types of usable modes in memory
     private Dictionary<string, AModePresenter> _modes = new();
-    private AModePresenter _currentMode = null;
+
+    // For presenting selected modes
+    private TabItem _currentTab = null;
+    private List<TabItem> _tabs = new();
+    private Stack<TabItem> _objectPool = new();
+
 
     private void Awake()
     {
         AModePresenter.OnLoaded += OnNewModeAdded;
         SelectableModeItem.OnClick += OpenDirect;
+        TabItem.OnClick += OnTabItemSelected;
+        TabItem.OnDelete += OnTabCloseRequested;
 
         AddModeButton.onClick.AddListener(AddButtonPressed);
         CloseModeButton.onClick.AddListener(CloseButtonPressed);
@@ -27,6 +38,11 @@ public class ModeManagerPresenter : MonoBehaviour
     private void OnNewModeAdded(AModePresenter presenter)
     {
         _modes.Add(presenter.GetName(), presenter);
+    }
+
+    public void ShowAddModeButton()
+    {
+        AddModeButton.gameObject.SetActive(true);
     }
 
     /// <summary> Open a mode by the direct name they were given. </summary>
@@ -42,15 +58,85 @@ public class ModeManagerPresenter : MonoBehaviour
 
     private void OpenDirect(AModePresenter mode)
     {
-        if (_currentMode != null)
-            _currentMode.Close();
 
-        _currentMode = mode;
+        if (_currentTab != null)
+        {
+            // Don't do anything if attempting to open the currently active tab
+            if (mode.GetName() == _currentTab.ModePresenter.GetName())
+                return;
+
+            _currentTab.Deselect();
+            _currentTab.ModePresenter.Close();
+        }
+
+        // Find or create the tab for the given mode
+        bool tabExists = false;
+        foreach(TabItem tab in _tabs)
+        {
+            if (tab.ModePresenter.GetName() == mode.GetName())
+            {
+                tabExists = true;
+                _currentTab = tab;
+                break;
+            }
+        }
+
+        if (!tabExists)
+        {
+            _currentTab = GetPoolItem();
+            _currentTab.Bind(mode);
+            _tabs.Add(_currentTab);
+        }
+
+        _currentTab.Select();
         mode.Open();
-
-        //TODO: Check if this mode is already added as a tab and if not, do so.
     }
 
+    private void OnTabItemSelected(TabItem tab)
+    {
+        if (_currentTab &&
+            tab.ModePresenter.GetName() == _currentTab.ModePresenter.GetName())
+            return;
+
+        if (_currentTab)
+        {
+            _currentTab.Deselect();
+            _currentTab.ModePresenter.Close();
+        }
+
+        _currentTab = tab;
+        tab.Select();
+        OpenDirect(tab.ModePresenter);
+    }
+
+    private void OnTabCloseRequested()
+    {
+        int index = -1;
+        // If there is more than one tab, select and turn on a new tab
+        if (_tabs.Count > 1)
+        {
+            index++;
+
+            foreach (TabItem tab in _tabs)
+            {
+                if (tab.ModePresenter.GetName() == _currentTab.ModePresenter.GetName())
+                    break;
+                index++;
+            }
+
+            index = Mathf.Max(0, index - 1);
+            _tabs[index].Select();
+            _tabs[index].ModePresenter.Open();
+        }
+
+        _tabs.Remove(_currentTab);
+        _currentTab.Unbind(TabPool);
+
+        if (index == -1)
+            _currentTab = null;
+        else
+            _currentTab = _tabs[index];
+    }
 
     private void AddButtonPressed()
     {
@@ -58,7 +144,7 @@ public class ModeManagerPresenter : MonoBehaviour
         CloseModeButton.gameObject.SetActive(true);
     }
 
-    private void CloseButtonPressed()
+    public void CloseButtonPressed()
     {
         AddModeButton.gameObject.SetActive(true);
         CloseModeButton.gameObject.SetActive(false);
@@ -70,6 +156,17 @@ public class ModeManagerPresenter : MonoBehaviour
         baseList.Sort();
 
         return baseList;
+    }
+
+
+    private TabItem GetPoolItem()
+    {
+        if (_objectPool.Count > 0)
+            return _objectPool.Pop();
+
+        // Create new pooling item
+        var item = Instantiate(TabPrefab, ActiveTabs);
+        return item;
     }
 
 }

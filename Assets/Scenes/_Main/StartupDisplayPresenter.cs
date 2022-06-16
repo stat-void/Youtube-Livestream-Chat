@@ -67,6 +67,8 @@ public class StartupDisplayPresenter : AModePresenter
 
         if (res)
         {
+            ModeManager.ShowAddModeButton();
+
             if (AutostartChatToggle.isOn)
                 ModeManager.OpenByName("Chat");
 

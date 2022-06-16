@@ -74,8 +74,6 @@ public class ChatDisplayPresenter : AModePresenter
         _apiTimer.StartTimer();
     }
 
-    
-
     public override void Close()
     {
         _open = false;
