@@ -22,9 +22,9 @@ public class TimerListener : MonoBehaviour
         Timer.OnAPIRequestDelayChanged += OnWaitTimeChanged;
     }
 
-    private void OnWaitTimeChanged(float obj)
+    private void OnWaitTimeChanged(float value)
     {
-        throw new NotImplementedException();
+        WaitTimeText.text = value.ToString("0.0");
     }
 
     private void OnTimeUpdate(float currentTime)

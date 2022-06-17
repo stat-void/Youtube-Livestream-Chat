@@ -17,6 +17,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
     public class YoutubeLiveChatMessages : MonoBehaviour
     {
         public static event Action<List<YoutubeChatMessage>> ChatMessages;
+        public static event Action<int> RecommendedWaitTimeMilliseconds;
         public static event Action<string> Feedback;
 
         // Quota and APIKey handler
@@ -120,6 +121,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 _nextPageToken = data["nextPageToken"];
 
                 int waitTimeMilliseconds = int.Parse(data["pollingIntervalMillis"]);
+                RecommendedWaitTimeMilliseconds?.Invoke(waitTimeMilliseconds);
                 Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
                 await Task.Delay(waitTimeMilliseconds);
 
@@ -160,6 +162,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 JSONArray arg = data["items"].AsArray;
 
                 _nextPageToken = data["nextPageToken"]; //Use this to go to the next page
+                RecommendedWaitTimeMilliseconds?.Invoke(int.Parse(data["pollingIntervalMillis"]));
 
                 // Invoke and send all new messages
                 PrepareAndInvokeMessages(ref arg);

@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
 namespace Void.YoutubeAPI
 {
+    /// <summary> Class that handles the API key as well as quota usage status. </summary>
     public class YoutubeQuotaManager : MonoBehaviour
     {
 

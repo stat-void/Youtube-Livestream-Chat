@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Void.YoutubeAPI.LiveStreamChat.Messages;
 
 namespace Void.YoutubeAPI
 {
@@ -63,6 +62,12 @@ namespace Void.YoutubeAPI
         private float _apiRequestDelay = 3;
         private float _currentTime = 0;
         private bool _paused = true;
+        private bool _recommendedWait = false;
+
+        private void Awake()
+        {
+            YoutubeLiveChatMessages.RecommendedWaitTimeMilliseconds += RecommendedWaitUpdate;
+        }        
 
         private void Update()
         {
@@ -82,8 +87,16 @@ namespace Void.YoutubeAPI
             }
         }
 
+        private void RecommendedWaitUpdate(int waitTimeMilliseconds)
+        {
+            if (_recommendedWait)
+                APIRequestDelay = waitTimeMilliseconds/1000f;
+        }
+
         public void StartTimer() => _paused = false;
         public void PauseTimer() => _paused = true;
         public void ResetTimer() => _currentTime = 0;
+        public void SetRecommendedWaitUsage(bool value) => _recommendedWait = value;
+        
     }
 }

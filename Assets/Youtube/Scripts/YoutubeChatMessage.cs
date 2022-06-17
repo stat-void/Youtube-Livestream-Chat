@@ -4,6 +4,7 @@ using System;
 
 namespace Void.YoutubeAPI.LiveStreamChat.Messages
 {
+    /// <summary> Container class for the contents of a Youtube chat message. </summary>
     public class YoutubeChatMessage
     {
         /// <summary> Message type, such as regular text message, Super Chat, Membership etc. </summary>
