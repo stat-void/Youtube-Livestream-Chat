@@ -18,7 +18,7 @@ public class QuotaListener : MonoBehaviour
         QuotaUsed.text = QuotaManager.CurrentQuota.ToString();
         QuotaManager.OnQuotaUpdate += OnQuotaUpdate;
 
-        _warningLimit = QuotaManager.MaxQuota - Mathf.FloorToInt(QuotaManager.MaxQuota * 0.1f);
+        _warningLimit = Mathf.FloorToInt(QuotaManager.MaxQuota * 0.9f);
         _warningReached = false;
         _limitReached = false;
     }
