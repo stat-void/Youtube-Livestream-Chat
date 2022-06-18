@@ -42,9 +42,6 @@ public class MainPresenter : MonoBehaviour
             the resulting text to pop up multiple times. Should I add some minor checks for the previous message bulk to ignore repeating ID / message content?
         I would have to implement the checking condition this needs with Focus Mode anyway.
 
-    Max Quota Warning
-        When the chat system is 1000 points away from reaching the limit, the quota should become yellow?
-        Going over the limit turns it to red. This way, there is visual feedback.
 
     Settings screen
         Modifiable duration value, with the option to pick the "recommended" dynamic wait time from Youtube as well
