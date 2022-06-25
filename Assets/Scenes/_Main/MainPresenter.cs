@@ -21,11 +21,18 @@ public class MainPresenter : MonoBehaviour
     {
         ViewSystem.Open("ModeSelector/ModeSelector");           // Scene that displays all possible "modes" in a list that the user can pick from.
         ViewSystem.Open("ModeScenes/ChatDisplay/ChatDisplay");  // Generic chat displayer
+        ViewSystem.Open("ModeScenes/Settings/Settings");        // Modify settings that affect all other views.
     }
 
 
     /*
     TODO List
+
+    Have a second pass on chat display, anything with 2 rows or more gets somewhat messed up?
+        3 rows shows clear overflow.
+
+    Bugfixing session for chat display. If full list size has not been passed, switching between this and settings causes weird results,
+        such as chat not going all the way to the bottom up to a certain amount of messages, or not all messages being removed?
 
     Check out the IEnumerator for chat display in build
         There was one extremely rare case of a timestamp that could not be parsed.

@@ -17,56 +17,47 @@ namespace Void.YoutubeAPI
         public event Action<float> SendCurrentTime;
 
         /// <summary>
-        /// Event used to automate API message requests if this class is used.
-        /// </summary>
-        public static event Action OnAPIMessagesRequested;
-
-        /// <summary>
         /// Event used to notify whenever the current API delay to invoke message request was changed.
         /// </summary>
         public event Action<float> OnAPIRequestDelayChanged;
 
         /// <summary>
-        /// The amount of time (in seconds) needed to pass to request an API call.
+        /// Event used to automate API message requests if this class is used.
         /// </summary>
-        public float APIRequestDelay
+        public static event Action OnAPIMessagesRequested;
+
+        /// <summary> The amount of time (in seconds) needed to pass to request an API call. </summary>
+        public float APIRequestInterval
+        {
+            get { return _apiRequestInterval; }
+        }
+
+        private float _apiRequestInterval = 3;
+        private float _currentTime = 0;
+        private bool _paused = true;
+
+        /// <summary> Decide if this class should use the interval gotten in each chat message request, or set it manually </summary>
+        public bool UseYoutubeInterval
         {
             get
             {
-                return _apiRequestDelay;
+                return _useYTInterval;
             }
 
             set
             {
-                if (value <= 0)
-                    Debug.LogError("Request delay can't be 0 or negative.");
-
-                else if (value < 0.5f)
-                    Debug.LogError("Going below 0.5 seconds is wasteful on quota and volatile at fetching messages, stopping");
-
-                else if (value < 0.7f)
-                {
-                    Debug.LogWarning("Setting delay below 0.7 seconds can cause duplicate messages to appear as Youtube API corrects timestamps.");
-                    _apiRequestDelay = value;
-                    OnAPIRequestDelayChanged?.Invoke(_apiRequestDelay);
-                }
-
-                else
-                {
-                    _apiRequestDelay = value;
-                    OnAPIRequestDelayChanged?.Invoke(_apiRequestDelay);
-                }
+                _useYTInterval = value;
+                PlayerPrefs.SetString("YT_UseInterval", _useYTInterval.ToString());
             }
         }
 
-        private float _apiRequestDelay = 3;
-        private float _currentTime = 0;
-        private bool _paused = true;
-        private bool _recommendedWait = false;
+        private bool _useYTInterval;
 
         private void Awake()
         {
-            YoutubeLiveChatMessages.RecommendedWaitTimeMilliseconds += RecommendedWaitUpdate;
+            YoutubeLiveChatMessages.RecommendedIntervalMilliseconds += RecommendedWaitUpdate;
+            _useYTInterval = PlayerPrefs.GetString("YT_UseInterval", "False") == "True";
+            _apiRequestInterval = PlayerPrefs.GetFloat("YT_RequestInterval", 3);
         }        
 
         private void Update()
@@ -80,23 +71,45 @@ namespace Void.YoutubeAPI
             _currentTime += delta;
             SendCurrentTime?.Invoke(_currentTime);
 
-            if (_currentTime >= APIRequestDelay)
+            if (_currentTime >= APIRequestInterval)
             {
-                _currentTime -= APIRequestDelay;
+                _currentTime -= APIRequestInterval;
                 OnAPIMessagesRequested?.Invoke();
             }
         }
 
         private void RecommendedWaitUpdate(int waitTimeMilliseconds)
         {
-            if (_recommendedWait)
-                APIRequestDelay = waitTimeMilliseconds/1000f;
+            if (_useYTInterval)
+                SetAPIRequestInterval(waitTimeMilliseconds / 1000f);
+        }
+
+        public void SetAPIRequestInterval(float value)
+        {
+            if (value <= 0)
+                Debug.LogError("Request delay can't be 0 or negative.");
+
+            else if (value < 0.5f)
+                Debug.LogError("Going below 0.5 seconds is wasteful on quota and volatile at fetching messages, stopping.");
+
+            else if (value < 0.7f)
+            {
+                Debug.LogWarning("Setting delay below 0.7 seconds can cause duplicate messages to appear as Youtube API corrects timestamps.");
+                _apiRequestInterval = value;
+                PlayerPrefs.SetFloat("YT_RequestInterval", _apiRequestInterval);
+                OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
+            }
+
+            else
+            {
+                _apiRequestInterval = value;
+                PlayerPrefs.SetFloat("YT_RequestInterval", _apiRequestInterval);
+                OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
+            }
         }
 
         public void StartTimer() => _paused = false;
         public void PauseTimer() => _paused = true;
         public void ResetTimer() => _currentTime = 0;
-        public void SetRecommendedWaitUsage(bool value) => _recommendedWait = value;
-        
     }
 }

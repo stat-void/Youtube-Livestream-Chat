@@ -54,8 +54,6 @@ public class StartupDisplayPresenter : AModePresenter
         gameObject.SetActive(false);
     }
 
-
-    //TODO: You could also make this a combined startup/settings screen?
     private async void AttemptInit()
     {
         QuotaManager.SetAPIKey(API_InputField.text, SaveAPIKeyToggle.isOn);

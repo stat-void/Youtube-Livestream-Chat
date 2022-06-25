@@ -171,8 +171,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
                     MemberUpdate.MembershipsGifted = item["snippet"][nodeName]["giftMembershipsCount"].AsInt;
 
-                    Debug.Log($"member gifting event, any preset messages? - | {item["snippet"]["displayMessage"]} |");
-                    Message = $"Gifted memberships - {MemberUpdate.MemberLevelName} x{MemberUpdate.MembershipsGifted}!";
+                    Message = $"{item["snippet"]["displayMessage"]}! - {MemberUpdate.MemberLevelName}";
 
                     break;
 
@@ -180,8 +179,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     MemberUpdate.MemberType = MembershipType.Received;
                     MemberUpdate.MemberLevelName = item["snippet"][nodeName]["memberLevelName"];
 
-                    Debug.Log($"Gift receival event, any preset messages? - | {item["snippet"]["displayMessage"]} |");
-                    Message = $"Has been gifted a membership - {MemberUpdate.MemberLevelName}!";
+                    Message = $"{item["snippet"]["displayMessage"]}! - {MemberUpdate.MemberLevelName}!";
                     break;
             }
         }

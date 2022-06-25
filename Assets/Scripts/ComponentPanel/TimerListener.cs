@@ -13,7 +13,7 @@ public class TimerListener : MonoBehaviour
 
     private void Start()
     {
-        WaitTimeText.text = Timer.APIRequestDelay.ToString("0.0");
+        WaitTimeText.text = Timer.APIRequestInterval.ToString("0.0");
 
         TimerFill.fillAmount    = _filling ? 0 : 1;
         TimerFill.fillDirection = _filling ? SlicedFilledImage.FillDirection.Right : SlicedFilledImage.FillDirection.Left;
@@ -30,11 +30,11 @@ public class TimerListener : MonoBehaviour
     private void OnTimeUpdate(float currentTime)
     {
         if (_filling)
-            TimerFill.fillAmount = Mathf.InverseLerp(0, Timer.APIRequestDelay, currentTime);
+            TimerFill.fillAmount = Mathf.InverseLerp(0, Timer.APIRequestInterval, currentTime);
         else
-            TimerFill.fillAmount = Mathf.InverseLerp(Timer.APIRequestDelay, 0, currentTime);
+            TimerFill.fillAmount = Mathf.InverseLerp(Timer.APIRequestInterval, 0, currentTime);
 
-        if (currentTime >= Timer.APIRequestDelay)
+        if (currentTime >= Timer.APIRequestInterval)
         {
             _filling = !_filling;
 

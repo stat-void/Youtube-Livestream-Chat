@@ -4,6 +4,7 @@ using UnityEngine;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
 using UnityEngine.UI;
 using Void.YoutubeAPI;
+using System;
 
 public class ChatDisplayPresenter : AModePresenter
 {
@@ -34,9 +35,7 @@ public class ChatDisplayPresenter : AModePresenter
 
     private void Start()
     {
-        // This isn't particularly great... but the multi-scene setup doesn't allow for a direct connection
         _apiTimer = FindObjectOfType<YoutubeAPITimer>();
-
         NotifyClassReady(this);
     }
 
@@ -47,16 +46,18 @@ public class ChatDisplayPresenter : AModePresenter
 
     public override string GetDescription()
     {
-        //TODO: Have a better description?
-        return "Show the regular chat.";
+        return "Show the regular chat with no unique modifications.";
     }
 
     public override void Open()
     {
         BaseCanvas.gameObject.SetActive(true);
 
+        // Wait time increases to 0.05 seconds, or 3 skipped frames with 100 elements, so disabling this part.
+        // Pretty much requires visual object pooling to function normally.
+
         // Add all currently recorded elements from oldest to newest
-        for (int i = ChatMessageListener.MessageList.Count-1; i >= 0; i--)
+        /*for (int i = ChatMessageListener.MessageList.Count-1; i >= 0; i--)
         {
             YoutubeChatMessage message = ChatMessageListener.MessageList[i];
 
@@ -64,7 +65,7 @@ public class ChatDisplayPresenter : AModePresenter
             item.Bind(message, ChatContent);
 
             _currentActives++;
-        }
+        }*/
 
         ScrollRect.verticalNormalizedPosition = 0f;
 
@@ -80,10 +81,11 @@ public class ChatDisplayPresenter : AModePresenter
         _currentActives = 0;
         ChatMessageListener.ChatMessages -= OnNewMessages;
 
-        // Take every item currently active and unbind them into the bool, deactivating them.
+        // Take every item currently active and unbind them into the pool, deactivating them.
         for (int i = _activePool.Count - 1; i >= 0; i--)
         {
             var item = _activePool[i];
+            _objectPool.Push(item);
             item.Unbind(PoolContent);
         }
 
@@ -91,8 +93,9 @@ public class ChatDisplayPresenter : AModePresenter
         {
             _disposables.Add(_currentDisplay);
             _currentDisplay = null;
-        }  
+        }
 
+        _activePool.Clear();
         _apiTimer.PauseTimer();
         BaseCanvas.gameObject.SetActive(false);
     }
@@ -117,13 +120,14 @@ public class ChatDisplayPresenter : AModePresenter
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)
     {
+        //TODO: There appear to be weird cases where even with "0" messages I see updates
         IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
-            if (ChatMessageListener.WaitMessages && i < newMessages.Count - 1)
+            /*if (Settings.RealTime && i < newMessages.Count - 1)
             {
                 float waitTime = (float)newMessages[i].Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
 
@@ -139,7 +143,7 @@ public class ChatDisplayPresenter : AModePresenter
                         yield break;
                     }
                 }
-            }
+            }*/
 
             AListItem assignable;
 
@@ -161,11 +165,11 @@ public class ChatDisplayPresenter : AModePresenter
             assignable.transform.SetAsLastSibling();
             assignable.Bind(newMessages[i], ChatContent);
 
-            if (ChatMessageListener.WaitMessages)
+            /*if (Settings.RealTime)
             {
                 yield return new WaitForEndOfFrame();
                 ScrollRect.verticalNormalizedPosition = 0f;
-            }
+            }*/
         }
 
         yield return new WaitForEndOfFrame();
@@ -180,6 +184,7 @@ public class ChatDisplayPresenter : AModePresenter
             return _objectPool.Pop();
 
         // Create new pooling item
+        Debug.LogWarning("Forced to instantiate pooling item");
         var item = Instantiate(ContentPrefab, ChatContent);
         return item;
     }

@@ -17,7 +17,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
     public class YoutubeLiveChatMessages : MonoBehaviour
     {
         public static event Action<List<YoutubeChatMessage>> ChatMessages;
-        public static event Action<int> RecommendedWaitTimeMilliseconds;
+        public static event Action<int> RecommendedIntervalMilliseconds;
         public static event Action<string> Feedback;
 
         // Quota and APIKey handler
@@ -121,7 +121,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 _nextPageToken = data["nextPageToken"];
 
                 int waitTimeMilliseconds = int.Parse(data["pollingIntervalMillis"]);
-                RecommendedWaitTimeMilliseconds?.Invoke(waitTimeMilliseconds);
+                RecommendedIntervalMilliseconds?.Invoke(waitTimeMilliseconds);
                 Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
                 await Task.Delay(waitTimeMilliseconds);
 
@@ -153,6 +153,9 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 if (www.result != UnityWebRequest.Result.Success)
                 {
                     LogError(www);
+                    _fullMessages.Clear();
+                    ChatMessages?.Invoke(_fullMessages);
+                    
                     return;
                 }
 
@@ -161,8 +164,8 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 JSONArray arg = data["items"].AsArray;
 
-                _nextPageToken = data["nextPageToken"]; //Use this to go to the next page
-                RecommendedWaitTimeMilliseconds?.Invoke(int.Parse(data["pollingIntervalMillis"]));
+                _nextPageToken = data["nextPageToken"]; // Use this to go to the next page
+                RecommendedIntervalMilliseconds?.Invoke(int.Parse(data["pollingIntervalMillis"]));
 
                 // Invoke and send all new messages
                 PrepareAndInvokeMessages(ref arg);
@@ -188,7 +191,6 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
  
                 _fullMessages.Add(new YoutubeChatMessage(content, published));
             }
-
             ChatMessages?.Invoke(_fullMessages);
         }
 
@@ -212,16 +214,21 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 answer = "The request failed to communicate with the server";
             
             else if (error == UnityWebRequest.Result.DataProcessingError)
+            {
+                _quotaManager.AddQuota(5);
                 answer = "Server communication successful, but error processing received data";
+            }   
 
             else if (error == UnityWebRequest.Result.InProgress)
                 answer = "The request is still in progress, which should not be possible here.";
 
             else if (error == UnityWebRequest.Result.ProtocolError)
             {
+                _quotaManager.AddQuota(5);
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 string cause = data["error"]["errors"].AsArray[0]["message"];
 
+                // This occurs if interval is less than Youtube wants and no messages are found for the first time on this loop.
                 if (cause.Contains("The request was sent too soon after the previous one."))
                     return;
 

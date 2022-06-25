@@ -98,14 +98,6 @@ public class ModeManagerPresenter : MonoBehaviour
             tab.ModePresenter.GetName() == _currentTab.ModePresenter.GetName())
             return;
 
-        if (_currentTab)
-        {
-            _currentTab.Deselect();
-            _currentTab.ModePresenter.Close();
-        }
-
-        _currentTab = tab;
-        tab.Select();
         OpenDirect(tab.ModePresenter);
     }
 
