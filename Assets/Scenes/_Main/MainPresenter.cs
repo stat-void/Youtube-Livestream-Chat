@@ -50,12 +50,6 @@ public class MainPresenter : MonoBehaviour
         I would have to implement the checking condition this needs with Focus Mode anyway.
 
 
-    Settings screen
-        Modifiable duration value, with the option to pick the "recommended" dynamic wait time from Youtube as well
-        Options to delete saved data
-        Options to delete the API Key
-
-
     Resizing
         Fix some of the elements with janky resizing so freeform resizing can be smaller width-wise without overlap. (mainly query panel)
 

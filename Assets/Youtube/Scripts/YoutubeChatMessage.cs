@@ -10,10 +10,16 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         /// <summary> Message type, such as regular text message, Super Chat, Membership etc. </summary>
         public MessageEventType Type; 
 
-        // Default parameters available for every message
+        /// <summary> The ID value of the given user. </summary>
         public string ChannelID;
+
+        /// <summary> Written name of the current user. </summary>
         public string Username;
+
+        /// <summary> Webpage leading to the display icon used by this user. </summary>
         public string ProfileImageURL;
+
+        /// <summary> UTC timestamp on when this message was sent. </summary>
         public DateTime Timestamp;
 
         /// <summary> User display message or relevant event notification. </summary>
@@ -132,12 +138,12 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             switch (nodeName)
             {
                 case "superChatDetails":
-                    Message = item["snippet"]["superChatDetails"]["userComment"];
+                    Message = $"{SuperEvent.AmountDisplayString} - {item["snippet"]["superChatDetails"]["userComment"]}"; 
                     break;
 
                 case "superStickerDetails":
                     Debug.Log($"Sticker event, any preset messages? - | {item["snippet"]["displayMessage"]} |");
-                    Message = $"Sent a super sticker! {SuperEvent.AmountDisplayString}";
+                    Message = $"{SuperEvent.AmountDisplayString} - Sent a super sticker!";
                     break;
             }
         }
@@ -153,8 +159,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     MemberUpdate.MemberLevelName = item["snippet"][nodeName]["memberLevelName"];
 
                     MemberUpdate.MemberMonth = uint.Parse(item["snippet"][nodeName]["memberMonth"]);
-
-                    Message = item["snippet"]["memberMilestoneChatDetails"]["userComment"];
+                    Message = item["snippet"]["displayMessage"];
                     break;
 
                 case "newSponsorDetails":
@@ -179,7 +184,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     MemberUpdate.MemberType = MembershipType.Received;
                     MemberUpdate.MemberLevelName = item["snippet"][nodeName]["memberLevelName"];
 
-                    Message = $"{item["snippet"]["displayMessage"]}! - {MemberUpdate.MemberLevelName}!";
+                    Message = $"{item["snippet"]["displayMessage"]}! - {MemberUpdate.MemberLevelName}";
                     break;
             }
         }

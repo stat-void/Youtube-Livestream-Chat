@@ -53,19 +53,8 @@ public class ChatDisplayPresenter : AModePresenter
     {
         BaseCanvas.gameObject.SetActive(true);
 
-        // Wait time increases to 0.05 seconds, or 3 skipped frames with 100 elements, so disabling this part.
-        // Pretty much requires visual object pooling to function normally.
-
-        // Add all currently recorded elements from oldest to newest
-        /*for (int i = ChatMessageListener.MessageList.Count-1; i >= 0; i--)
-        {
-            YoutubeChatMessage message = ChatMessageListener.MessageList[i];
-
-            var item = GetPoolItem();
-            item.Bind(message, ChatContent);
-
-            _currentActives++;
-        }*/
+        //TODO:  Wait time increases to 0.05 seconds, or 3 skipped frames with 100 elements
+        // Pretty much requires visual object pooling to preload chat here
 
         ScrollRect.verticalNormalizedPosition = 0f;
 
@@ -120,30 +109,35 @@ public class ChatDisplayPresenter : AModePresenter
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)
     {
-        //TODO: There appear to be weird cases where even with "0" messages I see updates
+        //TODO: There appear to be weird cases where even with "0" messages I see updates, but with real-time?
         IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
+        bool overflowRisk = false;
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
-            /*if (Settings.RealTime && i < newMessages.Count - 1)
+            if (Settings.RealTime && !overflowRisk && i < newMessages.Count - 1)
             {
                 float waitTime = (float)newMessages[i].Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
 
-                if (totalTimeWaitedSeconds + waitTime < _apiTimer.APIRequestDelay - 0.5f)
+                if (totalTimeWaitedSeconds + waitTime < _apiTimer.APIRequestInterval - 0.5f)
                 {
                     totalTimeWaitedSeconds += waitTime;
                     yield return new WaitForSeconds(waitTime);
 
-                    // Verify if this view was closed and stop if needed.
+                    // Verify if this view was closed and stop if needed. Note that there will likely be null exceptions if this ever occurs in this view.
                     if (_disposables.Contains(thisCoroutine))
                     {
                         _disposables.Remove(thisCoroutine);
                         yield break;
                     }
                 }
-            }*/
+                else
+                {
+                    overflowRisk = true;
+                }
+            }
 
             AListItem assignable;
 
@@ -165,11 +159,11 @@ public class ChatDisplayPresenter : AModePresenter
             assignable.transform.SetAsLastSibling();
             assignable.Bind(newMessages[i], ChatContent);
 
-            /*if (Settings.RealTime)
+            if (Settings.RealTime)
             {
                 yield return new WaitForEndOfFrame();
                 ScrollRect.verticalNormalizedPosition = 0f;
-            }*/
+            }
         }
 
         yield return new WaitForEndOfFrame();
@@ -184,7 +178,6 @@ public class ChatDisplayPresenter : AModePresenter
             return _objectPool.Pop();
 
         // Create new pooling item
-        Debug.LogWarning("Forced to instantiate pooling item");
         var item = Instantiate(ContentPrefab, ChatContent);
         return item;
     }
