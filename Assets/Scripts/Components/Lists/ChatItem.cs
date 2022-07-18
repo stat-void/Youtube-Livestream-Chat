@@ -16,8 +16,10 @@ public class ChatItem : AListItem
     private const string _ownerColor        = "#FFD603";
 
     //0-blue, 1-light blue, 2-yellowgreen, 3-yellow, 4-orange, 5-magenta, 6-red
-    private readonly List<string> _superColors =     new() { "#1665C0", "#00E5FF", "#1EE9B6", "#FFC927", "#F57B02", "#E81E63", "#E62216" };
-    private readonly List<string> _darkSuperColors = new() { "#1665C0", "#00B8D3", "#01BFA5", "#FEB300", "#E65100", "#C1195B", "#D00001" };
+    private readonly List<string> _darkSuperColors =  new() { "#1665C0", "#00B8D3", "#01BFA5", "#FEB300", "#E65100", "#C1195B", "#D00001" };
+    private readonly List<string> _superColors =      new() { "#1665C0", "#00E5FF", "#1EE9B6", "#FFC927", "#F57B02", "#E81E63", "#E62216" };
+    private readonly List<string> _lightSuperColors = new() { "#1665C0", "#00E5FF", "#34FFCC", "#FFC927", "#FF850C", "#FF357A", "#FF3B2F" };
+
 
     public override void Bind(YoutubeChatMessage node, Transform active)
     {
@@ -85,8 +87,8 @@ public class ChatItem : AListItem
     {
         return node.Type switch
         {
-            MessageEventType.SuperChatEvent     => _superColors[node.SuperEvent.Tier - 1],
-            MessageEventType.SuperStickerEvent  => _superColors[node.SuperEvent.Tier - 1],
+            MessageEventType.SuperChatEvent     => _lightSuperColors[node.SuperEvent.Tier - 1],
+            MessageEventType.SuperStickerEvent  => _lightSuperColors[node.SuperEvent.Tier - 1],
 
             MessageEventType.NewMemberEvent                 => _memberUserColor,
             MessageEventType.MemberMilestoneChatEvent       => _memberUserColor,

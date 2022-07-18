@@ -100,7 +100,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     break;
 
                 default:
-                    Debug.Log($"Unchecked type specific field, any messages? - | {item["snippet"]["displayMessage"]} |");
+                    Debug.LogWarning($"Unchecked type specific field: {Type}, any messages? - | {item["snippet"]["displayMessage"]} |");
                     break;
             }
         }

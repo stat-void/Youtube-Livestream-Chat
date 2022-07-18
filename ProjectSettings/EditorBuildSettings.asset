@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ModeScenes/ChatDisplay/ChatDisplay.unity
     guid: c1a08bf371b1a4e679c6eb4b0711b9eb
   - enabled: 1
+    path: Assets/Scenes/ModeScenes/FocusMode/FocusMode.unity
+    guid: 569a7ccfb8b8a4e04994584007ed4c85
+  - enabled: 1
     path: Assets/Scenes/ModeScenes/Settings/Settings.unity
     guid: b9b4e168b9ae847e7895c0f8ab330e0f
   m_configObjects: {}

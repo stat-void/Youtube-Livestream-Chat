@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
 
@@ -10,6 +9,9 @@ public class ChatMessageListener : MonoBehaviour
 
     public static List<YoutubeChatMessage> MessageList;
     public static readonly int ListMaxSize = 100;
+
+    public static SortedDictionary<string, List<string>> UsernameIDPairs { get; private set; } = new();
+    public static Dictionary<string, YoutubeChatMessage> IDLastMessagePairs { get; private set; } = new();
 
     private void Awake()
     {
@@ -30,6 +32,20 @@ public class ChatMessageListener : MonoBehaviour
                 MessageList.RemoveAt(MessageList.Count - 1);
 
             MessageList.Insert(0, messages[i]);
+
+            // Add last messages by ID value
+            IDLastMessagePairs[messages[i].ChannelID] = messages[i];
+
+            // Add all recorded users by name and list of IDs that may share that name
+
+            // Initialize new username with new ID list
+            if (!UsernameIDPairs.ContainsKey(messages[i].Username))
+                UsernameIDPairs[messages[i].Username] = new() { messages[i].ChannelID };
+
+            // Alternatively, Add new ID to a username
+            else if (!UsernameIDPairs[messages[i].Username].Contains(messages[i].ChannelID))
+                UsernameIDPairs[messages[i].Username].Add(messages[i].ChannelID);
+            
         }
 
         ChatMessages?.Invoke(messages);

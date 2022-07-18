@@ -20,7 +20,7 @@ public abstract class AModePresenter : MonoBehaviour, IComparable<AModePresenter
     public static event Action<AModePresenter> OnLoaded;
 
 
-    /// <summary> Let classes listening to NotifyLoaded find out that this class is ready to use. </summary>
+    /// <summary> Let classes listening to OnLoaded find out that this class is ready to use. </summary>
     protected void NotifyClassReady(AModePresenter presenter) =>
         OnLoaded?.Invoke(presenter);
 

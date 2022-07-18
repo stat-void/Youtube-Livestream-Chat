@@ -89,15 +89,6 @@ public class ChatDisplayPresenter : AModePresenter
         BaseCanvas.gameObject.SetActive(false);
     }
 
-    private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
-    {
-        if (!_open)
-            return;
-
-        foreach (ChatItem item in _activePool)
-            item.UpdateFit();
-    }
-
     /// <summary> Display any newly received messages </summary>
     /// <param name="newMessages"> Latest received messages from newest to oldest. </param>
     private void OnNewMessages(List<YoutubeChatMessage> newMessages)
@@ -109,7 +100,6 @@ public class ChatDisplayPresenter : AModePresenter
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)
     {
-        //TODO: There appear to be weird cases where even with "0" messages I see updates, but with real-time?
         IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
         bool overflowRisk = false;
@@ -180,5 +170,14 @@ public class ChatDisplayPresenter : AModePresenter
         // Create new pooling item
         var item = Instantiate(ContentPrefab, ChatContent);
         return item;
+    }
+
+    private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
+    {
+        if (!_open)
+            return;
+
+        foreach (ChatItem item in _activePool)
+            item.UpdateFit();
     }
 }
