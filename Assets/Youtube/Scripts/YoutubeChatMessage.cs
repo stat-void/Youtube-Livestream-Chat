@@ -142,8 +142,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     break;
 
                 case "superStickerDetails":
-                    Debug.Log($"Sticker event, any preset messages? - | {item["snippet"]["displayMessage"]} |");
-                    Message = $"{SuperEvent.AmountDisplayString} - Sent a super sticker!";
+                    Message = $"{item["snippet"]["displayMessage"]}!"; // {Currency} {value} from {username}: \"Shiba dog shouting good luck in a megaphone\"
                     break;
             }
         }

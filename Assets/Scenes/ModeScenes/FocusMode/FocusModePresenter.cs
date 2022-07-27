@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
-using TMPro;
 using Void.YoutubeAPI;
-using System;
 
 public class FocusModePresenter : AModePresenter
 {
@@ -16,9 +14,6 @@ public class FocusModePresenter : AModePresenter
     [SerializeField] protected Button AddRemoveUsersButton;
     [SerializeField] protected Transform UserChanger;
     [SerializeField] protected UserSearchField SearchField;
-
-    // A good way to store and or recall the 300 width, and moving from pos 310 to -10?
-    // Or... Just using DoTween?
 
     [Header("Chat Display")]
     [SerializeField] protected ScrollRect ScrollRect;
@@ -36,15 +31,6 @@ public class FocusModePresenter : AModePresenter
     private HashSet<IEnumerator> _disposables = new();
 
     private bool _userChangerOpen = false;
-
-    //TODO: A lot of ChatDisplayPresenter code will likely end up copied here,
-    //TODO: But you need a custom extractor method, that takes the received messages
-    //TODO: and makes a new list of messages consisting of only listened user ID's
-
-    //TODO: Then you need a reactionary method that is called whenever a user is clicked on, to add them into the pool of listened users
-
-    //TODO: And you need separate visuals for users you are listening to, and those that can be listened to
-
 
     private void Awake()
     {
@@ -184,7 +170,9 @@ public class FocusModePresenter : AModePresenter
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
-            // TODO: New part for this class. If the given message is not being filtered in, skip it.
+            // New part for this class. If this message is not being filtered, skip it.
+            if (!SearchField.IsUserValid(newMessages[i]))
+                continue;
 
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
             if (Settings.RealTime && !overflowRisk && i < newMessages.Count - 1)

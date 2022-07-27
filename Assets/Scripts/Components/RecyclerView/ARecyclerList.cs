@@ -2,6 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+Note to self - This list system has a bug. 
+If scrolling too aggressively, the first one/two/maybe more names end up disappearing, possibly the bottom of the list too?
+This is a purely visual bug, using the search list reveals them again and refreshing reveals them again.
+From what I've noticed, the reason is affected by these 2 lines:
+
+float windowTop = Mathf.Lerp(-(_listHeight - _viewAreaHeight), 0, scrollPosition.y);
+float windowBottom = windowTop - _viewAreaHeight;
+
+it seems that some value in these goes out of sync, and the from the data list, something with the index 1 or 2 ends up getting
+larger values, causing the most important check to never reach the start of the display list.
+
+If element 0 is not visible, and the size of each element is 50, then in order for it to be revealed, a threshold of -25 must be passed.
+(center is 0, size is 50, bottom would then be 25 and top -25)
+
+But, in the process of something going out of sync, the blocking elements gets a threshold of 25 instead.
+
+*/
 
 public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
 {
@@ -56,7 +74,7 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         _itemHeight = ItemPrefab.GetComponent<RectTransform>().rect.height;
 
         // Presented content or panel layout may have changed
-        _listHeight = GetDataCount() * _itemHeight; //TODO: This had "listbottompadding of 300 earlier added.
+        _listHeight = GetDataCount() * _itemHeight;
         _viewAreaHeight = ScrollRect.GetComponent<RectTransform>().rect.height;
 
         // Set scroll area back to top
@@ -65,7 +83,7 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         
     }
 
-    protected void ClearVisibleLines()
+    protected void ClearVisibleItems()
     {
         while (_visibleItems.Count > 0)
         {
@@ -77,15 +95,48 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         SetupRecyclerList(true);
     }
 
+    /// <summary> Go through the current list of items and add/remove pooling items from top/bottom as needed. </summary>
+    private void OnScrollValueChanged(Vector2 scrollPosition)
+    {
+        // There is no content outside the 0 to 1 range
+        if (scrollPosition.y < -0.01f || scrollPosition.y > 1.01f)
+            return;
+
+        // Remap scrollbar values to RectTransform space
+        float windowTop = Mathf.Lerp(-(_listHeight - _viewAreaHeight), 0, scrollPosition.y);
+        float windowBottom = windowTop - _viewAreaHeight;
+
+        // Remove out of view items from top
+        while (_visibleItems.Count > 0 && _visibleItems[0].BottomEdge > windowTop)
+            RemoveFromTop();
+            
+        // Remove out of view items from bottom
+        while (_visibleItems.Count > 0 && _visibleItems[^1].TopEdge < windowBottom)
+            RemoveFromBottom();
+
+        // When no items are present, the size of the padding elements needs an update
+        if (_visibleItems.Count == 0)
+            RescalePadding(windowTop);
+
+        while (IsTopEdgeMissingContent(windowTop))
+            AddToTop();
+
+        while (IsBottomEdgeMissingContent(windowBottom))
+            AddToBottom();
+    }
+
+    protected void ForceScrollReset() =>
+        OnScrollValueChanged(Vector2.up);
+
     private void AddToBottom()
     {
         var item = GetItem();
         _visibleItems.Add(item);
 
-        // Padding size is reduced to make room for a new line
+        // Padding size is reduced to make room for a new item
         _bottomPadding.preferredHeight -= _itemHeight;
 
-        // Line is inserted before bottom padding element
+        // Item is inserted before bottom padding element
         item.Bind(GetDataAt(_nextBottomContentIndex), GetHighlightAt(_nextBottomContentIndex));
 
         item.Transform.SetAsLastSibling();
@@ -101,11 +152,11 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         var item = GetItem();
         _visibleItems.Insert(0, item);
 
-        // Padding size is reduced to make room for a new line
+        // Padding size is reduced to make room for a new item
         _topPadding.preferredHeight -= _itemHeight;
         _topPadding.preferredHeight = Mathf.Max(_topPadding.preferredHeight, 0);
 
-        // Line is inserted after top padding element
+        // Item is inserted after top padding element
         item.Bind(GetDataAt(_nextTopContentIndex), GetHighlightAt(_nextTopContentIndex));
 
         item.Transform.SetAsFirstSibling();
@@ -214,42 +265,9 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         if (_visibleItems.Count == 0)
             return true;
 
-        // Top is missing content when top edge of top item is visible
+        //Debug.Log($"{_visibleItems[0].TopEdge} < {edgeOfWindow} ? {_visibleItems[0].TopEdge < edgeOfWindow}; Padding value: {_topPadding.preferredHeight}");
         return _visibleItems[0].TopEdge < edgeOfWindow;
     }
-
-    private void OnScrollValueChanged(Vector2 scrollPosition)
-    {
-        // There is no content outside the 0 to 1 range
-        if (scrollPosition.y < -0.01f || scrollPosition.y > 1.01f)
-            return;
-
-        // Remap scrollbar values to RectTransform space
-        float windowTop = Mathf.Lerp(-(_listHeight - _viewAreaHeight), 0, scrollPosition.y);
-        float windowBottom = windowTop - _viewAreaHeight;
-
-        // Remove out of view items from top
-        while (_visibleItems.Count > 0 && _visibleItems[0].BottomEdge > windowTop)
-            RemoveFromTop();
-
-        // Remove out of view items from bottom
-        while (_visibleItems.Count > 0 && _visibleItems[^1].TopEdge < windowBottom)
-            RemoveFromBottom();
-
-        // When no items are present, the size of the padding elements needs an update
-        if (_visibleItems.Count == 0)
-            RescalePadding(windowTop);
-
-        while (IsTopEdgeMissingContent(windowTop))
-            AddToTop();
-
-        while (IsBottomEdgeMissingContent(windowBottom))
-            AddToBottom();
-    }
-
-    protected void ForceScrollReset() =>
-        OnScrollValueChanged(Vector2.up);
-    
 
     void RescalePadding(float visibleAreaTopEdge)
     {
@@ -270,7 +288,7 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
         _nextTopContentIndex = numberOfHiddenItems;
         _nextBottomContentIndex = numberOfHiddenItems + 1;
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(ContentParent);
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(ContentParent);
     }
 
     public abstract void SetSelection(object selected);
