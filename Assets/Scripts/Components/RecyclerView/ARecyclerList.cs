@@ -21,7 +21,7 @@ But, in the process of something going out of sync, the blocking elements gets a
 
 */
 
-public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
+public abstract class ARecyclerList : MonoBehaviour, IRecyclerList
 {
 
     [Header("Vertical Recycling List")]
@@ -29,6 +29,9 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
     [SerializeField] protected RectTransform PoolParent;
     [SerializeField] protected ScrollRect ScrollRect;
     [SerializeField] protected ARecyclerItem ItemPrefab;
+
+    RectTransform IRecyclerList.ContentParent => ContentParent;
+    RectTransform IRecyclerList.PoolParent => PoolParent;
 
     private readonly List<IRecyclerItem> _visibleItems = new();
     private readonly Stack<IRecyclerItem> _pooledItems = new();
@@ -42,9 +45,6 @@ public abstract class ARecyclerList : MonoBehaviour, IRecyclerListPresenter
 
     private LayoutElement _topPadding;
     private LayoutElement _bottomPadding;
-
-    RectTransform IRecyclerListPresenter.ContentParent => ContentParent;
-    RectTransform IRecyclerListPresenter.PoolParent => PoolParent;
 
     private bool _initialSetupDone = false;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IRecyclerListPresenter
+public interface IRecyclerList
 {
     /// <summary> Informs the presenter that an item was selected by the user. </summary>
     /// <param name="selected"> The selected line from the list. </param>

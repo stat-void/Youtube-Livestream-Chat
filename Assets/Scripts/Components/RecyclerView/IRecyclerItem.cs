@@ -3,7 +3,7 @@ using UnityEngine;
 public interface IRecyclerItem
 {
     /// <summary> Initializes this virtual item to work with the given list presenter. Use after creating an instance. </summary>
-    void Initialize(IRecyclerListPresenter listPresenter);
+    void Initialize(IRecyclerList listPresenter);
 
     /// <summary> Set data for this object. </summary>
     void Bind(object data);

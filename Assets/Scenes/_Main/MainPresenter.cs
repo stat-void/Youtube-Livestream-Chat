@@ -29,18 +29,8 @@ public class MainPresenter : MonoBehaviour
     /*
     TODO List
 
-    Text cleanup?
-        Some people can send messages later than others, but due to a better connection, their message will come up first, causing
-            the resulting text to pop up multiple times. Should I add some minor checks for the previous message bulk to ignore repeating ID / message content?
-        I would have to implement the checking condition this needs with Focus Mode anyway.
-
-    Focus Mode
-        The first Screen Manager extra function. You already know how this should go.
-        Also, maybe document all the other ideas here at some point?
-
-    Resizing
-        Fix some of the elements with janky resizing so freeform resizing can be smaller width-wise without overlap. (mainly query panel)
-
+    Manual Timer activation/deactivation
+        Will require slight modification for the query panel positioning.
 
     Do I need a disclaimer for API Key usage guidelines?
         Youtube mentioned it somewhere, but where should I?
@@ -51,7 +41,17 @@ public class MainPresenter : MonoBehaviour
     Text
         More language support? Any way to reduce memory on it?
 
-    RecyclerView lists with resizable elements.
+    
+
+    Long term - Text cleanup?
+        Some people can send messages later than others, but due to a better connection, their message will come up first, causing
+            the resulting text to pop up multiple times. Should I add some minor checks for the previous message bulk to ignore repeating ID / message content?
+            Occurrence rate relatively rare so I'll not focus on this for now.
+
+    Long term - Fix current ARecyclerList visual bug (More info in said class).
+        When scrolling too aggressively, some of the start/end elements can disappear. Refreshes will make them reappear though.
+
+    Long term - RecyclerView lists with resizable elements.
         So ChatMessageListener can increase the amount of messages to 500/1000 remembered with trivial performance hits.
         This could also make the movement of the chat display smoother?
         What about a RecyclerGrid for some other areas?

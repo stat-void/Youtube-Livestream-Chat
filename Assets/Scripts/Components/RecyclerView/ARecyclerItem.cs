@@ -4,7 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(LayoutElement), typeof(RectTransform))]
 public abstract class ARecyclerItem : MonoBehaviour, IRecyclerItem
 {
-    protected IRecyclerListPresenter ListPresenter;
+    protected IRecyclerList ListPresenter;
 
     private LayoutElement _layoutElement;
     private RectTransform _rectTransform;
@@ -18,7 +18,7 @@ public abstract class ARecyclerItem : MonoBehaviour, IRecyclerItem
         _rectTransform.anchoredPosition.y - 0.5f * _layoutElement.minHeight;
 
 
-    public void Initialize(IRecyclerListPresenter listPresenter)
+    public void Initialize(IRecyclerList listPresenter)
     {
         ListPresenter  = listPresenter;
         _layoutElement = GetComponent<LayoutElement>();
