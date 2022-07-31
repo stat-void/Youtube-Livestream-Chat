@@ -41,7 +41,7 @@ public class MainPresenter : MonoBehaviour
     Text
         More language support? Any way to reduce memory on it?
 
-    
+    Long term - Rare cases of chat display messing up text display. Might take awhile to catch and debug it.
 
     Long term - Text cleanup?
         Some people can send messages later than others, but due to a better connection, their message will come up first, causing

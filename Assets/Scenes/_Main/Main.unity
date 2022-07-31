@@ -429,7 +429,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1076851589}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9259893
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2908,7 +2908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -102.500854, y: -10}
+  m_AnchoredPosition: {x: -102.500916, y: -10}
   m_SizeDelta: {x: -284.99902, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1033766466
@@ -3616,7 +3616,6 @@ GameObject:
   - component: {fileID: 1214202602}
   - component: {fileID: 1214202605}
   - component: {fileID: 1214202604}
-  - component: {fileID: 1214202603}
   m_Layer: 5
   m_Name: TabPanel
   m_TagString: Untagged
@@ -3646,26 +3645,6 @@ RectTransform:
   m_AnchoredPosition: {x: -90, y: 0}
   m_SizeDelta: {x: -390, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1214202603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1214202601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 90
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &1214202604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4147,6 +4126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1513175263}
   - component: {fileID: 1513175264}
+  - component: {fileID: 1513175265}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -4193,13 +4173,27 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1513175265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513175262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &1547464374
 GameObject:
   m_ObjectHideFlags: 0
@@ -5491,8 +5485,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1513175263}
   m_Horizontal: 1
-  m_Vertical: 1
-  m_MovementType: 1
+  m_Vertical: 0
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135

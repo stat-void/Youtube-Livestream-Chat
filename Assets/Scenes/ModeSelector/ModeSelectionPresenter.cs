@@ -34,7 +34,7 @@ public class ModeSelectionPresenter : MonoBehaviour
 
         SelectableModeItem.OnClick += OnChoiceClicked;
         SelectableModeItem.OnMouseHover += OnChoiceHovered;
-        ScreenResizeListener.OnResize += OnScreenResize;
+        //ScreenResizeListener.OnResize += OnScreenResize;
     }
 
     private void Open()
@@ -68,6 +68,7 @@ public class ModeSelectionPresenter : MonoBehaviour
 
     private void OnChoiceClicked(AModePresenter obj)
     {
+        DescriptorText.text = "";
         _modeManager.CloseButtonPressed();
         Close();
     }

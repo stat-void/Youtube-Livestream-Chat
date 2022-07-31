@@ -1,0 +1,1 @@
+Would you kindly stop autogenerating the StreamingAssets meta file, causing an empty folder not caught by Git to be generated and making an annoying fuss about it every single time I carry the project across different computers please?
