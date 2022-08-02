@@ -109,6 +109,4 @@ public class RemoveUserSearcher : UserSearcher
             UsernameIDDict[name].Remove(id);
         }
     }
-
-
 }

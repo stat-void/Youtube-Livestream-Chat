@@ -29,17 +29,30 @@ public class MainPresenter : MonoBehaviour
     /*
     TODO List
 
-    Manual Timer activation/deactivation
-        Will require slight modification for the query panel positioning.
-
     Do I need a disclaimer for API Key usage guidelines?
         Youtube mentioned it somewhere, but where should I?
+        Probably in the in-build guide.
 
     In-build guide on how to get an API Key.
         So people wouldn't have to read the GitLab/Hub page.
 
+    One last small performance improvement on Focus when resizing (Timer)
+
     Text
-        More language support? Any way to reduce memory on it?
+        More language support?
+        While I would like to make it dynamic for memory reduction,
+            that would be really bad for performance on any non-ascii language.
+
+    For version 2 - Manual Timer activation/deactivation
+        Query items were moved to have a good spot for the play/pause button.
+        And you need to make play/pause icons.
+        Maybe change text from "wait" to "delay" too.
+
+    For version 2 - First voter system.
+        You know what this is.
+
+    For version 2 - Second voter system.
+        You also know what this is.
 
     Long term - Rare cases of chat display messing up text display. Might take awhile to catch and debug it.
 

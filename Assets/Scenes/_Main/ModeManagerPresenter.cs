@@ -104,21 +104,30 @@ public class ModeManagerPresenter : MonoBehaviour
     private void OnTabCloseRequested()
     {
         int index = -1;
-        // If there is more than one tab, select and turn on a new tab
+
+        // If there is more than one tab, select and open a new tab
         if (_tabs.Count > 1)
         {
-            index++;
+            index = 0;
 
             foreach (TabItem tab in _tabs)
             {
                 if (tab.ModePresenter.GetName() == _currentTab.ModePresenter.GetName())
                     break;
+
                 index++;
             }
 
-            index = Mathf.Max(0, index - 1);
-            _tabs[index].Select();
-            _tabs[index].ModePresenter.Open();
+            if (index == 0)
+            {
+                _tabs[index + 1].Select();
+                _tabs[index + 1].ModePresenter.Open();
+            }
+            else
+            {
+                _tabs[index - 1].Select();
+                _tabs[index - 1].ModePresenter.Open();
+            }
         }
 
         _tabs.Remove(_currentTab);
@@ -126,8 +135,10 @@ public class ModeManagerPresenter : MonoBehaviour
 
         if (index == -1)
             _currentTab = null;
-        else
+        else if (index == 0)
             _currentTab = _tabs[index];
+        else
+            _currentTab = _tabs[index - 1];
     }
 
     private void AddButtonPressed()

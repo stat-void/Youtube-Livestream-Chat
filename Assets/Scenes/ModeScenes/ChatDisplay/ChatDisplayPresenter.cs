@@ -95,7 +95,8 @@ public class ChatDisplayPresenter : AModePresenter
     {
         // async does not have WaitForEndOfFrame, so using Coroutine for smoother scrollbar anchoring.
         _currentDisplay = DisplayMessages(newMessages);
-        StartCoroutine(_currentDisplay);
+        if (_currentDisplay != null)
+            StartCoroutine(_currentDisplay);
     }
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)

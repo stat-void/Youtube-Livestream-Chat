@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class AddUserSearcher : UserSearcher
 {
@@ -54,5 +56,4 @@ public class AddUserSearcher : UserSearcher
                 return user;
         return null;
     }
-
 }

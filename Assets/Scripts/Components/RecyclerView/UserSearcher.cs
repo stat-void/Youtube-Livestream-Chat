@@ -37,6 +37,7 @@ public class UserSearcher : ARecyclerList
         SearchField.onValueChanged.AddListener(OnSearchUpdate);
         RefreshButton.onClick.AddListener(OnAddRefreshClicked);
         DirectButton.onClick.AddListener(OnDirectButtonClick);
+        ScreenResizeListener.OnResize += OnScreenResize;
     }
 
 
@@ -97,6 +98,11 @@ public class UserSearcher : ARecyclerList
     /// <summary> Called whenever the refresh button is manually clicked on. </summary>
     private void OnAddRefreshClicked() =>
         RefreshUsers();
+
+    private void OnScreenResize(Vector2 arg1, Vector2 arg2) =>
+        // TODO: Maybe make this a timer based wait before rushing ahead, any resize resets timer, and then once passed, calls refresh.
+        RefreshUsers();
+    
 
     protected async void RefreshUsers()
     {
