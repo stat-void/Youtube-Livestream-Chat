@@ -7,6 +7,7 @@ using Void.YoutubeAPI.LiveStreamChat.Messages;
 public class StartupDisplayPresenter : AModePresenter
 {
     [SerializeField] protected ModeManagerPresenter ModeManager;
+    [SerializeField] protected APIGuidePresenter APIPresenter;
 
     [Header("Inputs")]
     [SerializeField] protected TMP_InputField API_InputField;
@@ -51,6 +52,7 @@ public class StartupDisplayPresenter : AModePresenter
         ConnectionButton.onClick.RemoveListener(AttemptInit);
         YoutubeLiveChatMessages.Feedback -= OnFeedback;
 
+        APIPresenter.Finish();
         gameObject.SetActive(false);
     }
 

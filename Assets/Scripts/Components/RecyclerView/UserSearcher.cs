@@ -115,7 +115,8 @@ public class UserSearcher : ARecyclerList
         _ = RotateRefreshIcon();
         await Task.Run(LoopUsers);
 
-        RefreshButton.interactable = true;
+        if (RefreshButton != null)
+            RefreshButton.interactable = true;
         _refreshingList = false;
 
         ClearVisibleItems();

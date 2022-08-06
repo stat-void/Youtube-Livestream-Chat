@@ -25,18 +25,10 @@ public class MainPresenter : MonoBehaviour
         ViewSystem.Open("ModeScenes/Settings/Settings");        // Modify settings that affect all other views.
     }
 
-
     /*
     TODO List
-
-    Do I need a disclaimer for API Key usage guidelines?
-        Youtube mentioned it somewhere, but where should I?
-        Probably in the in-build guide.
-
-    In-build guide on how to get an API Key.
-        So people wouldn't have to read the GitLab/Hub page.
-
     One last small performance improvement on Focus when resizing (Timer)
+    This performance improvement now also needs to be done for APIGuidePresenter.
 
     Text
         More language support?
