@@ -22,7 +22,6 @@ public class ModeSelectionPresenter : MonoBehaviour
     private List<SelectableModeItem> _activeModes = new();
 
     private bool _setupDone = false;
-    private bool _open = false;
 
     private void Start()
     {
@@ -53,14 +52,12 @@ public class ModeSelectionPresenter : MonoBehaviour
         }
 
         BaseCanvas.gameObject.SetActive(true);
-        _open = true;
     }
 
 
     private void Close()
     {
         BaseCanvas.gameObject.SetActive(false);
-        _open = false;
     }
 
     private void OnChoiceHovered(string desc) =>
@@ -74,14 +71,10 @@ public class ModeSelectionPresenter : MonoBehaviour
     }
         
 
-
-    private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
+    /*private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
     {
-        if (!_open)
-            return;
-
         foreach (var item in _activeModes)
             item.UpdateFit();
-    }
+    }*/
 
 }

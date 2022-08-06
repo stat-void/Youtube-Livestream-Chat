@@ -26,7 +26,6 @@ public class FocusModePresenter : AModePresenter
     private Stack<AListItem> _objectPool = new();
     private int _currentActives = 0;
 
-    private bool _open = false;
     private IEnumerator _currentDisplay;
     private HashSet<IEnumerator> _disposables = new();
 
@@ -35,8 +34,6 @@ public class FocusModePresenter : AModePresenter
     private void Awake()
     {
         BaseCanvas.worldCamera = Camera.main;
-        ScreenResizeListener.OnResize += OnScreenResize;
-
         BaseCanvas.gameObject.SetActive(false);
     }
 
@@ -63,8 +60,8 @@ public class FocusModePresenter : AModePresenter
         BaseCanvas.gameObject.SetActive(true);
         ScrollRect.verticalNormalizedPosition = 0f;
         SearchField.OpenRefresh();
-        _open = true;
 
+        ScreenResizeListener.OnResize += OnScreenResize;
         ChatMessageListener.ChatMessages += OnNewMessages;
 
 
@@ -73,9 +70,10 @@ public class FocusModePresenter : AModePresenter
 
     public override void Close()
     {
-        _open = false;
         _currentActives = 0;
+        SearchField.CloseRefresh();
 
+        ScreenResizeListener.OnResize -= OnScreenResize;
         ChatMessageListener.ChatMessages -= OnNewMessages;
 
 
@@ -240,11 +238,8 @@ public class FocusModePresenter : AModePresenter
         return item;
     }
 
-    private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
+    private void OnScreenResize()
     {
-        if (!_open)
-            return;
-
         foreach (ChatItem item in _activePool)
             item.UpdateFit();
     }

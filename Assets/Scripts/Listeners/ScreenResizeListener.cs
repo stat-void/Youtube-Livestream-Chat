@@ -5,7 +5,7 @@ using UnityEngine;
 public class ScreenResizeListener : MonoBehaviour
 {
     /// <summary> Invoke the current minimum and maximum world positions of this transform. </summary>
-    public static event Action<Vector2, Vector2> OnResize;
+    public static event Action OnResize;
 
     private RectTransform _rect;
     private bool _dimensionsChanged = false;
@@ -25,11 +25,7 @@ public class ScreenResizeListener : MonoBehaviour
 
         _dimensionsChanged = true;
 
-        //TODO: This is not right, in the future for RecyclerViews, you want to grab this RectTransforms corners relative to screen size.
-        var anchorWorldMin = _rect.anchorMin * Screen.width;
-        var anchorWorldMax = _rect.anchorMax * Screen.height;
-
-        OnResize?.Invoke(anchorWorldMin, anchorWorldMax);
+        OnResize?.Invoke();
         await Task.Yield();
         _dimensionsChanged = false;
     }

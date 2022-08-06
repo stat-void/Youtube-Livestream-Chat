@@ -17,8 +17,16 @@ public class UserSearchField : MonoBehaviour
 
     public void OpenRefresh()
     {
+        AddSearcher.Open();
+        RemoveSearcher.Open();
         AddSearcher.RefreshData();
         RemoveSearcher.RefreshData();
+    }
+
+    public void CloseRefresh()
+    {
+        AddSearcher.Close();
+        RemoveSearcher.Close();
     }
 
     public bool IsUserValid(YoutubeChatMessage message)

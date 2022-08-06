@@ -21,15 +21,12 @@ public class ChatDisplayPresenter : AModePresenter
     private Stack<AListItem> _objectPool = new();
     private int _currentActives = 0;
 
-    private bool _open = false;
     private IEnumerator _currentDisplay;
     private HashSet<IEnumerator> _disposables = new();
 
     private void Awake()
     {
         BaseCanvas.worldCamera = Camera.main;
-        ScreenResizeListener.OnResize += OnScreenResize;
-
         BaseCanvas.gameObject.SetActive(false);
     }
 
@@ -58,7 +55,7 @@ public class ChatDisplayPresenter : AModePresenter
 
         ScrollRect.verticalNormalizedPosition = 0f;
 
-        _open = true;
+        ScreenResizeListener.OnResize += OnScreenResize;
         ChatMessageListener.ChatMessages += OnNewMessages;
 
         _apiTimer.StartTimer();
@@ -66,8 +63,8 @@ public class ChatDisplayPresenter : AModePresenter
 
     public override void Close()
     {
-        _open = false;
         _currentActives = 0;
+        ScreenResizeListener.OnResize -= OnScreenResize;
         ChatMessageListener.ChatMessages -= OnNewMessages;
 
         // Take every item currently active and unbind them into the pool, deactivating them.
@@ -173,11 +170,8 @@ public class ChatDisplayPresenter : AModePresenter
         return item;
     }
 
-    private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
+    private void OnScreenResize()
     {
-        if (!_open)
-            return;
-
         foreach (ChatItem item in _activePool)
             item.UpdateFit();
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -18,6 +19,10 @@ public class APIGuidePresenter : MonoBehaviour
     [SerializeField] protected Button LibraryButton;
     [SerializeField] protected Button CredentialsButton;
     [SerializeField] protected Button QuotaButton;
+
+    bool _quitting = false;
+    private IEnumerator _currentResize = null;
+    private float _resizeWaitSeconds = 0f;
 
     private void Awake()
     {
@@ -51,11 +56,37 @@ public class APIGuidePresenter : MonoBehaviour
         BaseGO.SetActive(false);
     }
 
-    private void OnScreenResize(Vector2 arg1, Vector2 arg2)
+    private void OnScreenResize()
     {
+        if (_quitting)
+            return;
+
+        _resizeWaitSeconds = 0.1f;
+
+        if (_currentResize == null)
+        {
+            _currentResize = RefreshFit();
+            StartCoroutine(_currentResize);
+        }
+    }
+
+    private IEnumerator RefreshFit()
+    {
+        while (_resizeWaitSeconds > 0)
+        {
+            yield return null;
+            _resizeWaitSeconds -= Time.unscaledDeltaTime;
+        }
+
+        _resizeWaitSeconds = 0;
         foreach (TextItem item in TextFields)
             item.UpdateFit();
+
+        _currentResize = null;
+        yield break;
     }
+
+
 
     private async void OnOpenClicked()
     {
@@ -87,5 +118,8 @@ public class APIGuidePresenter : MonoBehaviour
     private void OnQuotaClicked() =>
         Application.OpenURL("https://cloud.google.com/docs/quota");
 
-
+    private void OnApplicationQuit()
+    {
+        _quitting = true;
+    }
 }

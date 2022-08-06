@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class UserSearcher : ARecyclerList
 {
@@ -28,16 +29,30 @@ public class UserSearcher : ARecyclerList
     public static event Action<SearchUserItem, SelectionType> OnUserSelection;
     public static event Action<string, SelectionType> OnDirectUserSelection;
 
+    bool _quitting = false;
+    private IEnumerator _currentResize = null;
+    private float _resizeWaitSeconds = 0f;
 
     private void Start()
     {
         // Size of the virtual list depends on sheet size from SetupSheet
         SetupRecyclerList(true);
+    }
 
+    public void Open()
+    {
         SearchField.onValueChanged.AddListener(OnSearchUpdate);
         RefreshButton.onClick.AddListener(OnAddRefreshClicked);
         DirectButton.onClick.AddListener(OnDirectButtonClick);
         ScreenResizeListener.OnResize += OnScreenResize;
+    }
+
+   public void Close()
+    {
+        SearchField.onValueChanged.RemoveListener(OnSearchUpdate);
+        RefreshButton.onClick.RemoveListener(OnAddRefreshClicked);
+        DirectButton.onClick.RemoveListener(OnDirectButtonClick);
+        ScreenResizeListener.OnResize -= OnScreenResize;
     }
 
 
@@ -99,10 +114,36 @@ public class UserSearcher : ARecyclerList
     private void OnAddRefreshClicked() =>
         RefreshUsers();
 
-    private void OnScreenResize(Vector2 arg1, Vector2 arg2) =>
-        // TODO: Maybe make this a timer based wait before rushing ahead, any resize resets timer, and then once passed, calls refresh.
+    private void OnScreenResize()
+    {
+        if (_quitting)
+            return;
+
+        _resizeWaitSeconds = 0.1f;
+
+        if (_currentResize == null)
+        {
+            _currentResize = RefreshFit();
+            StartCoroutine(_currentResize);
+        }
+    }
+
+    private IEnumerator RefreshFit()
+    {
+        while (_resizeWaitSeconds > 0)
+        {
+            yield return null;
+            _resizeWaitSeconds -= Time.unscaledDeltaTime;
+        }
+
+        _resizeWaitSeconds = 0;
+
         RefreshUsers();
-    
+
+        _currentResize = null;
+        yield break;
+    }
+
 
     protected async void RefreshUsers()
     {
@@ -201,5 +242,10 @@ public class UserSearcher : ARecyclerList
         Remove,
         DirectAdd,
         DirectRemove
+    }
+
+    private void OnApplicationQuit()
+    {
+        _quitting = true;
     }
 }
