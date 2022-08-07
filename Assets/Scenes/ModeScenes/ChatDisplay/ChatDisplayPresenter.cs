@@ -145,6 +145,7 @@ public class ChatDisplayPresenter : AModePresenter
 
             _activePool.Add(assignable);
             assignable.transform.SetAsLastSibling();
+            //TODO: This Bind has a rare chance of failure - ArgumentOutOfRangeException
             assignable.Bind(newMessages[i], ChatContent);
 
             if (Settings.RealTime)

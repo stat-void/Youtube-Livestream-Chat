@@ -39,7 +39,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dbbf667a9f42a344282656b0f4598ba9, type: 2}
   - {fileID: 11400000, guid: 30e6720c68e471f46994688112f65fb5, type: 2}
   - {fileID: 11400000, guid: 860cfcc459d574442a638120899d17a6, type: 2}
+  - {fileID: 11400000, guid: ade0907b521f56e479c10f9547acebad, type: 2}
   - {fileID: 11400000, guid: 8ac82f1c6d91a44b1887e0073f01b6bf, type: 2}
+  - {fileID: 11400000, guid: 70611d8e6b39fe240a0fabfcfd38fb2e, type: 2}
+  - {fileID: 11400000, guid: 8a8da1e3e2fc9604580a4d2627796d66, type: 2}
+  - {fileID: 11400000, guid: 20d353fb6921503499d642706c4dddbc, type: 2}
   m_matchMaterialPreset: 1
   m_defaultSpriteAsset: {fileID: 0}
   m_defaultSpriteAssetPath: Sprite Assets/

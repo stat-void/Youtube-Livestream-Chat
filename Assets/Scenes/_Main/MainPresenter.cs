@@ -27,26 +27,24 @@ public class MainPresenter : MonoBehaviour
 
     /*
     TODO List
-    One last small performance improvement on Focus when resizing (Timer)
-    This performance improvement now also needs to be done for APIGuidePresenter.
-
-    Text
-        More language support?
-        While I would like to make it dynamic for memory reduction,
-            that would be really bad for performance on any non-ascii language.
-
-    For version 2 - Manual Timer activation/deactivation
+    Version 2 - Manual Timer activation/deactivation
         Query items were moved to have a good spot for the play/pause button.
         And you need to make play/pause icons.
         Maybe change text from "wait" to "delay" too.
 
-    For version 2 - First voter system.
+    Version 2 - Rare cases of chat display messing up text display.
+        Determined 2 separate situations as the cause:
+            1. Too many messages in a row, easier to debug with manual timer.
+            2. Some Superchat events having an unhandled tier value.
+
+    Version 2 - First voter system.
         You know what this is.
 
-    For version 2 - Second voter system.
+    Version 2 - Second voter system.
         You also know what this is.
 
-    Long term - Rare cases of chat display messing up text display. Might take awhile to catch and debug it.
+    Version 2 - Even more language support
+        There are always unpredictable symbols that may be used in a chat.
 
     Long term - Text cleanup?
         Some people can send messages later than others, but due to a better connection, their message will come up first, causing

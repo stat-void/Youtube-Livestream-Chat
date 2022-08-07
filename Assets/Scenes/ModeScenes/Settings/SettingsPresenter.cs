@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Void.YoutubeAPI.LiveStreamChat.Messages;
 using UnityEngine.UI;
 using Void.YoutubeAPI;
 using TMPro;
-using System;
 
 public class SettingsPresenter : AModePresenter
 {
@@ -50,15 +46,6 @@ public class SettingsPresenter : AModePresenter
         MaxQuotaInput.text = _quotaManager.MaxQuota.ToString();
         RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
 
-        RealTime.onValueChanged.AddListener(OnRealTimeUpdate);
-        Animations.onValueChanged.AddListener(OnAnimationsUpdate);
-        UseYTInterval.onValueChanged.AddListener(OnUseYTIntervalUpdate);
-
-        MaxQuotaInput.onEndEdit.AddListener(OnMaxQuotaUpdate);
-        RequestIntervalInput.onEndEdit.AddListener(OnRequestDelayUpdate);
-
-        DeleteAPIKeyButton.onClick.AddListener(OnAPIKeyDeleteRequest);
-
         NotifyClassReady(this);
     }
 
@@ -75,11 +62,31 @@ public class SettingsPresenter : AModePresenter
     public override void Open()
     {
         BaseCanvas.gameObject.SetActive(true);
+
+        RealTime.onValueChanged.AddListener(OnRealTimeUpdate);
+        Animations.onValueChanged.AddListener(OnAnimationsUpdate);
+        UseYTInterval.onValueChanged.AddListener(OnUseYTIntervalUpdate);
+
+        MaxQuotaInput.onEndEdit.AddListener(OnMaxQuotaUpdate);
+        RequestIntervalInput.onEndEdit.AddListener(OnRequestDelayUpdate);
+
+        DeleteAPIKeyButton.onClick.AddListener(OnAPIKeyDeleteRequest);
+        DeleteAllInfoButton.onClick.AddListener(OnDeleteAllRequest);
     }
 
     public override void Close()
     {
         BaseCanvas.gameObject.SetActive(false);
+
+        RealTime.onValueChanged.RemoveListener(OnRealTimeUpdate);
+        Animations.onValueChanged.RemoveListener(OnAnimationsUpdate);
+        UseYTInterval.onValueChanged.RemoveListener(OnUseYTIntervalUpdate);
+
+        MaxQuotaInput.onEndEdit.RemoveListener(OnMaxQuotaUpdate);
+        RequestIntervalInput.onEndEdit.RemoveListener(OnRequestDelayUpdate);
+
+        DeleteAPIKeyButton.onClick.RemoveListener(OnAPIKeyDeleteRequest);
+        DeleteAllInfoButton.onClick.RemoveListener(OnDeleteAllRequest);
     }
 
     private void OnRealTimeUpdate(bool value) =>
@@ -119,5 +126,4 @@ public class SettingsPresenter : AModePresenter
 
     private void OnDeleteAllRequest() =>
         PlayerPrefs.DeleteAll();
-
 }
