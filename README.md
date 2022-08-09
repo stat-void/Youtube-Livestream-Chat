@@ -13,9 +13,7 @@ For an idea on what could be done with this system, [I currently have an interac
 - Focus mode - A nearly identical chat display that can be used to filter in specific users. Current features are to filter in moderators, members, or any user by their specific username, adding them one by one and making a "focused" chat display.
 
 ## Installation
-Note to self - Once ready, add a link to a build that can be downloaded and used. 
-
-Otherwise, download this project, open it from Unity and make a build from there.
+[Download the Version 1 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V1/Youtube-Livestream-Chat-V1.zip), unpack it and run the executable.
 
 ## Usage
 
