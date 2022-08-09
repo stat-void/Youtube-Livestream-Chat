@@ -49,7 +49,7 @@ For more information on quotas and requesting increases to the quota cap (might 
 
 ## Project Status (Roadmap)
 
-Once the first release build is available here, the next roadmap for version 2 is:
+Roadmap for version 2:
 - The ability to manually pause/unpause query requests after switching to a new tab.
 - Two different voting systems:
     - A "regular" voting system that resembles Youtube polling. Since this requires writing into the chat directly to vote, the current polling system will be better, unless you need more than 4 votable options. For now, I'm planning to it being able to add up to 10 pollable choices. If I ever figure out the visual bug on my RecyclerViews, the amount of choices could be made potentially infinite.
@@ -61,5 +61,5 @@ Once the first release build is available here, the next roadmap for version 2 i
 - Youtube Channel - [Stat Void](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA). Showing interest in the stuff I'm doing is probably the best way to support right now.
 
 ## License
-Uhh, whatever the license was to freely download and edit it as you see fit?
+This project is licensed under the terms of the MIT license.
 
