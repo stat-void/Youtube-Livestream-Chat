@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +8,9 @@ using Void.YoutubeAPI.LiveStreamChat.Messages;
 
 public class StartupDisplayPresenter : AModePresenter
 {
+
+    public static event Action OnStartupFinish;
+
     [SerializeField] protected ModeManagerPresenter ModeManager;
     [SerializeField] protected APIGuidePresenter APIPresenter;
 
@@ -53,6 +58,8 @@ public class StartupDisplayPresenter : AModePresenter
         YoutubeLiveChatMessages.Feedback -= OnFeedback;
 
         APIPresenter.Finish();
+
+        OnStartupFinish?.Invoke();
         gameObject.SetActive(false);
     }
 

@@ -22,6 +22,11 @@ namespace Void.YoutubeAPI
         public event Action<float> OnAPIRequestDelayChanged;
 
         /// <summary>
+        /// Event used to notify if any piece of code externally updated play status of this class timer.
+        /// </summary>
+        public event Action<bool> OnTimerPlayUpdate;
+
+        /// <summary>
         /// Event used to automate API message requests if this class is used.
         /// </summary>
         public static event Action OnAPIMessagesRequested;
@@ -32,9 +37,10 @@ namespace Void.YoutubeAPI
             get { return _apiRequestInterval; }
         }
 
+        public bool IsPlaying { get; private set; } = false;
+
         private float _apiRequestInterval = 3;
         private float _currentTime = 0;
-        private bool _paused = true;
 
         /// <summary> Decide if this class should use the interval gotten in each chat message request, or set it manually </summary>
         public bool UseYoutubeInterval
@@ -62,7 +68,7 @@ namespace Void.YoutubeAPI
 
         private void Update()
         {
-            if (!_paused)
+            if (IsPlaying)
                 OnDeltaUpdate(Time.unscaledDeltaTime);
         }
 
@@ -108,8 +114,17 @@ namespace Void.YoutubeAPI
             }
         }
 
-        public void StartTimer() => _paused = false;
-        public void PauseTimer() => _paused = true;
+        public void StartTimer()
+        {
+            IsPlaying = true;
+            OnTimerPlayUpdate?.Invoke(true);
+        }
+
+        public void PauseTimer()
+        {
+            IsPlaying = false;
+            OnTimerPlayUpdate?.Invoke(false);
+        }
         public void ResetTimer() => _currentTime = 0;
     }
 }
