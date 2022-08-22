@@ -20,17 +20,14 @@ public class MainPresenter : MonoBehaviour
     private void PreloadViews()
     {
         ViewSystem.Open("ModeSelector/ModeSelector");           // Scene that displays all possible "modes" in a list that the user can pick from.
-        ViewSystem.Open("ModeScenes/ChatDisplay/ChatDisplay");  // Generic chat displayer
-        ViewSystem.Open("ModeScenes/FocusMode/FocusMode");      // Chat display where you can listen to specific users
+        ViewSystem.Open("ModeScenes/ChatDisplay/ChatDisplay");  // Generic chat displayer.
+        ViewSystem.Open("ModeScenes/FocusMode/FocusMode");      // Chat display where you can listen to specific users.
+        ViewSystem.Open("ModeScenes/VoteMode/VoteMode");        // Recreation of Youtube polling, to have users vote for something.
         ViewSystem.Open("ModeScenes/Settings/Settings");        // Modify settings that affect all other views.
     }
 
     /*
     TODO List
-    Version 2 - Manual Timer activation/deactivation
-        Query items were moved to have a good spot for the play/pause button.
-        And you need to make play/pause icons.
-        Maybe change text from "wait" to "delay" too.
 
     Version 2 - Rare cases of chat display messing up text display.
         Determined 2 separate situations as the cause:
@@ -45,6 +42,14 @@ public class MainPresenter : MonoBehaviour
 
     Version 2 - Even more language support
         There are always unpredictable symbols that may be used in a chat.
+
+    Version 3 (Maybe) - Vote Extractor
+        Extension to regular voter to create additional votes where only those who
+        voted in a specific way are allowed for the next vote.
+
+    Version 3 (Possibly) - Vote Loosener
+        Extension to regular voter to have a "non-strict mode". A message would only
+        have to contain the prompt, not be exclusively it (regex matching for the value, separated by spaces IF there are words before/after it)
 
     Long term - Text cleanup?
         Some people can send messages later than others, but due to a better connection, their message will come up first, causing
