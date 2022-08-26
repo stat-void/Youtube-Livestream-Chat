@@ -106,9 +106,18 @@ public class SettingsPresenter : AModePresenter
 
     private void OnRequestDelayUpdate(string value)
     {
-        RequestIntervalInput.text = string.Format(value, "0.00");
-        _apiTimer.SetAPIRequestInterval(float.Parse(value));
-        RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
+        if (value == "")
+        {
+            //RequestIntervalInput.text = "3.00";
+            _apiTimer.SetAPIRequestInterval(3f);
+            RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
+        }
+        else
+        {
+            //RequestIntervalInput.text = string.Format(value, "0.00");
+            _apiTimer.SetAPIRequestInterval(float.Parse(value));
+            RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
+        }
     }
         
 

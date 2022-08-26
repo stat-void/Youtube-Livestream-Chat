@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5cd13144a8afb4ff1958365b1895682d
+guid: eb07271a77f744834ac2cf1144832b0d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,11 +9,10 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - White Rabbit
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: 9396c8de62a1c4a9cb315a0aae7c569e, type: 3}
+  - White Rabbit Extended
+  fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 1
+  fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1
