@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ModeScenes/VoteMode/VoteMode.unity
     guid: 53ca1e01bf36848f8ba0a00752f4386a
   - enabled: 1
+    path: Assets/Scenes/ModeScenes/PollMode/PollMode.unity
+    guid: 16f166429cc314f258ab0c58e67159b0
+  - enabled: 1
     path: Assets/Scenes/ModeScenes/Settings/Settings.unity
     guid: b9b4e168b9ae847e7895c0f8ab330e0f
   m_configObjects: {}

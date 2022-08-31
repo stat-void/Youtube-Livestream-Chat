@@ -161,7 +161,10 @@ public class VoteManager : MonoBehaviour
     private void AddAnswer()
     {
         if (_voteItems.Count >= _maxAnswers)
+        {
+            VoteAnswerCountInputField.text = $"{_maxAnswers}";
             return;
+        } 
 
         VoteItem item = GetPoolItem();
         _voteItems.Add(item);
@@ -175,7 +178,10 @@ public class VoteManager : MonoBehaviour
     private void RemoveAnswer()
     {
         if (_voteItems.Count <= _minAnswers)
+        {
+            VoteAnswerCountInputField.text = $"{_minAnswers}";
             return;
+        }
 
         VoteItem item = _voteItems[_voteItems.Count - 1];
 
@@ -298,6 +304,9 @@ public class VoteManager : MonoBehaviour
 
         foreach (YoutubeChatMessage message in messages)
         {
+            if (message.Message == null)
+                continue;
+
             string id = message.ChannelID;
             string prompt = message.Message.ToLower();
 

@@ -22,7 +22,8 @@ public class MainPresenter : MonoBehaviour
         ViewSystem.Open("ModeSelector/ModeSelector");           // Scene that displays all possible "modes" in a list that the user can pick from.
         ViewSystem.Open("ModeScenes/ChatDisplay/ChatDisplay");  // Generic chat displayer.
         ViewSystem.Open("ModeScenes/FocusMode/FocusMode");      // Chat display where you can listen to specific users.
-        ViewSystem.Open("ModeScenes/VoteMode/VoteMode");        // Recreation of Youtube polling, to have users vote for something.
+        ViewSystem.Open("ModeScenes/VoteMode/VoteMode");        // Recreation of Youtube voting.
+        ViewSystem.Open("ModeScenes/PollMode/PollMode");        // Custom poller, to see general sentiment on what users are writing.
         ViewSystem.Open("ModeScenes/Settings/Settings");        // Modify settings that affect all other views.
     }
 
@@ -33,12 +34,6 @@ public class MainPresenter : MonoBehaviour
         Determined 2 separate situations as the cause:
             1. Too many messages in a row, easier to debug with manual timer.
             2. Some Superchat events having an unhandled tier value.
-
-    Version 2 - First voter system.
-        You know what this is.
-
-    Version 2 - Second voter system.
-        You also know what this is.
 
     Version 2 - Even more language support
         There are always unpredictable symbols that may be used in a chat.
