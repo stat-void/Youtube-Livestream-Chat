@@ -11,6 +11,8 @@ For an idea on what could be done with this system, [I currently have an interac
 ## Features
 - Chat display - A regular chat display for a given video ID. One advantage this has over a direct chat window from Youtube is being able to (for most of the time) display messages with lower latency, as long as the request delay is equal or below the Youtube recommended polling wait time.
 - Focus mode - A nearly identical chat display that can be used to filter in specific users. Current features are to filter in moderators, members, or any user by their specific username, adding them one by one and making a "focused" chat display.
+- Voter - A "regular" voting system that resembles Youtube voting. Has the ability to manually write a question and a set of answers with prompts. Prompts are what users within a chat have to write to have their vote registered.. If left empty, numbers will be automatically generated as votable choices. Up to 10 answers can be tracked. An optional choice to be able to change your vote is also available.
+- Poller - A freeform voting system. Instead of giving a choice, it keeps track of what users are generally writing and shows the 10 most written things. Also, if a user has written something new, their old message and its count is removed. Messages are also automatically removed after 20 queries to keep information fresh. Good for situations where you want to quickly see what choices the chat would make.
 
 ## Installation
 [Download the Version 1 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V1/Youtube-Livestream-Chat-V1.zip), unpack it and run the executable.
@@ -46,14 +48,14 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-
-Roadmap for version 2:
-- The ability to manually pause/unpause query requests after switching to a new tab.
-- Two different voting systems:
-    - A "regular" voting system that resembles Youtube polling. Since this requires writing into the chat directly to vote, the current polling system will be better, unless you need more than 4 votable options. For now, I'm planning to it being able to add up to 10 pollable choices. If I ever figure out the visual bug on my RecyclerViews, the amount of choices could be made potentially infinite.
-    - An "open" voting system, where there are no questions or answers, but it instead keeps track of what the most popular words are, and displays the top 10 most written words. Good for statistics in situations where the chat likes to make decisions (1, 2, 3, ...) or tier choices (S, A, B, C, ...).
-- More text support.
-- Some specific bug fixes that are easier to pinpoint once manual pause/unpause is implemented.
+Right now I think I'm going to take a small break and work on another project I had in mind, but when I come back - Ideas for Version 3 Roadmap:
+- Personalisation view - To give a little bit of freedom in the program appearance, such as disabling bloom, or changing the display colors.
+- Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead.
+- Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view (if I make that)?
+- Voter updates - Give options for voting to be less strict (the prompt is written somewhere in text), and make an optional addition that allows only people who voted in a specific way to participate in the next vote.
+- Poller updates - Make decay an editable value (currently 20 queries). Otherwise I think this view is fine.
+- OAuth version integration, if I can figure it out. Then this can be used on membership streams. However, I have to find a way that doesn’t involve saving your username/password, because that breaks TOS.
+- More text support, as usual.
 
 ## Support
 - Youtube Channel - [Stat Void](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA). Showing interest in the stuff I'm doing is probably the best way to support right now.
