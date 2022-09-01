@@ -30,13 +30,8 @@ public class MainPresenter : MonoBehaviour
     /*
     TODO List
 
-    Version 2 - Rare cases of chat display messing up text display.
-        Determined 2 separate situations as the cause:
-            1. Too many messages in a row, easier to debug with manual timer.
-            2. Some Superchat events having an unhandled tier value.
-
-    Version 2 - Even more language support
-        There are always unpredictable symbols that may be used in a chat.
+    Version 3 - Customization View 
+        Give an opportunity to change the visuals more to the users liking.
 
     Version 3 (Maybe) - Vote Extractor
         Extension to regular voter to create additional votes where only those who
@@ -45,6 +40,12 @@ public class MainPresenter : MonoBehaviour
     Version 3 (Possibly) - Vote Loosener
         Extension to regular voter to have a "non-strict mode". A message would only
         have to contain the prompt, not be exclusively it (regex matching for the value, separated by spaces IF there are words before/after it)
+
+    Version 3 - Poll Decay as a changeable parameter.
+        Self-explanatory
+
+    Version 3 - Even more language support
+        Eventually, I'll have to start considering even more unique letter languages
 
     Long term - Text cleanup?
         Some people can send messages later than others, but due to a better connection, their message will come up first, causing
