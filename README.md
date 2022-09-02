@@ -15,7 +15,7 @@ For an idea on what could be done with this system, [I currently have an interac
 - Poller - A freeform voting system. Instead of giving a choice, it keeps track of what users are generally writing and shows the 10 most written things. Also, if a user has written something new, their old message and its count is removed. Messages are also automatically removed after 20 queries to keep information fresh. Good for situations where you want to quickly see what choices the chat would make.
 
 ## Installation
-[Download the Version 1 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V1/Youtube-Livestream-Chat-V1.zip), unpack it and run the executable.
+[Download the Version 2 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V2/Youtube-Livestream-Chat-V2.zip), unpack it and run the executable.
 
 ## Usage
 
