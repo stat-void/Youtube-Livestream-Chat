@@ -48,13 +48,16 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-Right now I think I'm going to take a small break and work on another project I had in mind, but when I come back - Ideas for Version 3 Roadmap:
+Current status with the other project is ~60% as of this update. Most of the core is done there, leaving only one major part left, and then doing all of the additional fluff + SFX. When I come back - Ideas for Version 3 Roadmap:
+
 - Personalisation view - To give a little bit of freedom in the program appearance, such as disabling bloom, or changing the display colors.
+- CRT video afterglow effect creation - In regards to a future project that I'll look into when the current side project is finished. I want to test out making a post-processing effect (or a simple quick solution) for that CRT monitor effect when viewed through a camera with different refresh rates. In here, it would be a part of the personalisation view.
 - Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead.
 - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view (if I make that)?
 - Voter updates - Give options for voting to be less strict (the prompt is written somewhere in text), and make an optional addition that allows only people who voted in a specific way to participate in the next vote.
 - Poller updates - Make decay an editable value (currently 20 queries). Otherwise I think this view is fine.
 - OAuth version integration, if I can figure it out. Then this can be used on membership streams. However, I have to find a way that doesn’t involve saving your username/password, because that breaks TOS.
+- Convert any data saving from PlayerPrefs to a JSON document. This way, it's much simpler to both delete and carry over data on devices, and it reduces Unity dependencies. Eventually, I want to have a pure C# variant of this that can be used on other engines.
 - More text support, as usual.
 
 ## Support
