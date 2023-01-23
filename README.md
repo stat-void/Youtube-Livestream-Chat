@@ -48,17 +48,17 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-Current status with the other project is ~60% as of this update. Most of the core is done there, leaving only one major part left, and then doing all of the additional fluff + SFX. When I come back - Ideas for Version 3 Roadmap:
+I've changed my mind regarding the other project, for now. I'll finish V3, then make a video about my findings.
 
 - Personalisation view - To give a little bit of freedom in the program appearance, such as disabling bloom, or changing the display colors.
-- CRT video afterglow effect creation - In regards to a future project that I'll look into when the current side project is finished. I want to test out making a post-processing effect (or a simple quick solution) for that CRT monitor effect when viewed through a camera with different refresh rates. In here, it would be a part of the personalisation view.
-- Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead.
-- Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view (if I make that)?
+- Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead. Optionally, has options to capture superchats, or membership related events.
+- Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
 - Voter updates - Give options for voting to be less strict (the prompt is written somewhere in text), and make an optional addition that allows only people who voted in a specific way to participate in the next vote.
 - Poller updates - Make decay an editable value (currently 20 queries). Otherwise I think this view is fine.
 - OAuth version integration, if I can figure it out. Then this can be used on membership streams. However, I have to find a way that doesn’t involve saving your username/password, because that breaks TOS.
-- Convert any data saving from PlayerPrefs to a JSON document. This way, it's much simpler to both delete and carry over data on devices, and it reduces Unity dependencies. Eventually, I want to have a pure C# variant of this that can be used on other engines.
-- More text support, as usual.
+- Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
+- Backlog - CRT video afterglow effect creation - In regards to a future project that I'll look into. I want to test out making a post-processing effect (or a simple quick solution) for that CRT monitor effect when viewed through a camera with different refresh rates. In here, it would be a part of the personalisation view.
+- Backlog - More text support, as usual.
 
 ## Support
 - Youtube Channel - [Stat Void](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA). Showing interest in the stuff I'm doing is probably the best way to support right now.
