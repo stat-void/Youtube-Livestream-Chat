@@ -52,7 +52,7 @@ public class PollManager : MonoBehaviour
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeAPITimer>();
+        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
     }
 
     public void Open()

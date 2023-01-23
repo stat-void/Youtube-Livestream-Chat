@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Void.YoutubeAPI;
 using TMPro;
+using Void.YoutubeAPI.LiveStreamChat.Messages;
+using SimpleJSON;
 
 public class SettingsPresenter : AModePresenter
 {
@@ -24,7 +26,7 @@ public class SettingsPresenter : AModePresenter
     //[SerializeField] protected TMP_Text Feedback;
 
     private YoutubeAPITimer _apiTimer;
-    private YoutubeQuotaManager _quotaManager;
+    private YoutubeKeyManager _keyManager;
     private Settings _settings;
 
     private void Awake()
@@ -35,15 +37,15 @@ public class SettingsPresenter : AModePresenter
     
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeAPITimer>();
-        _quotaManager = FindObjectOfType<YoutubeQuotaManager>();
+        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        _keyManager = FindObjectOfType<YoutubeLiveChatMessages>().KeyManager;
         _settings = FindObjectOfType<Settings>();
 
         RealTime.isOn = Settings.RealTime;
         Animations.isOn = Settings.Animations;
         UseYTInterval.isOn = _apiTimer.UseYoutubeInterval;
 
-        MaxQuotaInput.text = _quotaManager.MaxQuota.ToString();
+        MaxQuotaInput.text = _keyManager.MaxQuota.ToString();
         RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
 
         NotifyClassReady(this);
@@ -125,14 +127,15 @@ public class SettingsPresenter : AModePresenter
     {
         int endValue = Mathf.Max(int.Parse(value), 10000);
         MaxQuotaInput.text = endValue.ToString();
-        _quotaManager.SetMaxQuota(endValue);
+        _keyManager.SetMaxQuota(endValue);
     }
 
 
     private void OnAPIKeyDeleteRequest() =>
-        PlayerPrefs.DeleteKey("YT_APIKey");
-    
+        YoutubeData.GetData()["YT"]["APIKey"] = "";
 
     private void OnDeleteAllRequest() =>
-        PlayerPrefs.DeleteAll();
+        YoutubeData.ResetData();
+    
+        
 }

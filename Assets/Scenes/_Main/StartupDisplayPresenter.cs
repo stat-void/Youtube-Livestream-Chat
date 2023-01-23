@@ -27,7 +27,6 @@ public class StartupDisplayPresenter : AModePresenter
 
     [Header("Youtube Chat Connectors")]
     [SerializeField] protected YoutubeLiveChatMessages Chatter;
-    [SerializeField] protected YoutubeQuotaManager QuotaManager;
 
     public override string GetName()
     {
@@ -46,7 +45,7 @@ public class StartupDisplayPresenter : AModePresenter
         ConnectionButton.onClick.AddListener(AttemptInit);
         YoutubeLiveChatMessages.Feedback += OnFeedback;
 
-        if (!string.IsNullOrWhiteSpace(QuotaManager.APIKey))
+        if (!string.IsNullOrWhiteSpace(Chatter.KeyManager.APIKey))
         {
             API_InputField.placeholder.GetComponent<TMP_Text>().text = "API Key found. Write new if you want to override (Hidden)";
         }
@@ -65,7 +64,7 @@ public class StartupDisplayPresenter : AModePresenter
 
     private async void AttemptInit()
     {
-        QuotaManager.SetAPIKey(API_InputField.text, SaveAPIKeyToggle.isOn);
+        Chatter.KeyManager.SetAPIKey(API_InputField.text, SaveAPIKeyToggle.isOn);
 
         if (!await Chatter.GetChatIDAsync(VideoID_InputField.text))
             return;

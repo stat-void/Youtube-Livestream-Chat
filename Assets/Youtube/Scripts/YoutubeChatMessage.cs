@@ -212,7 +212,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         public string AmountDisplayString;
         public string Currency;
         public ulong AmountMicros;
-        public int Tier;
+        public int Tier;                    // Tier color, starts at 1 to 7
     }
 
     /// <summary> Representation of membership related events. </summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Void.YoutubeAPI;
+using Void.YoutubeAPI.LiveStreamChat.Messages;
 
 public class PollModePresenter : AModePresenter
 {
@@ -22,7 +23,7 @@ public class PollModePresenter : AModePresenter
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeAPITimer>();
+        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
         NotifyClassReady(this);
     }
 

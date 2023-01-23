@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
+using SimpleJSON;
 
 namespace Void.YoutubeAPI
 {
@@ -29,7 +30,7 @@ namespace Void.YoutubeAPI
         /// <summary>
         /// Event used to automate API message requests if this class is used.
         /// </summary>
-        public static event Action OnAPIMessagesRequested;
+        public static event Action OnRequest;
 
         /// <summary> The amount of time (in seconds) needed to pass to request an API call. </summary>
         public float APIRequestInterval
@@ -53,18 +54,29 @@ namespace Void.YoutubeAPI
             set
             {
                 _useYTInterval = value;
-                PlayerPrefs.SetString("YT_UseInterval", _useYTInterval.ToString());
+                _apiData["YT"]["UseInterval"] = _useYTInterval.ToString();
             }
         }
 
         private bool _useYTInterval;
 
-        private void Awake()
+        private JSONNode _apiData;
+
+        /// <summary> If no JSON data exists, should the application use the suggested wait time from Youtube GET requests?  </summary>
+        private const bool _useYTIntervalDefault = false;
+
+        /// <summary>  If no JSON data exists and Youtube GET request wait time is not used, how long should the delay be?  </summary>
+        private const float _apiRequestIntervalDefault = 3;
+
+        private void Start()
         {
-            YoutubeLiveChatMessages.RecommendedIntervalMilliseconds += RecommendedWaitUpdate;
-            _useYTInterval = PlayerPrefs.GetString("YT_UseInterval", "False") == "True";
-            _apiRequestInterval = PlayerPrefs.GetFloat("YT_RequestInterval", 3);
-        }        
+            YoutubeLiveChatMessages.OnIntervalUpdateMilliseconds += RecommendedWaitUpdate;
+            _apiData = YoutubeData.GetData();
+
+            // If JSON data exists, use it, otherwise set default values.
+            _useYTInterval = !string.IsNullOrEmpty(_apiData["YT"]["UseInterval"]) ? _apiData["YT"]["UseInterval"] == "True" : _useYTIntervalDefault;
+            _apiRequestInterval = !string.IsNullOrEmpty(_apiData["YT"]["RequestInterval"]) ? _apiData["YT"]["RequestInterval"].AsFloat : _apiRequestIntervalDefault;
+        }
 
         private void Update()
         {
@@ -80,7 +92,7 @@ namespace Void.YoutubeAPI
             if (_currentTime >= APIRequestInterval)
             {
                 _currentTime -= APIRequestInterval;
-                OnAPIMessagesRequested?.Invoke();
+                OnRequest?.Invoke();
             }
         }
 
@@ -102,14 +114,14 @@ namespace Void.YoutubeAPI
             {
                 Debug.LogWarning("Setting delay below 0.7 seconds can cause duplicate messages to appear as Youtube API corrects timestamps.");
                 _apiRequestInterval = value;
-                PlayerPrefs.SetFloat("YT_RequestInterval", _apiRequestInterval);
+                _apiData["YT"]["RequestInterval"] = _apiRequestInterval.ToString();
                 OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
             }
 
             else
             {
                 _apiRequestInterval = value;
-                PlayerPrefs.SetFloat("YT_RequestInterval", _apiRequestInterval);
+                _apiData["YT"]["RequestInterval"] = _apiRequestInterval.ToString();
                 OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
             }
         }
@@ -126,5 +138,11 @@ namespace Void.YoutubeAPI
             OnTimerPlayUpdate?.Invoke(false);
         }
         public void ResetTimer() => _currentTime = 0;
+
+        public void QuitCalled()
+        {
+            IsPlaying = false;
+            YoutubeLiveChatMessages.OnIntervalUpdateMilliseconds -= RecommendedWaitUpdate;
+        }
     }
 }

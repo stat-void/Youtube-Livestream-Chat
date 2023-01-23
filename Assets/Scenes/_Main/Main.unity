@@ -2279,7 +2279,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b2b5bb8b1c44e71b0eb166e18496a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuotaManager: {fileID: 1714594292}
   QuotaUsed: {fileID: 1490291003}
 --- !u!1 &549736663
 GameObject:
@@ -3061,7 +3060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -54.000366}
+  m_AnchoredPosition: {x: 0, y: -54.00038}
   m_SizeDelta: {x: -20, y: -128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &702922049
@@ -5089,7 +5088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38f8af3dc32a248de99810aa990a68e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: {fileID: 1055596008}
+  Messager: {fileID: 66694242}
   TimerFill: {fileID: 1881547840}
   WaitTimeText: {fileID: 1013185321}
   PlayButton: {fileID: 507659877}
@@ -5422,17 +5421,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052299796}
   m_CullTransparentMesh: 1
---- !u!114 &1055596008 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2607957321277513259, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
-  m_PrefabInstance: {fileID: 2607957320990867701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19f89362c7987417d95ff4732d488d08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1076851588
 GameObject:
   m_ObjectHideFlags: 0
@@ -5575,7 +5563,6 @@ MonoBehaviour:
   FeedbackField: {fileID: 715306809}
   FeedbackPlaceHolder: {fileID: 487567941}
   Chatter: {fileID: 66694242}
-  QuotaManager: {fileID: 1714594292}
 --- !u!1 &1136024438
 GameObject:
   m_ObjectHideFlags: 0
@@ -8486,17 +8473,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693922067}
   m_CullTransparentMesh: 1
---- !u!114 &1714594292 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2607957321277513258, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
-  m_PrefabInstance: {fileID: 2607957320990867701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afea2082c6a704f748f2bf0ef24bff88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1743255940
 GameObject:
   m_ObjectHideFlags: 0
@@ -9477,6 +9453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -9493,6 +9470,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &1950429900
 GameObject:
   m_ObjectHideFlags: 0
@@ -10926,5 +10904,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: YoutubeHandler
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2067420539986051737, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}

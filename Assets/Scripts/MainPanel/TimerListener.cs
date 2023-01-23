@@ -1,23 +1,27 @@
 using UnityEngine;
-using Void.YoutubeAPI;
-using TMPro;
-using System;
 using UnityEngine.UI;
+using Void.YoutubeAPI;
+using Void.YoutubeAPI.LiveStreamChat.Messages;
+using TMPro;
 
 public class TimerListener : MonoBehaviour
 {
-    [SerializeField] protected YoutubeAPITimer Timer;
+    [SerializeField] protected YoutubeLiveChatMessages Messager;
     [SerializeField] protected SlicedFilledImage TimerFill;
     [SerializeField] protected TMP_Text WaitTimeText;
 
     [SerializeField] protected Button PlayButton;
     [SerializeField] protected Button PauseButton;
 
+    private YoutubeAPITimer _apiTimer;
     private bool _filling = true;
+
 
     private void Start()
     {
-        WaitTimeText.text = Timer.APIRequestInterval.ToString("0.0");
+        _apiTimer = Messager.APITimer;
+
+        WaitTimeText.text = _apiTimer.APIRequestInterval.ToString("0.0");
 
         TimerFill.fillAmount    = _filling ? 0 : 1;
         TimerFill.fillDirection = _filling ? SlicedFilledImage.FillDirection.Right : SlicedFilledImage.FillDirection.Left;
@@ -28,8 +32,8 @@ public class TimerListener : MonoBehaviour
         PlayButton.gameObject.SetActive(false);
         PauseButton.gameObject.SetActive(false);
 
-        Timer.SendCurrentTime += OnTimeUpdate;
-        Timer.OnAPIRequestDelayChanged += OnWaitTimeChanged;
+        _apiTimer.SendCurrentTime += OnTimeUpdate;
+        _apiTimer.OnAPIRequestDelayChanged += OnWaitTimeChanged;
 
         StartupDisplayPresenter.OnStartupFinish += OnStartupFinish;
     }
@@ -42,11 +46,11 @@ public class TimerListener : MonoBehaviour
     private void OnTimeUpdate(float currentTime)
     {
         if (_filling)
-            TimerFill.fillAmount = Mathf.InverseLerp(0, Timer.APIRequestInterval, currentTime);
+            TimerFill.fillAmount = Mathf.InverseLerp(0, _apiTimer.APIRequestInterval, currentTime);
         else
-            TimerFill.fillAmount = Mathf.InverseLerp(Timer.APIRequestInterval, 0, currentTime);
+            TimerFill.fillAmount = Mathf.InverseLerp(_apiTimer.APIRequestInterval, 0, currentTime);
 
-        if (currentTime >= Timer.APIRequestInterval)
+        if (currentTime >= _apiTimer.APIRequestInterval)
         {
             _filling = !_filling;
 
@@ -57,22 +61,22 @@ public class TimerListener : MonoBehaviour
     }
 
     private void OnPlayButtonPressed() =>
-        Timer.StartTimer();
+        _apiTimer.StartTimer();
 
     private void OnPauseButtonPressed() =>
-        Timer.PauseTimer();
+        _apiTimer.PauseTimer();
 
 
     private void OnStartupFinish()
     {
         StartupDisplayPresenter.OnStartupFinish -= OnStartupFinish;
 
-        if (Timer.IsPlaying)
+        if (_apiTimer.IsPlaying)
             PauseButton.gameObject.SetActive(true);
         else
             PlayButton.gameObject.SetActive(true);
 
-        Timer.OnTimerPlayUpdate += OnTimerUpdated;
+        _apiTimer.OnTimerPlayUpdate += OnTimerUpdated;
     }
 
 

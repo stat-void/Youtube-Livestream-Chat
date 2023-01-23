@@ -68,10 +68,8 @@ public class ChatItem : AListItem
         // Superchat override case
         if (node.Type == MessageEventType.SuperChatEvent || node.Type == MessageEventType.SuperStickerEvent)
         {
-            Debug.LogWarning($"Superevent tier, User: {node.Username}; type: {node.Type}; tier: {node.SuperEvent.Tier}");
             return _darkSuperColors[node.SuperEvent.Tier - 1];
-        }
-            
+        } 
    
         // Regular cases
         if (node.AuthorDetails.IsOwner)

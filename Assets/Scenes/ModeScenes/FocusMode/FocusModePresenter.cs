@@ -39,7 +39,7 @@ public class FocusModePresenter : AModePresenter
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeAPITimer>();
+        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
         AddRemoveUsersButton.onClick.AddListener(UpdateUserChanger);
 
         NotifyClassReady(this);

@@ -1,15 +1,14 @@
+using SimpleJSON;
 using System;
 using System.Globalization;
 using System.Threading;
 using UnityEngine;
 
-
 namespace Void.YoutubeAPI
 {
     /// <summary> Class that handles the API key as well as quota usage status. </summary>
-    public class YoutubeQuotaManager : MonoBehaviour
+    public class YoutubeKeyManager
     {
-
         public event Action<int> OnQuotaUpdate;
         
         public int CurrentQuota { get; private set; }
@@ -18,15 +17,19 @@ namespace Void.YoutubeAPI
 
         private Timer _newDayTimer;
 
+        private readonly JSONNode _apiData;
 
-        private void Awake()
+        public YoutubeKeyManager()
         {
-            CurrentQuota = PlayerPrefs.GetInt("YT_CurrentQuota", 0);
-            MaxQuota = PlayerPrefs.GetInt("YT_MaxQuota", 10000);
-            APIKey = PlayerPrefs.GetString("YT_APIKey", "");
+            _apiData = YoutubeData.GetData();
+
+            // If JSON data exists, use it, otherwise set default values.
+            CurrentQuota = !string.IsNullOrEmpty(_apiData["YT"]["CurrentQuota"]) ? _apiData["YT"]["CurrentQuota"].AsInt : 0;
+            MaxQuota =  !string.IsNullOrEmpty(_apiData["YT"]["MaxQuota"]) ? _apiData["YT"]["MaxQuota"].AsInt : 10000;
+            APIKey = _apiData["YT"]["APIKey"];
 
             // Check if PST midnight has arrived from quit time (Google quota reset)
-            VerifyNewDayPST(PlayerPrefs.GetString("YT_QuitTime", ""));
+            VerifyNewDayPST(_apiData["YT"]["QuitTime"]);
 
             // Start internal timer to also reset quota during runtime when PST midnight arrives.
             StartQuotaResetTimer();
@@ -57,21 +60,20 @@ namespace Void.YoutubeAPI
                 SaveAPIKey(APIKey);
 
             if (!save)
-                PlayerPrefs.DeleteKey("YT_APIKey");
+                _apiData["YT"]["APIKey"] = "";
         }
 
-        /// <summary> Store the currently used API key to... somewhere (whereever PlayerPrefs data is stored on the currently used system) </summary>
+        /// <summary> Store the currently used API key to the data JSON file. </summary>
         /// <param name="key"> The API key value to recall. </param>
         private void SaveAPIKey(string key) =>
-            PlayerPrefs.SetString("YT_APIKey", key);
-        
+            _apiData["YT"]["APIKey"] = key;
 
-        /// <summary> Remove all currently saved PlayerPrefs information related to the stored API key. </summary>
+        /// <summary> Remove all currently saved information related to the stored API key. </summary>
         public void DeleteAPIKeyInfo()
         {
-            PlayerPrefs.DeleteKey("YT_APIKey");
-            PlayerPrefs.DeleteKey("YT_CurrentQuota");
-            PlayerPrefs.DeleteKey("YT_MaxQuota");
+            _apiData["YT"]["APIKey"] = "";
+            _apiData["YT"]["CurrentQuota"] = "";
+            _apiData["YT"]["MaxQuota"] = "";
         }
 
 
@@ -163,16 +165,15 @@ namespace Void.YoutubeAPI
         ------------------------
         */
 
-        private void OnApplicationQuit()
+        public void QuitCalled()
         {
-            if (!string.IsNullOrWhiteSpace(PlayerPrefs.GetString("YT_APIKey", "")))
+            if (!string.IsNullOrWhiteSpace(_apiData["YT"]["APIKey"]))
             {
-                PlayerPrefs.SetInt("YT_CurrentQuota", CurrentQuota);
-                PlayerPrefs.SetInt("YT_MaxQuota", MaxQuota);
+                _apiData["YT"]["CurrentQuota"] = CurrentQuota.ToString();
+                _apiData["YT"]["MaxQuota"] = MaxQuota.ToString();
             }
 
-            PlayerPrefs.SetString("YT_QuitTime", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture));
-
+            _apiData["YT"]["QuitTime"] = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture);
             DisposeQuotaResetTimer();
         }
     }

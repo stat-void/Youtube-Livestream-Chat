@@ -1,4 +1,6 @@
+using SimpleJSON;
 using UnityEngine;
+using Void.YoutubeAPI;
 
 /// <summary> All app specific settings that are not being monitored by other classes. </summary>
 public class Settings : MonoBehaviour
@@ -18,22 +20,23 @@ public class Settings : MonoBehaviour
     private static bool _realTime;
     private static bool _animations;
 
+    private void Awake()
+    {
+        JSONNode apiData = YoutubeData.GetData();
+
+        _realTime = !string.IsNullOrEmpty(apiData["Settings"]["RealTime"]) ? apiData["Settings"]["RealTime"].AsBool : true;
+        _animations = !string.IsNullOrEmpty(apiData["Settings"]["Animations"]) ? apiData["Settings"]["Animations"].AsBool : true;
+    }
 
     public void SetRealTime(bool value)
     {
         _realTime = value;
-        PlayerPrefs.SetInt("YT_RealTime", _realTime ? 1 : 0);
+        YoutubeData.GetData()["Settings"]["RealTime"] = _realTime ? "true" : "false";
     }
 
     public void SetAnimations(bool value)
     {
         _animations = value;
-        PlayerPrefs.SetInt("YT_Animations", _animations ? 1 : 0);
-    }
-
-    private void Awake()
-    {
-        _realTime = PlayerPrefs.GetInt("YT_RealTime", 1) == 1;
-        _animations = PlayerPrefs.GetInt("YT_Animations", 1) == 1;
+        YoutubeData.GetData()["Settings"]["Animations"] = _animations ? "true" : "false";
     }
 }

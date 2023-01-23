@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2607957321277513236}
   - component: {fileID: 2607957321277513237}
-  - component: {fileID: 2607957321277513258}
-  - component: {fileID: 2607957321277513259}
+  - component: {fileID: 9032105269338602165}
   m_Layer: 0
   m_Name: YoutubeHandler
   m_TagString: Untagged
@@ -46,19 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761f688acdba4cb419d22d5e1b787929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2607957321277513258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2607957321277513256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afea2082c6a704f748f2bf0ef24bff88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2607957321277513259
+  APITimer: {fileID: 9032105269338602165}
+--- !u!114 &9032105269338602165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using SimpleJSON;
-using System.Threading.Tasks;
 
 namespace Void.YoutubeAPI.LiveStreamChat.Messages
 {
@@ -13,15 +13,16 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
     ///
     /// Does not require OAuth 2.0 authentication.
     /// </summary>
-    [RequireComponent(typeof(YoutubeQuotaManager))]
     public class YoutubeLiveChatMessages : MonoBehaviour
     {
         public static event Action<List<YoutubeChatMessage>> ChatMessages;
-        public static event Action<int> RecommendedIntervalMilliseconds;
+        public static event Action<int> OnIntervalUpdateMilliseconds;
         public static event Action<string> Feedback;
 
         // Quota and APIKey handler
-        private YoutubeQuotaManager _quotaManager;
+        public YoutubeKeyManager KeyManager { get; private set; }
+        //TODO: Once you figure out the timer/stopwatch and webrequest call bug, turn the APITimer into a non-monobehavior as well.
+        [SerializeField] public YoutubeAPITimer APITimer;
 
         // Chat ID collected from the video ID and tokens to keep updating chat polls
         private string _chatID = "";
@@ -36,8 +37,14 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
         private void Awake()
         {
-            _quotaManager = GetComponent<YoutubeQuotaManager>();
-            YoutubeAPITimer.OnAPIMessagesRequested += GetChatMessages;
+            KeyManager = new YoutubeKeyManager();
+
+            YoutubeAPITimer.OnRequest += GetChatMessages;
+        }
+
+        private void OnApplicationQuit()
+        {
+            QuitCalled();
         }
 
         /// <summary>
@@ -50,7 +57,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         {
             _chatID = "";
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&key={_quotaManager.APIKey}&id={videoID}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&key={KeyManager.APIKey}&id={videoID}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
                 var request = www.SendWebRequest();
@@ -63,7 +70,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     return false;
                 }
 
-                _quotaManager.AddQuota(1);
+                KeyManager.AddQuota(1);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 _chatID = data["items"][0]["liveStreamingDetails"]["activeLiveChatId"];
@@ -94,7 +101,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
             _nextPageToken = "";
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&liveChatId={_chatID}&key={_quotaManager.APIKey}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&liveChatId={_chatID}&key={KeyManager.APIKey}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
                 var request = www.SendWebRequest();
@@ -107,7 +114,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     return false;
                 }
 
-                _quotaManager.AddQuota(5);
+                KeyManager.AddQuota(5);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 JSONNode content = data["items"].AsArray[^1];           // arg[arg.Count - 1]
@@ -121,7 +128,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 _nextPageToken = data["nextPageToken"];
 
                 int waitTimeMilliseconds = int.Parse(data["pollingIntervalMillis"]);
-                RecommendedIntervalMilliseconds?.Invoke(waitTimeMilliseconds);
+                OnIntervalUpdateMilliseconds?.Invoke(waitTimeMilliseconds);
                 Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
                 await Task.Delay(waitTimeMilliseconds);
 
@@ -143,9 +150,10 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 return;
             }
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&pageToken={_nextPageToken}&liveChatId={_chatID}&key={_quotaManager.APIKey}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&pageToken={_nextPageToken}&liveChatId={_chatID}&key={KeyManager.APIKey}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
+
                 var request = www.SendWebRequest();
                 while (!request.isDone)
                     await Task.Yield();
@@ -155,17 +163,17 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     LogError(www);
                     _fullMessages.Clear();
                     ChatMessages?.Invoke(_fullMessages);
-                    
+
                     return;
                 }
 
-                _quotaManager.AddQuota(5);
+                KeyManager.AddQuota(5);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 JSONArray arg = data["items"].AsArray;
 
                 _nextPageToken = data["nextPageToken"]; // Use this to go to the next page
-                RecommendedIntervalMilliseconds?.Invoke(int.Parse(data["pollingIntervalMillis"]));
+                OnIntervalUpdateMilliseconds?.Invoke(int.Parse(data["pollingIntervalMillis"]));
 
                 // Invoke and send all new messages
                 PrepareAndInvokeMessages(ref arg);
@@ -188,7 +196,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
                 if (DateTime.Compare(_publishedAt, published) >= 0)
                     break;
- 
+
                 _fullMessages.Add(new YoutubeChatMessage(content, published));
             }
             ChatMessages?.Invoke(_fullMessages);
@@ -212,19 +220,19 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
             if (error == UnityWebRequest.Result.ConnectionError)
                 answer = "The request failed to communicate with the server";
-            
+
             else if (error == UnityWebRequest.Result.DataProcessingError)
             {
-                _quotaManager.AddQuota(5);
+                KeyManager.AddQuota(5);
                 answer = "Server communication successful, but error processing received data";
-            }   
+            }
 
             else if (error == UnityWebRequest.Result.InProgress)
                 answer = "The request is still in progress, which should not be possible here.";
 
             else if (error == UnityWebRequest.Result.ProtocolError)
             {
-                _quotaManager.AddQuota(5);
+                KeyManager.AddQuota(5);
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 string cause = data["error"]["errors"].AsArray[0]["message"];
 
@@ -236,6 +244,16 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             }
             Debug.LogError(answer);
             Feedback?.Invoke(answer);
+        }
+
+        private void QuitCalled()
+        {
+            YoutubeAPITimer.OnRequest -= GetChatMessages;
+
+            KeyManager.QuitCalled();
+            APITimer.QuitCalled();
+            
+            YoutubeData.SaveData();
         }
     }
 }
