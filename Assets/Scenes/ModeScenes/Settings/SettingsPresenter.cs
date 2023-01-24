@@ -135,7 +135,7 @@ public class SettingsPresenter : AModePresenter
         YoutubeData.GetData()["YT"]["APIKey"] = "";
 
     private void OnDeleteAllRequest() =>
-        YoutubeData.ResetData();
+        YoutubeData.DeleteData();
     
         
 }

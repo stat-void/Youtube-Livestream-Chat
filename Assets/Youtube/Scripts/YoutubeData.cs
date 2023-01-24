@@ -28,12 +28,17 @@ namespace Void.YoutubeAPI
             if (!_initialized)
                 return;
 
-            _data.SaveToFile(basePath + $"\\{_dataName}");
+            if (File.Exists(basePath + $"\\{_dataName}"))
+                _data.SaveToFile(basePath + $"\\{_dataName}");
         }
 
-        public static void ResetData()
+        public static void DeleteData()
         {
-            _data = "";
+            if (!_initialized)
+                return;
+
+            if (File.Exists(basePath + $"\\{_dataName}"))
+                File.Delete(basePath + $"\\{_dataName}");
         }
 
 
