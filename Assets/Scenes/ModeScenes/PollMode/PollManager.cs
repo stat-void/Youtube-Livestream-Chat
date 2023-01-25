@@ -19,6 +19,7 @@ public class PollManager : MonoBehaviour
     [SerializeField] protected Toggle CaseSensitive;
     [SerializeField] protected Toggle SkipPunctuations;
     [SerializeField] protected Toggle SkipWhitespace;
+    [SerializeField] protected TMP_InputField DecayField;
     [SerializeField] protected TMP_Text UniqueMessageText;
     [SerializeField] protected TMP_Text UniqueMessageCount;
 
@@ -34,7 +35,8 @@ public class PollManager : MonoBehaviour
     private int _pollSum = 0;
 
     private readonly Queue<List<(string, string)>> _decay = new();   // Tuples of ID and MSG
-    private int _maxDecay = 20;
+    private int _defaultDecay = 20;
+    private int _currentDecay;
 
     private bool _polling = false;
     private bool _firstQuerySkipped = false;
@@ -182,6 +184,12 @@ public class PollManager : MonoBehaviour
         UniqueMessageCount.gameObject.SetActive(true);
         UniqueMessageCount.text = "0";
 
+        if (DecayField.text == "0" || string.IsNullOrWhiteSpace(DecayField.text))
+            DecayField.text = "";
+
+        _currentDecay = !string.IsNullOrEmpty(DecayField.text) ?
+            int.Parse(DecayField.text) : _defaultDecay;
+
         ChatMessageListener.ChatMessages += OnNewMessages;
     }
 
@@ -203,6 +211,7 @@ public class PollManager : MonoBehaviour
         CaseSensitive.interactable = state;
         SkipPunctuations.interactable = state;
         SkipWhitespace.interactable = state;
+        DecayField.interactable = state;
     }
 
     private void OnNewMessages(List<YoutubeChatMessage> messages)
@@ -293,7 +302,7 @@ public class PollManager : MonoBehaviour
         */
         _decay.Enqueue(decayList);
 
-        if (_decay.Count > _maxDecay)
+        if (_decay.Count > _currentDecay)
         {
             List<(string, string)> removeDecay = _decay.Dequeue();
 

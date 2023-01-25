@@ -807,6 +807,7 @@ MonoBehaviour:
   CaseSensitive: {fileID: 614182255}
   SkipPunctuations: {fileID: 1486233503}
   SkipWhitespace: {fileID: 435807205}
+  DecayField: {fileID: 839154282}
   UniqueMessageText: {fileID: 2071511577}
   UniqueMessageCount: {fileID: 1111607686}
 --- !u!1 &839154280
