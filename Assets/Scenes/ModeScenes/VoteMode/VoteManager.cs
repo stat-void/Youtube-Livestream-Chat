@@ -34,6 +34,7 @@ public class VoteManager : MonoBehaviour
     [SerializeField] protected TMP_InputField QuestionInputField;
     [SerializeField] protected Toggle MultiVotePermission;
     [SerializeField] protected Toggle FirstQuerySkip;
+    [SerializeField] protected Toggle OnlyPromptToVote;
 
     // Pooling and display related to vote Answers
     private List<VoteItem> _voteItems = new();
@@ -42,9 +43,9 @@ public class VoteManager : MonoBehaviour
     private const int _maxAnswers = 10;
 
     // Various things used during voting
-    private readonly Dictionary<string, string> _userVotePairs = new();
-    private readonly Dictionary<string, int> _promptIndexPairs = new();
-    private List<int> _voteCounts = new();
+    private readonly Dictionary<string, string> _userVotePairs = new(); // User ID and their chosen vote prompt pairs
+    private readonly Dictionary<string, int> _promptIndexPairs = new(); // Vote prompt and their list index pairs
+    private List<int> _voteCounts = new();                              // All vote count statuses
     private bool _voting = false;
     private bool _firstQuerySkipped = false;
     private YoutubeAPITimer _apiTimer;
@@ -62,6 +63,7 @@ public class VoteManager : MonoBehaviour
     private void Start()
     {
         _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        OnlyPromptToVote.SetIsOnWithoutNotify(true);
     }
 
     public void Open()
@@ -308,10 +310,22 @@ public class VoteManager : MonoBehaviour
                 continue;
 
             string id = message.ChannelID;
-            string prompt = message.Message.ToLower();
+            string prompt;
+            bool contains;
+
+            if (OnlyPromptToVote.isOn)
+            {
+                prompt = message.Message.ToLower();
+                contains = _promptIndexPairs.ContainsKey(prompt);
+            }
+            else
+            {
+                prompt = DoesMessageContainPrompt(message.Message, _promptIndexPairs);
+                contains = prompt != "";
+            }
 
             // Verify that the message is a matching Answer prompt.
-            if (_promptIndexPairs.ContainsKey(prompt))
+            if (contains)
             {
                 // Condition 1 - A brand new vote from a user
                 if (!_userVotePairs.ContainsKey(id))
@@ -357,6 +371,24 @@ public class VoteManager : MonoBehaviour
             StartCoroutine(_animatedVoting);
         }
     }
+
+    /// <summary> Go through list of prompts to find if a prompt is included within the given message. </summary>
+    /// <param name="message"> The original message written by a user. </param>
+    /// <param name="promptDict"> The currently used dictionary of prompts and their index locations. </param>
+    /// <returns> Prompt index. If no matching prompts, returns -1 instead. If multiple matching prompts, returns highest length.</returns>
+    private string DoesMessageContainPrompt(string message, Dictionary<string, int> promptDict)
+    {
+        string bestMatch = "";
+        foreach (string prompt in promptDict.Keys)
+        {
+            if (message.Contains(prompt))
+                bestMatch = prompt.Length > bestMatch.Length ? prompt : bestMatch;
+        }
+        return bestMatch;
+
+    }
+
+
 
     /// <summary> Convert a list of integers into percentages, assuming their sum is 1 </summary>
     private List<float> GetPercentages(List<int> values)
