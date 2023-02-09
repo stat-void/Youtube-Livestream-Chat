@@ -4,7 +4,7 @@
 
 Unity and C# implementation of displaying a Youtube livestream chat, as well as additional features that can help with filtering or interactivity. Done with [Youtube Data API V3](https://developers.google.com/youtube/v3/), this can be used as an alternative Youtube chat displayer with a Google API Key and a video ID of the current livestream. Future iterations will give additional functionality that's currently lacking on Youtube.
 
-For an idea on what could be done with this system, [I currently have an interactive game running every day on a separate Youtube channel](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA) that is yet to find any players.
+For an idea on what could be done with this system, [I had an interactive game running every day that has been paused indefinitely for now](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA).
 
 ***
 
@@ -53,8 +53,9 @@ I've changed my mind regarding the other project, for now. I'll finish V3, then 
 - Personalisation view - To give a little bit of freedom in the program appearance, such as disabling bloom, or changing the display colors.
 - Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead. Optionally, has options to capture superchats, or membership related events.
 - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
-- OAuth version integration, if I can figure it out. Then this can be used on membership streams. However, I have to find a way that doesn’t involve saving your username/password, because that breaks TOS.
+- Investigate Youtube Data API V1. Apparently it doesn't need quotas, but it also is deprecated and potentially eventually shut down?
 - Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
+- Backlog - OAuth version integration, if I can figure it out. It might not be useful for this project though.
 - Backlog - CRT video afterglow effect creation - In regards to a future project that I'll look into. I want to test out making a post-processing effect (or a simple quick solution) for that CRT monitor effect when viewed through a camera with different refresh rates. In here, it would be a part of the personalisation view.
 - Backlog - More text support, as usual.
 - Backlog - Whole program wide user grouping system? The idea is that maybe I want to pick out a select group of people that voted specific ways, then listen to them in another tool. This requires deeper planning though.
