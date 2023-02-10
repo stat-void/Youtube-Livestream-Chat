@@ -29,6 +29,7 @@ public class ModeSelectionPresenter : MonoBehaviour
         _modeManager.AddModeButton.onClick.AddListener(Open);
         _modeManager.CloseModeButton.onClick.AddListener(Close);
 
+        BaseCanvas.worldCamera = Camera.main;
         BaseCanvas.gameObject.SetActive(false);
 
         SelectableModeItem.OnClick += OnChoiceClicked;

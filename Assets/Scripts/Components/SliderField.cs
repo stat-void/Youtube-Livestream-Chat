@@ -59,7 +59,7 @@ public class SliderField : MonoBehaviour
 
             OnSliderChange?.Invoke(trueValue);
         }
-        catch (FormatException e)
+        catch (FormatException)
         {
             
         }
