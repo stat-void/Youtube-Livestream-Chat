@@ -34,7 +34,6 @@ public class ModeSelectionPresenter : MonoBehaviour
 
         SelectableModeItem.OnClick += OnChoiceClicked;
         SelectableModeItem.OnMouseHover += OnChoiceHovered;
-        //ScreenResizeListener.OnResize += OnScreenResize;
     }
 
     private void Open()
@@ -70,12 +69,4 @@ public class ModeSelectionPresenter : MonoBehaviour
         _modeManager.CloseButtonPressed();
         Close();
     }
-        
-
-    /*private void OnScreenResize(Vector2 anchorWorldMin, Vector2 anchorWorldMax)
-    {
-        foreach (var item in _activeModes)
-            item.UpdateFit();
-    }*/
-
 }

@@ -243,6 +243,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 answer = $"{www.error} - {cause}";
             }
             Debug.LogError(answer);
+            //HTTP/1.1 403 Forbidden - The request cannot be completed because you have exceeded your quota.
             Feedback?.Invoke(answer);
         }
 

@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Void.YoutubeAPI;
 using TMPro;
+using Void.YoutubeAPI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
-using SimpleJSON;
 
 public class SettingsPresenter : AModePresenter
 {

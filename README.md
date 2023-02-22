@@ -52,9 +52,10 @@ I've changed my mind regarding the other project, for now. I'll finish V3, then 
 
 - Personalisation view - To give a little bit of freedom in the program appearance, such as disabling bloom, or changing the display colors.
 - Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead. Optionally, has options to capture superchats, or membership related events.
-- Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
 - Investigate Youtube Data API V1. Apparently it doesn't need quotas, but it also is deprecated and potentially eventually shut down?
-- Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
+- Backlog - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
+- Backlog - Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
+- Backlog - Custom emoji support. Probably a separate view for people to write the command, and then locally upload/associate an image that would replace that command with the image (TMP)
 - Backlog - OAuth version integration, if I can figure it out. It might not be useful for this project though.
 - Backlog - CRT video afterglow effect creation - In regards to a future project that I'll look into. I want to test out making a post-processing effect (or a simple quick solution) for that CRT monitor effect when viewed through a camera with different refresh rates. In here, it would be a part of the personalisation view.
 - Backlog - More text support, as usual.

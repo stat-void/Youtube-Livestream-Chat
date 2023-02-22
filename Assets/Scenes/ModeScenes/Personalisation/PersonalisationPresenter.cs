@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
+using System.Collections.Generic;
+using TMPro;
 
+// Yes, I know, there are way too many serialized fields.
 public class PersonalisationPresenter : AModePresenter
 {
     [SerializeField] protected Canvas BaseCanvas;
@@ -49,11 +52,96 @@ public class PersonalisationPresenter : AModePresenter
     [SerializeField] protected SliderField CAIntensity;
 
     [Header("Buttons")]
+    [SerializeField] protected Button ApplyColorsButton;
     [SerializeField] protected Button SaveButton;
     [SerializeField] protected Button DefaultButton;
 
+    [Header("Color Fields")]
+    [SerializeField] protected ColorField PrimaryField;
+    [SerializeField] protected ColorField SecondaryField;
+    [SerializeField] protected ColorField ObjectBGField;
+    [SerializeField] protected ColorField BackgroundField;
+    [SerializeField] protected ColorField RegularUserField;
+    [SerializeField] protected ColorField RegularMessageField;
+    [SerializeField] protected ColorField MemberField;
+    [SerializeField] protected ColorField ModeratorField;
+    [SerializeField] protected ColorField OwnerField;
+    [SerializeField] protected ColorField HighlightUserField;
+    [SerializeField] protected ColorField HighlightMessageField;
+    [SerializeField] protected ColorField Super1UserField;
+    [SerializeField] protected ColorField Super1MessageField;
+    [SerializeField] protected ColorField Super2UserField;
+    [SerializeField] protected ColorField Super2MessageField;
+    [SerializeField] protected ColorField Super3UserField;
+    [SerializeField] protected ColorField Super3MessageField;
+    [SerializeField] protected ColorField Super4UserField;
+    [SerializeField] protected ColorField Super4MessageField;
+    [SerializeField] protected ColorField Super5UserField;
+    [SerializeField] protected ColorField Super5MessageField;
+    [SerializeField] protected ColorField Super6UserField;
+    [SerializeField] protected ColorField Super6MessageField;
+    [SerializeField] protected ColorField Super7UserField;
+    [SerializeField] protected ColorField Super7MessageField;
+
+    [Header("Color Editing Fields")]
+    [SerializeField] protected Image DemoBox;
+    [SerializeField] protected Image DemoBackground;
+    [SerializeField] protected TMP_Text DemoText;
+    [SerializeField] protected Image DemoIFBG;
+    [SerializeField] protected TMP_InputField DemoIFMain;
+    [SerializeField] protected Image DemoButtonBox;
+    [SerializeField] protected Image DemoButtonBG;
+    [SerializeField] protected TMP_Text DemoButtonText;
+    [SerializeField] protected TMP_Text DemoUserText;
+    [SerializeField] protected TMP_Text DemoMSGText;
+    [SerializeField] protected TMP_Text DemoMemberUSRText;
+    [SerializeField] protected TMP_Text DemoMemberMSGText;
+    [SerializeField] protected TMP_Text DemoModUSRText;
+    [SerializeField] protected TMP_Text DemoModMSGText;
+    [SerializeField] protected TMP_Text DemoOwnerUSRText;
+    [SerializeField] protected TMP_Text DemoOwnerMSGText;
+    [SerializeField] protected TMP_Text DemoHighlightUSRText;
+    [SerializeField] protected TMP_Text DemoHighlightMSGText;
+    [SerializeField] protected TMP_Text DemoSC1USRText;
+    [SerializeField] protected TMP_Text DemoSC1MSGText;
+    [SerializeField] protected TMP_Text DemoSC2USRText;
+    [SerializeField] protected TMP_Text DemoSC2MSGText;
+    [SerializeField] protected TMP_Text DemoSC3USRText;
+    [SerializeField] protected TMP_Text DemoSC3MSGText;
+    [SerializeField] protected TMP_Text DemoSC4USRText;
+    [SerializeField] protected TMP_Text DemoSC4MSGText;
+    [SerializeField] protected TMP_Text DemoSC5USRText;
+    [SerializeField] protected TMP_Text DemoSC5MSGText;
+    [SerializeField] protected TMP_Text DemoSC6USRText;
+    [SerializeField] protected TMP_Text DemoSC6MSGText;
+    [SerializeField] protected TMP_Text DemoSC7USRText;
+    [SerializeField] protected TMP_Text DemoSC7MSGText;
+
     private PersonalisationManager _manager;
-    
+
+    public List<ColorField> ColorFields
+    {
+        get
+        {
+            return new()
+            {
+                PrimaryField, SecondaryField,
+                ObjectBGField, BackgroundField,
+                RegularUserField, RegularMessageField,
+                MemberField,
+                ModeratorField,
+                OwnerField,
+                HighlightUserField, HighlightMessageField,
+                Super1UserField, Super1MessageField,
+                Super2UserField, Super2MessageField,
+                Super3UserField, Super3MessageField,
+                Super4UserField, Super4MessageField,
+                Super5UserField, Super5MessageField,
+                Super6UserField, Super6MessageField,
+                Super7UserField, Super7MessageField
+            };
+        }
+    }
 
     private void Awake()
     {
@@ -65,7 +153,6 @@ public class PersonalisationPresenter : AModePresenter
     {
         _manager = FindObjectOfType<PersonalisationManager>();
         Initialize();
-
         NotifyClassReady(this);
     }
 
@@ -141,7 +228,57 @@ public class PersonalisationPresenter : AModePresenter
         ChromaticAberration.SetIsOnWithoutNotify(_manager.ChromaticAberration.active);
         CAIntensity.Initialize("Intensity", _manager.ChromaticAberration.intensity.value, _manager.ChromaticAberration.intensity.min, 0.2f);
 
-        //TODO: There is still more
+        PrimaryField            .SetColor(ColorSettings.MainColor);
+        SecondaryField          .SetColor(ColorSettings.SecondaryColor);
+        ObjectBGField           .SetColor(ColorSettings.ObjectBackgroundColor);
+        BackgroundField         .SetColor(ColorSettings.BackgroundColor);
+        RegularUserField        .SetColor(ColorSettings.RegularUserColor);
+        RegularMessageField     .SetColor(ColorSettings.RegularMessageColor);
+        MemberField             .SetColor(ColorSettings.MemberColor);
+        ModeratorField          .SetColor(ColorSettings.ModeratorColor);
+        OwnerField              .SetColor(ColorSettings.OwnerColor);
+        HighlightUserField      .SetColor(ColorSettings.HighlightUserColor);
+        HighlightMessageField   .SetColor(ColorSettings.HighlightMessageColor);
+        Super1UserField         .SetColor(ColorSettings.UserSuperColors[0]);
+        Super1MessageField      .SetColor(ColorSettings.MessageSuperColors[0]);
+        Super2UserField         .SetColor(ColorSettings.UserSuperColors[1]);
+        Super2MessageField      .SetColor(ColorSettings.MessageSuperColors[1]);
+        Super3UserField         .SetColor(ColorSettings.UserSuperColors[2]);
+        Super3MessageField      .SetColor(ColorSettings.MessageSuperColors[2]);
+        Super4UserField         .SetColor(ColorSettings.UserSuperColors[3]);
+        Super4MessageField      .SetColor(ColorSettings.MessageSuperColors[3]);
+        Super5UserField         .SetColor(ColorSettings.UserSuperColors[4]);
+        Super5MessageField      .SetColor(ColorSettings.MessageSuperColors[4]);
+        Super6UserField         .SetColor(ColorSettings.UserSuperColors[5]);
+        Super6MessageField      .SetColor(ColorSettings.MessageSuperColors[5]);
+        Super7UserField         .SetColor(ColorSettings.UserSuperColors[6]);
+        Super7MessageField      .SetColor(ColorSettings.MessageSuperColors[6]);
+
+        PrimaryFieldChanged(PrimaryField.GetColor());
+        SecondaryFieldChanged(SecondaryField.GetColor());
+        ObjectBGFieldChanged(ObjectBGField.GetColor());
+        BackgroundFieldChanged(BackgroundField.GetColor());
+        RegularUserFieldChanged(RegularUserField.GetColor());
+        RegularMessageFieldChanged(RegularMessageField.GetColor());
+        MemberFieldChanged(MemberField.GetColor());
+        ModeratorFieldChanged(ModeratorField.GetColor());
+        OwnerFieldChanged(OwnerField.GetColor());
+        HighlightUserFieldChanged(HighlightUserField.GetColor());
+        HighlightMessageFieldChanged(HighlightMessageField.GetColor());
+        Super1USRFieldChanged(Super1UserField.GetColor());
+        Super1MSGFieldChanged(Super1MessageField.GetColor());
+        Super2USRFieldChanged(Super2UserField.GetColor());
+        Super2MSGFieldChanged(Super2MessageField.GetColor());
+        Super3USRFieldChanged(Super3UserField.GetColor());
+        Super3MSGFieldChanged(Super3MessageField.GetColor());
+        Super4USRFieldChanged(Super4UserField.GetColor());
+        Super4MSGFieldChanged(Super4MessageField.GetColor());
+        Super5USRFieldChanged(Super5UserField.GetColor());
+        Super5MSGFieldChanged(Super5MessageField.GetColor());
+        Super6USRFieldChanged(Super6UserField.GetColor());
+        Super6MSGFieldChanged(Super6MessageField.GetColor());
+        Super7USRFieldChanged(Super7UserField.GetColor());
+        Super7MSGFieldChanged(Super7MessageField.GetColor());
     }
 
     private void ChangeListeners(bool state)
@@ -183,6 +320,33 @@ public class PersonalisationPresenter : AModePresenter
             ChromaticAberration.onValueChanged.AddListener(ChromaticAberrationToggle);
             CAIntensity.OnSliderChange += ChromaticAberrationIntensity;
 
+            PrimaryField.OnColorChange          += PrimaryFieldChanged;
+            SecondaryField.OnColorChange        += SecondaryFieldChanged;
+            ObjectBGField.OnColorChange         += ObjectBGFieldChanged;
+            BackgroundField.OnColorChange       += BackgroundFieldChanged;
+            RegularUserField.OnColorChange      += RegularUserFieldChanged;
+            RegularMessageField.OnColorChange   += RegularMessageFieldChanged;
+            MemberField.OnColorChange           += MemberFieldChanged;
+            ModeratorField.OnColorChange        += ModeratorFieldChanged;
+            OwnerField.OnColorChange            += OwnerFieldChanged;
+            HighlightUserField.OnColorChange    += HighlightUserFieldChanged;
+            HighlightMessageField.OnColorChange += HighlightMessageFieldChanged;
+            Super1UserField.OnColorChange       += Super1USRFieldChanged;
+            Super1MessageField.OnColorChange    += Super1MSGFieldChanged;
+            Super2UserField.OnColorChange       += Super2USRFieldChanged;
+            Super2MessageField.OnColorChange    += Super2MSGFieldChanged;
+            Super3UserField.OnColorChange       += Super3USRFieldChanged;
+            Super3MessageField.OnColorChange    += Super3MSGFieldChanged;
+            Super4UserField.OnColorChange       += Super4USRFieldChanged;
+            Super4MessageField.OnColorChange    += Super4MSGFieldChanged;
+            Super5UserField.OnColorChange       += Super5USRFieldChanged;
+            Super5MessageField.OnColorChange    += Super5MSGFieldChanged;
+            Super6UserField.OnColorChange       += Super6USRFieldChanged;
+            Super6MessageField.OnColorChange    += Super6MSGFieldChanged;
+            Super7UserField.OnColorChange       += Super7USRFieldChanged;
+            Super7MessageField.OnColorChange    += Super7MSGFieldChanged;
+
+            ApplyColorsButton.onClick.AddListener(ApplyButtonClicked);
             SaveButton.onClick.AddListener(SaveButtonClicked);
             DefaultButton.onClick.AddListener(DefaultButtonClicked);
         }
@@ -224,6 +388,33 @@ public class PersonalisationPresenter : AModePresenter
             ChromaticAberration.onValueChanged.RemoveListener(ChromaticAberrationToggle);
             CAIntensity.OnSliderChange -= ChromaticAberrationIntensity;
 
+            PrimaryField.OnColorChange          -= PrimaryFieldChanged;
+            SecondaryField.OnColorChange        -= SecondaryFieldChanged;
+            ObjectBGField.OnColorChange         -= ObjectBGFieldChanged;
+            BackgroundField.OnColorChange       -= BackgroundFieldChanged;
+            RegularUserField.OnColorChange      -= RegularUserFieldChanged;
+            RegularMessageField.OnColorChange   -= RegularMessageFieldChanged;
+            MemberField.OnColorChange           -= MemberFieldChanged;
+            ModeratorField.OnColorChange        -= ModeratorFieldChanged;
+            OwnerField.OnColorChange            -= OwnerFieldChanged;
+            HighlightUserField.OnColorChange    -= HighlightUserFieldChanged;
+            HighlightMessageField.OnColorChange -= HighlightMessageFieldChanged;
+            Super1UserField.OnColorChange       -= Super1USRFieldChanged;
+            Super1MessageField.OnColorChange    -= Super1MSGFieldChanged;
+            Super2UserField.OnColorChange       -= Super2USRFieldChanged;
+            Super2MessageField.OnColorChange    -= Super2MSGFieldChanged;
+            Super3UserField.OnColorChange       -= Super3USRFieldChanged;
+            Super3MessageField.OnColorChange    -= Super3MSGFieldChanged;
+            Super4UserField.OnColorChange       -= Super4USRFieldChanged;
+            Super4MessageField.OnColorChange    -= Super4MSGFieldChanged;
+            Super5UserField.OnColorChange       -= Super5USRFieldChanged;
+            Super5MessageField.OnColorChange    -= Super5MSGFieldChanged;
+            Super6UserField.OnColorChange       -= Super6USRFieldChanged;
+            Super6MessageField.OnColorChange    -= Super6MSGFieldChanged;
+            Super7UserField.OnColorChange       -= Super7USRFieldChanged;
+            Super7MessageField.OnColorChange    -= Super7MSGFieldChanged;
+
+            ApplyColorsButton.onClick.RemoveListener(ApplyButtonClicked);
             SaveButton.onClick.RemoveListener(SaveButtonClicked);
             DefaultButton.onClick.RemoveListener(DefaultButtonClicked);
         }
@@ -336,6 +527,74 @@ public class PersonalisationPresenter : AModePresenter
     private void ChromaticAberrationIntensity(float value)
         => _manager.ChromaticAberration.intensity.value = value;
 
+    private void PrimaryFieldChanged(Color color)
+    {
+        DemoBox.color = color;
+        DemoText.color = color;
+        DemoButtonBox.color = color;
+        DemoButtonText.color = color;
+        //TODO: DemoIFMain.colors.
+    }
+    private void SecondaryFieldChanged(Color color)
+        => DemoIFMain.placeholder.color = color;
+    private void ObjectBGFieldChanged(Color color)
+    {
+        DemoIFBG.color = color;
+        DemoButtonBG.color = color;
+    }
+    private void BackgroundFieldChanged(Color color)
+        => DemoBackground.color = color;
+    private void RegularUserFieldChanged(Color color)
+        => DemoUserText.color = color;
+    private void RegularMessageFieldChanged(Color color)
+    {
+        DemoMSGText.color = color;
+        DemoMemberMSGText.color = color;
+        DemoModMSGText.color = color;
+        DemoOwnerMSGText.color = color;
+    }
+    private void MemberFieldChanged(Color color)
+        => DemoMemberUSRText.color = color;
+    private void ModeratorFieldChanged(Color color)
+        => DemoModUSRText.color = color;
+    private void OwnerFieldChanged(Color color)
+        => DemoOwnerUSRText.color = color;
+    private void HighlightUserFieldChanged(Color color)
+        => DemoHighlightUSRText.color = color;
+    private void HighlightMessageFieldChanged(Color color)
+        => DemoHighlightMSGText.color = color;
+    private void Super1USRFieldChanged(Color color)
+        => DemoSC1USRText.color = color;
+    private void Super1MSGFieldChanged(Color color)
+        => DemoSC1MSGText.color = color;
+    private void Super2USRFieldChanged(Color color)
+        => DemoSC2USRText.color = color;
+    private void Super2MSGFieldChanged(Color color)
+        => DemoSC2MSGText.color = color;
+    private void Super3USRFieldChanged(Color color)
+        => DemoSC3USRText.color = color;
+    private void Super3MSGFieldChanged(Color color)
+        => DemoSC3MSGText.color = color;
+    private void Super4USRFieldChanged(Color color)
+        => DemoSC4USRText.color = color;
+    private void Super4MSGFieldChanged(Color color)
+        => DemoSC4MSGText.color = color;
+    private void Super5USRFieldChanged(Color color)
+        => DemoSC5USRText.color = color;
+    private void Super5MSGFieldChanged(Color color)
+        => DemoSC5MSGText.color = color;
+    private void Super6USRFieldChanged(Color color)
+        => DemoSC6USRText.color = color;
+    private void Super6MSGFieldChanged(Color color)
+        => DemoSC6MSGText.color = color;
+    private void Super7USRFieldChanged(Color color)
+        => DemoSC7USRText.color = color;
+    private void Super7MSGFieldChanged(Color color)
+        => DemoSC7MSGText.color = color;
+
+    private void ApplyButtonClicked()
+        => _manager.Colors.SetColors(ColorFields);
+
     private void SaveButtonClicked()
         => _manager.SavePersonalisationData();
 
@@ -375,6 +634,8 @@ public class PersonalisationPresenter : AModePresenter
 
         ChromaticAberrationToggle(_manager.AberrationDefaultActive);
         ChromaticAberrationIntensity(_manager.AberrationDefaultIntensity);
+
+        _manager.Colors.DefaultColors();
 
         Initialize();
     }

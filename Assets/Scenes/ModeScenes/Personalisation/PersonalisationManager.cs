@@ -1,6 +1,4 @@
 using SimpleJSON;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -11,7 +9,8 @@ using Void.YoutubeAPI;
 /// </summary>
 public class PersonalisationManager : MonoBehaviour
 {
-    [SerializeField] protected Volume volume;
+    [SerializeField] protected Volume Volume;
+    [SerializeField] protected ColorSettings ColorSettings;
 
     private Bloom _bloom;
     private Vignette _vignette;
@@ -20,6 +19,7 @@ public class PersonalisationManager : MonoBehaviour
     private LensDistortion _lensDistortion;
     private PaniniProjection _paniniProjection;
     private ChromaticAberration _chromaticAberration;
+
     
     //TODO: Just keep in mind that this BG color affects both cameras and some custom parts like focus
     //TODO: Colors should have active text, field text, primary (lines), secondary (buttons), tertiary (fields), background
@@ -63,6 +63,7 @@ public class PersonalisationManager : MonoBehaviour
     public LensDistortion LensDistortion { get => _lensDistortion; }
     public PaniniProjection PaniniProjection { get => _paniniProjection; }
     public ChromaticAberration ChromaticAberration { get => _chromaticAberration; }
+    public ColorSettings Colors { get => ColorSettings; }
 
 
     private void Awake()
@@ -79,7 +80,7 @@ public class PersonalisationManager : MonoBehaviour
         JSONNode data = YoutubeData.GetData();
 
         // Bloom
-        if (volume.profile.TryGet(out _bloom)) 
+        if (Volume.profile.TryGet(out _bloom)) 
         {
             JSONNode bloNode = data["personalisation"]["bloom"];
 
@@ -102,7 +103,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // Vignette
-        if (volume.profile.TryGet(out _vignette)) 
+        if (Volume.profile.TryGet(out _vignette)) 
         {
             JSONNode vigNode = data["personalisation"]["vignette"];
 
@@ -134,7 +135,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // Film Grain
-        if (volume.profile.TryGet(out _filmGrain))
+        if (Volume.profile.TryGet(out _filmGrain))
         {
             JSONNode figNode = data["personalisation"]["filmGrain"];
 
@@ -159,7 +160,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // White Balance
-        if (volume.profile.TryGet(out _whiteBalance)) 
+        if (Volume.profile.TryGet(out _whiteBalance)) 
         {
             JSONNode whiNode = data["personalisation"]["whiteBalance"];
 
@@ -174,7 +175,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // Lens Distortion
-        if (volume.profile.TryGet(out _lensDistortion))
+        if (Volume.profile.TryGet(out _lensDistortion))
         {
             JSONNode lenNode = data["personalisation"]["lensDistortion"];
 
@@ -186,7 +187,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // Panini Projection
-        if (volume.profile.TryGet(out _paniniProjection))
+        if (Volume.profile.TryGet(out _paniniProjection))
         {
             JSONNode panNode = data["personalisation"]["paniniProjection"];
 
@@ -198,7 +199,7 @@ public class PersonalisationManager : MonoBehaviour
         }
 
         // Chromatic Aberration
-        if (volume.profile.TryGet(out _chromaticAberration))
+        if (Volume.profile.TryGet(out _chromaticAberration))
         {
             JSONNode chrNode = data["personalisation"]["chromaticAberration"];
 
@@ -208,6 +209,9 @@ public class PersonalisationManager : MonoBehaviour
             _chromaticAberration.intensity.value = !string.IsNullOrEmpty(chrNode["intensity"])
                 ? Mathf.Clamp(chrNode["intensity"].AsFloat, 0, 0.2f) : AberrationDefaultIntensity;
         }
+
+        // Theme coloring
+        ColorSettings.RefreshColors();
     }
 
     /// <summary> Overwrite all personalisation settings to a JSONNode. </summary>
@@ -248,6 +252,8 @@ public class PersonalisationManager : MonoBehaviour
 
         data["personalisation"]["chromaticAberration"]["active"]    = _chromaticAberration.active ? "true" : "false";
         data["personalisation"]["chromaticAberration"]["intensity"] = _chromaticAberration.intensity.value.ToString();
+
+        ColorSettings.SaveColors();
     }
 
 }
