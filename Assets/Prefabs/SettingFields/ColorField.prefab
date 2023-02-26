@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7988724535961858787}
   - component: {fileID: 8381190472923271928}
+  - component: {fileID: 4957774799201237716}
   m_Layer: 0
   m_Name: ColorField
   m_TagString: Untagged
@@ -59,6 +60,25 @@ MonoBehaviour:
   GreenField: {fileID: 3396595404977214380}
   BlueField: {fileID: 1005373402758652155}
   ColorShower: {fileID: 3716324743495876636}
+--- !u!114 &4957774799201237716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280554182183042572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849199c8fb2b4bd4b9c8c00ffd9392fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: {fileID: 4237245564105300559}
+  RedText: {fileID: 1684164400191210966}
+  RedBackground: {fileID: 1580950855771626587}
+  GreenText: {fileID: 1587431281638912397}
+  GreenBackground: {fileID: 3225017194317940778}
+  BlueText: {fileID: 916430594808858377}
+  BlueBackground: {fileID: 5615910046440100870}
 --- !u!1 &567629597671311919
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -670,7 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1057,7 +1077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

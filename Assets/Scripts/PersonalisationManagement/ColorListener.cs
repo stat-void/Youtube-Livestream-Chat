@@ -12,5 +12,8 @@ public abstract class ColorListener : MonoBehaviour
     private void OnDestroy()
         => ColorSettings.OnColorsUpdated -= ColorUpdate;
 
+    private void OnEnable()
+        => ColorUpdate();
+    
     protected abstract void ColorUpdate();
 }

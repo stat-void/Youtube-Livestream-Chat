@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class SearchUserItem : ARecyclerItem, IPointerClickHandler
 {
@@ -12,12 +12,14 @@ public class SearchUserItem : ARecyclerItem, IPointerClickHandler
 
     public UserContainer User;
 
-    private Color _bgColor = new Color32(0, 255, 255, 60);
-    private Color _bgHighlighted = new Color32(150, 255, 255, 60);
+    private Color _bgColor;
+    private Color _bgHighlighted;
 
-
-    private const string _highlightColor = "FFFFFF";
-
+    private void Awake()
+    {
+        ColorUtility.TryParseHtmlString("#" + ColorSettings.ObjectBackgroundColor, out _bgColor);
+        ColorUtility.TryParseHtmlString("#" + ColorSettings.SecondaryColor, out _bgHighlighted);
+    }
 
     protected override void OnDataBind(object data)
     {
@@ -37,7 +39,7 @@ public class SearchUserItem : ARecyclerItem, IPointerClickHandler
         if (indexLengthTextHighlight != (0, 0))
             UsernameField.text = string.Format("{0}<color=#{1}>{2}</color>{3}",
                 User.Username.Substring(0, indexLengthTextHighlight.Item1),
-                _highlightColor,
+                ColorSettings.HighlightUserColor,
                 User.Username.Substring(indexLengthTextHighlight.Item1, indexLengthTextHighlight.Item2),
                 User.Username.Substring(indexLengthTextHighlight.Item1 + indexLengthTextHighlight.Item2));
         else

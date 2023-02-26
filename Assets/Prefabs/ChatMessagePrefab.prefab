@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918274844736830155}
   - component: {fileID: 4479626613289385164}
+  - component: {fileID: 73878792562914356}
   m_Layer: 0
   m_Name: ChatMessagePrefab
   m_TagString: Untagged
@@ -56,6 +57,21 @@ MonoBehaviour:
   Separator: {fileID: 1918274844992947073}
   Timestamp: {fileID: 1918274844754977865}
   UserData: {fileID: 1918274845137571886}
+--- !u!114 &73878792562914356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918274844736830156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e48172b27c0824243b962850e5061fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Timestamp: {fileID: 1918274844754977865}
+  Contents: {fileID: 1918274845137571886}
+  Divider: {fileID: 1918274844992947072}
 --- !u!1 &1918274844754977867
 GameObject:
   m_ObjectHideFlags: 0

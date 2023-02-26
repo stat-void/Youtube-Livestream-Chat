@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.9607843}
+  m_Color: {r: 0, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -268,6 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918274844736830155}
   - component: {fileID: 8992977254812224532}
+  - component: {fileID: 4601959769991729985}
   m_Layer: 0
   m_Name: PollItemPrefab
   m_TagString: Untagged
@@ -315,6 +316,26 @@ MonoBehaviour:
   PollPercentage: {fileID: 464095676256815577}
   PollCount: {fileID: 4287152624260059309}
   PollBar: {fileID: 8836947468652556283}
+--- !u!114 &4601959769991729985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918274844736830156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ce24bc20d4ea64789b110fa358782b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Percentage: {fileID: 464095676256815577}
+  Number: {fileID: 4287152624260059309}
+  Answer: {fileID: 6169881401363552814}
+  PollFill: {fileID: 8836947468652556283}
+  PollBase: {fileID: 2202072828939467932}
+  PercentageBackground: {fileID: 1768407681998090768}
+  NumberBackground: {fileID: 903277721409580160}
+  AnswerBackground: {fileID: 6849289218655300962}
 --- !u!1 &2451100259939989372
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -446,7 +467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -762,7 +783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -974,7 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 1, a: 0.05882353}
+  m_Color: {r: 0, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

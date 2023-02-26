@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.39215687, b: 0.39215687, a: 1}
+  m_Color: {r: 0, g: 0.5019608, b: 0.5019608, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 6108568039332338747}
   - component: {fileID: 6108568039332338741}
   - component: {fileID: 6108568039332338746}
+  - component: {fileID: 5719250080695811663}
   m_Layer: 0
   m_Name: ScrollView
   m_TagString: Untagged
@@ -487,3 +488,17 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5719250080695811663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108568039332338744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 771b890c4b7f68646a3ef9d93d348723, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScrollHandle: {fileID: 6108568038637971359}
+  ScrollBackground: {fileID: 6108568037716834626}

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8366288562630687630}
   - component: {fileID: 8366288562630687625}
   - component: {fileID: 8366288562630687624}
+  - component: {fileID: 5088079117839581804}
   m_Layer: 5
   m_Name: Input Field
   m_TagString: Untagged
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e9241a4cfe0bb46b5b8d4614fcaa4cc6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dcc28ba9fc1841e43981ac1982291dd4, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -77,7 +78,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 20
+  m_PixelsPerUnitMultiplier: 5
 --- !u!114 &8366288562630687624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +177,21 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &5088079117839581804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8366288562630687626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfcf21e13f6964c45b0d78aa45ed58a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 8366288564519930886}
+  Placeholder: {fileID: 8366288564194161277}
+  IFBackground: {fileID: 8366288562630687625}
 --- !u!1 &8366288563504789675
 GameObject:
   m_ObjectHideFlags: 0

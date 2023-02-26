@@ -424,6 +424,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918274844736830155}
   - component: {fileID: 3672149364760647381}
+  - component: {fileID: 4807657012868709274}
   m_Layer: 0
   m_Name: VoteChoicePrefab
   m_TagString: Untagged
@@ -473,6 +474,30 @@ MonoBehaviour:
   VotePercentage: {fileID: 464095676256815577}
   VoteCount: {fileID: 4287152624260059309}
   VoteBar: {fileID: 8836947468652556283}
+--- !u!114 &4807657012868709274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918274844736830156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e92b5f9c61a9b4898c6bff5edea8b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PromptText: {fileID: 8222881522727308291}
+  PromptPlaceholder: {fileID: 2788475807091198394}
+  PromptBackground: {fileID: 7873236741242721580}
+  Percentage: {fileID: 464095676256815577}
+  PercentageBackground: {fileID: 1768407681998090768}
+  Number: {fileID: 4287152624260059309}
+  NumberBackground: {fileID: 903277721409580160}
+  Answer: {fileID: 6169881401363552814}
+  AnswerPlaceholder: {fileID: 6792626172530625300}
+  AnswerBackground: {fileID: 6849289218655300962}
+  PollFill: {fileID: 8836947468652556283}
+  PollBase: {fileID: 2202072828939467932}
 --- !u!1 &2451100259939989372
 GameObject:
   m_ObjectHideFlags: 0
