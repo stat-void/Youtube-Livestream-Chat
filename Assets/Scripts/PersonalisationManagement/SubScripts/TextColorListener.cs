@@ -16,6 +16,7 @@ public class TextColorListener : ColorListener
             ColorTypeEnum.Secondary => ColorSettings.SecondaryColor,
             ColorTypeEnum.ObjectBackground => ColorSettings.ObjectBackgroundColor,
             ColorTypeEnum.Background => ColorSettings.BackgroundColor,
+            ColorTypeEnum.Highlight => ColorSettings.HighlightMessageColor,
             _ => ColorSettings.MainColor
         };
 

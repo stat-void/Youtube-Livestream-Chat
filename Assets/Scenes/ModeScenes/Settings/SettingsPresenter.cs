@@ -42,6 +42,7 @@ public class SettingsPresenter : AModePresenter
 
         RealTime.isOn = Settings.RealTime;
         Animations.isOn = Settings.Animations;
+        Debug.LogWarning(_apiTimer.UseYoutubeInterval);
         UseYTInterval.isOn = _apiTimer.UseYoutubeInterval;
 
         MaxQuotaInput.text = _keyManager.MaxQuota.ToString();
@@ -99,9 +100,6 @@ public class SettingsPresenter : AModePresenter
     private void OnUseYTIntervalUpdate(bool value)
     {
         _apiTimer.UseYoutubeInterval = value;
-
-        //RequestIntervalInput.interactable = !value;
-        //TODO: Should affect coloring of the text in addition of interactable changing image?
     }
         
 
@@ -109,13 +107,11 @@ public class SettingsPresenter : AModePresenter
     {
         if (value == "")
         {
-            //RequestIntervalInput.text = "3.00";
             _apiTimer.SetAPIRequestInterval(3f);
             RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
         }
         else
         {
-            //RequestIntervalInput.text = string.Format(value, "0.00");
             _apiTimer.SetAPIRequestInterval(float.Parse(value));
             RequestIntervalInput.text = _apiTimer.APIRequestInterval.ToString();
         }
@@ -131,7 +127,7 @@ public class SettingsPresenter : AModePresenter
 
 
     private void OnAPIKeyDeleteRequest() =>
-        YoutubeData.GetData()["YT"]["APIKey"] = "";
+        YoutubeData.GetData()["YT"]["apiKey"] = "";
 
     private void OnDeleteAllRequest() =>
         YoutubeData.DeleteData();

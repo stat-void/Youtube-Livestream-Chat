@@ -24,19 +24,19 @@ public class Settings : MonoBehaviour
     {
         JSONNode apiData = YoutubeData.GetData();
 
-        _realTime = !string.IsNullOrEmpty(apiData["Settings"]["RealTime"]) ? apiData["Settings"]["RealTime"].AsBool : true;
-        _animations = !string.IsNullOrEmpty(apiData["Settings"]["Animations"]) ? apiData["Settings"]["Animations"].AsBool : true;
+        _realTime = !string.IsNullOrEmpty(apiData["settings"]["realTime"]) ? apiData["settings"]["realTime"].AsBool : true;
+        _animations = !string.IsNullOrEmpty(apiData["settings"]["animations"]) ? apiData["settings"]["animations"].AsBool : true;
     }
 
     public void SetRealTime(bool value)
     {
         _realTime = value;
-        YoutubeData.GetData()["Settings"]["RealTime"] = _realTime ? "true" : "false";
+        YoutubeData.GetData()["settings"]["realTime"] = _realTime ? "true" : "false";
     }
 
     public void SetAnimations(bool value)
     {
         _animations = value;
-        YoutubeData.GetData()["Settings"]["Animations"] = _animations ? "true" : "false";
+        YoutubeData.GetData()["settings"]["animations"] = _animations ? "true" : "false";
     }
 }

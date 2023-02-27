@@ -16,6 +16,7 @@ public class ImageColorListener : ColorListener
             ColorTypeEnum.Secondary => ColorSettings.SecondaryColor,
             ColorTypeEnum.ObjectBackground => ColorSettings.ObjectBackgroundColor,
             ColorTypeEnum.Background => ColorSettings.BackgroundColor,
+            ColorTypeEnum.Highlight => ColorSettings.HighlightUserColor,
             _ => ColorSettings.MainColor
         };
 

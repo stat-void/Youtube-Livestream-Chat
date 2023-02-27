@@ -24,12 +24,12 @@ namespace Void.YoutubeAPI
             _apiData = YoutubeData.GetData();
 
             // If JSON data exists, use it, otherwise set default values.
-            CurrentQuota = !string.IsNullOrEmpty(_apiData["YT"]["CurrentQuota"]) ? _apiData["YT"]["CurrentQuota"].AsInt : 0;
-            MaxQuota =  !string.IsNullOrEmpty(_apiData["YT"]["MaxQuota"]) ? _apiData["YT"]["MaxQuota"].AsInt : 10000;
-            APIKey = _apiData["YT"]["APIKey"];
+            CurrentQuota = !string.IsNullOrEmpty(_apiData["YT"]["currentQuota"]) ? _apiData["YT"]["currentQuota"].AsInt : 0;
+            MaxQuota =  !string.IsNullOrEmpty(_apiData["YT"]["maxQuota"]) ? _apiData["YT"]["maxQuota"].AsInt : 10000;
+            APIKey = _apiData["YT"]["apiKey"];
 
             // Check if PST midnight has arrived from quit time (Google quota reset)
-            VerifyNewDayPST(_apiData["YT"]["QuitTime"]);
+            VerifyNewDayPST(_apiData["YT"]["quitTime"]);
 
             // Start internal timer to also reset quota during runtime when PST midnight arrives.
             StartQuotaResetTimer();
@@ -60,20 +60,20 @@ namespace Void.YoutubeAPI
                 SaveAPIKey(APIKey);
 
             if (!save)
-                _apiData["YT"]["APIKey"] = "";
+                _apiData["YT"]["apiKey"] = "";
         }
 
         /// <summary> Store the currently used API key to the data JSON file. </summary>
         /// <param name="key"> The API key value to recall. </param>
         private void SaveAPIKey(string key) =>
-            _apiData["YT"]["APIKey"] = key;
+            _apiData["YT"]["apiKey"] = key;
 
         /// <summary> Remove all currently saved information related to the stored API key. </summary>
         public void DeleteAPIKeyInfo()
         {
-            _apiData["YT"]["APIKey"] = "";
-            _apiData["YT"]["CurrentQuota"] = "";
-            _apiData["YT"]["MaxQuota"] = "";
+            _apiData["YT"]["apiKey"] = "";
+            _apiData["YT"]["currentQuota"] = "";
+            _apiData["YT"]["maxQuota"] = "";
         }
 
 
@@ -167,13 +167,13 @@ namespace Void.YoutubeAPI
 
         public void QuitCalled()
         {
-            if (!string.IsNullOrWhiteSpace(_apiData["YT"]["APIKey"]))
+            if (!string.IsNullOrWhiteSpace(_apiData["YT"]["apiKey"]))
             {
-                _apiData["YT"]["CurrentQuota"] = CurrentQuota.ToString();
-                _apiData["YT"]["MaxQuota"] = MaxQuota.ToString();
+                _apiData["YT"]["currentQuota"] = CurrentQuota.ToString();
+                _apiData["YT"]["maxQuota"] = MaxQuota.ToString();
             }
 
-            _apiData["YT"]["QuitTime"] = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture);
+            _apiData["YT"]["quitTime"] = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.FF", CultureInfo.InvariantCulture);
             DisposeQuotaResetTimer();
         }
     }

@@ -54,7 +54,7 @@ namespace Void.YoutubeAPI
             set
             {
                 _useYTInterval = value;
-                _apiData["YT"]["UseInterval"] = _useYTInterval.ToString();
+                _apiData["YT"]["useInterval"] = _useYTInterval.ToString();
             }
         }
 
@@ -68,14 +68,14 @@ namespace Void.YoutubeAPI
         /// <summary>  If no JSON data exists and Youtube GET request wait time is not used, how long should the delay be?  </summary>
         private const float _apiRequestIntervalDefault = 3;
 
-        private void Start()
+        private void Awake()
         {
             YoutubeLiveChatMessages.OnIntervalUpdateMilliseconds += RecommendedWaitUpdate;
             _apiData = YoutubeData.GetData();
 
             // If JSON data exists, use it, otherwise set default values.
-            _useYTInterval = !string.IsNullOrEmpty(_apiData["YT"]["UseInterval"]) ? _apiData["YT"]["UseInterval"] == "True" : _useYTIntervalDefault;
-            _apiRequestInterval = !string.IsNullOrEmpty(_apiData["YT"]["RequestInterval"]) ? _apiData["YT"]["RequestInterval"].AsFloat : _apiRequestIntervalDefault;
+            _useYTInterval = !string.IsNullOrEmpty(_apiData["YT"]["useInterval"]) ? _apiData["YT"]["useInterval"].AsBool : _useYTIntervalDefault;
+            _apiRequestInterval = !string.IsNullOrEmpty(_apiData["YT"]["requestInterval"]) ? _apiData["YT"]["requestInterval"].AsFloat : _apiRequestIntervalDefault;
         }
 
         private void Update()
@@ -114,14 +114,14 @@ namespace Void.YoutubeAPI
             {
                 Debug.LogWarning("Setting delay below 0.7 seconds can cause duplicate messages to appear as Youtube API corrects timestamps.");
                 _apiRequestInterval = value;
-                _apiData["YT"]["RequestInterval"] = _apiRequestInterval.ToString();
+                _apiData["YT"]["requestInterval"] = _apiRequestInterval.ToString();
                 OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
             }
 
             else
             {
                 _apiRequestInterval = value;
-                _apiData["YT"]["RequestInterval"] = _apiRequestInterval.ToString();
+                _apiData["YT"]["requestInterval"] = _apiRequestInterval.ToString();
                 OnAPIRequestDelayChanged?.Invoke(_apiRequestInterval);
             }
         }

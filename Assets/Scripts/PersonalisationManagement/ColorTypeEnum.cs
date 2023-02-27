@@ -3,5 +3,6 @@ public enum ColorTypeEnum
     Primary,
     Secondary,
     ObjectBackground,
-    Background
+    Background,
+    Highlight
 }
