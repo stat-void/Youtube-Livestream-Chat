@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
 using Void.YoutubeAPI;
 
-public class FocusModePresenter : AModePresenter
+public class UserListenerPresenter : AModePresenter
 {
     [SerializeField] protected Canvas BaseCanvas;
 
@@ -47,7 +47,7 @@ public class FocusModePresenter : AModePresenter
 
     public override string GetName()
     {
-        return "Focus Mode";
+        return "User Listener";
     }
 
     public override string GetDescription()

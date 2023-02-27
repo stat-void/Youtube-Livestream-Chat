@@ -20,10 +20,6 @@ public class PersonalisationManager : MonoBehaviour
     private PaniniProjection _paniniProjection;
     private ChromaticAberration _chromaticAberration;
 
-    
-    //TODO: Just keep in mind that this BG color affects both cameras and some custom parts like focus
-    //TODO: Colors should have active text, field text, primary (lines), secondary (buttons), tertiary (fields), background
-    //TODO: Also needs colors for superchats and regular messages?
     public readonly bool    BloomDefaultActive = true;
     public readonly float   BloomDefaultIntensity = 1.5f;
     public readonly float   BloomDefaultScatter = 0.5f;

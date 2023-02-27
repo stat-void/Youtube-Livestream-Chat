@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ModeScenes/ChatDisplay/ChatDisplay.unity
     guid: c1a08bf371b1a4e679c6eb4b0711b9eb
   - enabled: 1
-    path: Assets/Scenes/ModeScenes/FocusMode/FocusMode.unity
+    path: Assets/Scenes/ModeScenes/UserListenerMode/UserListenerMode.unity
     guid: 569a7ccfb8b8a4e04994584007ed4c85
   - enabled: 1
     path: Assets/Scenes/ModeScenes/VoteMode/VoteMode.unity

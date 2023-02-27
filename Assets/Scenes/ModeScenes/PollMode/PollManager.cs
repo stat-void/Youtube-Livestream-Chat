@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Void.YoutubeAPI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
-using System;
 
 public class PollManager : MonoBehaviour
 {
@@ -64,8 +63,6 @@ public class PollManager : MonoBehaviour
 
         UniqueMessageText.gameObject.SetActive(false);
         UniqueMessageCount.gameObject.SetActive(false);
-
-        //TODO: Add all listeners? Specifically, decay as an editable
     }
 
     public void Close()
@@ -83,8 +80,6 @@ public class PollManager : MonoBehaviour
         // Remove all currently visible pollings.
         while (_pollItems.Count > 0)
             RemovePoller();
-
-        //TODO: Remove all listeners? Specifically, decay as an editable
     }
 
 
@@ -361,8 +356,7 @@ public class PollManager : MonoBehaviour
                 _pollItems[i].UpdateMessage(sortedMessages[i]);
             }
             UniqueMessageCount.text = $"{_pollSum}";
-        }
-            
+        }  
 
         else
         {

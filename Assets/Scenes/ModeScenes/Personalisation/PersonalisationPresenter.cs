@@ -533,7 +533,6 @@ public class PersonalisationPresenter : AModePresenter
         DemoText.color = color;
         DemoButtonBox.color = color;
         DemoButtonText.color = color;
-        //TODO: DemoIFMain.colors.
     }
     private void SecondaryFieldChanged(Color color)
         => DemoIFMain.placeholder.color = color;

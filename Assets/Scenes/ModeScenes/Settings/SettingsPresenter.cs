@@ -42,7 +42,6 @@ public class SettingsPresenter : AModePresenter
 
         RealTime.isOn = Settings.RealTime;
         Animations.isOn = Settings.Animations;
-        Debug.LogWarning(_apiTimer.UseYoutubeInterval);
         UseYTInterval.isOn = _apiTimer.UseYoutubeInterval;
 
         MaxQuotaInput.text = _keyManager.MaxQuota.ToString();

@@ -21,7 +21,6 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
         // Quota and APIKey handler
         public YoutubeKeyManager KeyManager { get; private set; }
-        //TODO: Once you figure out the timer/stopwatch and webrequest call bug, turn the APITimer into a non-monobehavior as well.
         [SerializeField] public YoutubeAPITimer APITimer;
 
         // Chat ID collected from the video ID and tokens to keep updating chat polls
