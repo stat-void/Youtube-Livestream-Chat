@@ -70,9 +70,13 @@ public class RemoveUserSearcher : UserSearcher
         int toRemove = -1;
         for (int i = 0; i < Users.Count; i++)
         {
-            // Compare ID's if not blank, otherwise compare Usernames
-            bool match = !string.IsNullOrEmpty(container.ID) ? Users[i].ID == container.ID : Users[i].Username == container.Username;
-            if (match)
+            // Compare ID's if not current checkable ID is not empty.
+            bool matchID = !string.IsNullOrEmpty(container.ID) && Users[i].ID == container.ID;
+
+            // Compare usernames, if the data being compared against also does not have an ID. 
+            bool matchUsername = string.IsNullOrEmpty(Users[i].ID) && Users[i].Username == container.Username;
+
+            if (matchID || matchUsername)
             {
                 toRemove = i;
                 break;

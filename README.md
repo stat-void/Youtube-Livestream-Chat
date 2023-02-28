@@ -52,7 +52,7 @@ For more information on quotas and requesting increases to the quota cap (might 
 I've changed my mind regarding the other project, for now. I'll finish V3, then make a video about my findings.
 
 - Keyword listener view - An alternate Focus Mode where it tries to capture specific keywords instead. Optionally, has options to capture superchats, or membership related events.
-- User listener view - (Rename from Focus mode) Fix one minor error, then add a highlighting option to it alongside the Keyword Listener View.
+- User listener view - Add a highlighting option to it alongside the Keyword Listener View.
 - Investigate Youtube Data API V1. Apparently it doesn't need quotas, but it also is deprecated and potentially eventually shut down?
 - Backlog - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
 - Backlog - Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
