@@ -5,7 +5,6 @@ using TMPro;
 
 public class SearchUserItem : ARecyclerItem, IPointerClickHandler
 {
-
     [SerializeField] protected Button Button;
     [SerializeField] protected Image Background;
     [SerializeField] protected TMP_Text UsernameField;

@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using Void.YoutubeAPI.LiveStreamChat.Messages;
 using UnityEngine.UI;
+using Void.YoutubeAPI.LiveStreamChat.Messages;
 using Void.YoutubeAPI;
 
-public class ChatDisplayPresenter : AModePresenter
+public class UserListenerPresenter : AModePresenter
 {
     [SerializeField] protected Canvas BaseCanvas;
+
+    [Header("User Change Window")]
+    [SerializeField] protected Button AddRemoveUsersButton;
+    [SerializeField] protected Transform UserChanger;
+    [SerializeField] protected UserSearchField SearchField;
 
     [Header("Chat Display")]
     [SerializeField] protected ScrollRect ScrollRect;
@@ -23,6 +29,8 @@ public class ChatDisplayPresenter : AModePresenter
     private IEnumerator _currentDisplay;
     private HashSet<IEnumerator> _disposables = new();
 
+    private bool _userChangerOpen = false;
+
     private void Awake()
     {
         BaseCanvas.worldCamera = Camera.main;
@@ -32,30 +40,30 @@ public class ChatDisplayPresenter : AModePresenter
     private void Start()
     {
         _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        AddRemoveUsersButton.onClick.AddListener(UpdateUserChanger);
+
         NotifyClassReady(this);
     }
 
     public override string GetName()
     {
-        return "Chat";
+        return "User Listener";
     }
 
     public override string GetDescription()
     {
-        return "Show the regular chat with no unique modifications.";
+        return "Too much chatter? Filter out everyone instead!";
     }
 
     public override void Open()
     {
         BaseCanvas.gameObject.SetActive(true);
-
-        //TODO:  Wait time increases to 0.05 seconds, or 3 skipped frames with 100 elements
-        // Pretty much requires visual object pooling to preload chat here
-
         ScrollRect.verticalNormalizedPosition = 0f;
+        SearchField.OpenRefresh();
 
         ScreenResizeListener.OnResize += OnScreenResize;
         ChatMessageListener.ChatMessages += OnNewMessages;
+
 
         _apiTimer.StartTimer();
     }
@@ -63,8 +71,13 @@ public class ChatDisplayPresenter : AModePresenter
     public override void Close()
     {
         _visibleChatMessages = 0;
+        SearchField.CloseRefresh();
+
         ScreenResizeListener.OnResize -= OnScreenResize;
         ChatMessageListener.ChatMessages -= OnNewMessages;
+
+
+
 
         // Take every item currently active and unbind them into the pool, deactivating them.
         for (int i = _activePool.Count - 1; i >= 0; i--)
@@ -85,14 +98,66 @@ public class ChatDisplayPresenter : AModePresenter
         BaseCanvas.gameObject.SetActive(false);
     }
 
+
+    /// <summary> Depending on _userChangerOpen, open or close the search field window. </summary>
+    private async void UpdateUserChanger()
+    {
+        AddRemoveUsersButton.interactable = false;
+
+        _userChangerOpen = !_userChangerOpen;
+
+        Vector3 currentPos = UserChanger.localPosition;
+
+        if (!Settings.Animations)
+            UserChanger.localPosition =
+                _userChangerOpen ? currentPos - new Vector3(320,0,0) : currentPos + new Vector3(320, 0, 0);
+
+        else
+            await Vector3Lerp(
+                UserChanger,
+                 currentPos,
+                 _userChangerOpen ? currentPos - new Vector3(320, 0, 0) : currentPos + new Vector3(320, 0, 0),
+                0.5f);
+        
+
+        AddRemoveUsersButton.interactable = true;
+    }
+
+    private async Task Vector3Lerp(Transform item, Vector3 from, Vector3 to, float duration)
+    {
+        float time = 0;
+
+
+        while (time < duration)
+        {
+            await Task.Yield();
+            time += Time.unscaledDeltaTime;
+
+            // Smooth Step Lerp
+            float t = time / duration;
+            t = t * t * (3f - 2f * t);
+
+            item.localPosition = Vector3.Lerp(from, to, t);
+        }
+
+        item.localPosition = to;
+    }
+
+
+    /*
+    ---
+    ---
+    ChatDisplayPresenter related content (With some parts slightly modified)
+    ---
+    ---
+    */
+
     /// <summary> Display any newly received messages </summary>
     /// <param name="newMessages"> Latest received messages from newest to oldest. </param>
     private void OnNewMessages(List<YoutubeChatMessage> newMessages)
     {
-        // async does not have WaitForEndOfFrame, so using Coroutine for smoother scrollbar anchoring.
         _currentDisplay = DisplayMessages(newMessages);
-        if (_currentDisplay != null)
-            StartCoroutine(_currentDisplay);
+        StartCoroutine(_currentDisplay);
     }
 
     private IEnumerator DisplayMessages(List<YoutubeChatMessage> newMessages)
@@ -103,6 +168,10 @@ public class ChatDisplayPresenter : AModePresenter
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
+            // New part for this class. If this message is not being filtered, skip it.
+            if (!SearchField.IsUserValid(newMessages[i]))
+                continue;
+
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
             if (Settings.RealTime && !overflowRisk && i < newMessages.Count - 1)
             {
@@ -144,7 +213,6 @@ public class ChatDisplayPresenter : AModePresenter
 
             _activePool.Add(assignable);
             assignable.transform.SetAsLastSibling();
-            //TODO: This Bind has a rare chance of failure - ArgumentOutOfRangeException
             assignable.Bind(newMessages[i], ChatContent);
 
             if (Settings.RealTime)

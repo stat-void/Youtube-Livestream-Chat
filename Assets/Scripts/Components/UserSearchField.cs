@@ -83,7 +83,6 @@ public class UserSearchField : MonoBehaviour
             }
 
             // Remover
-            //TODO: This should be the thing I should debug, to verify that the correct removal is done
             RemoveSearcher.RemoveUser(item.User);
         }
 

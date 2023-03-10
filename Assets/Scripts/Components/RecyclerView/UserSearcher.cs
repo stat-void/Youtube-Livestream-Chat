@@ -16,7 +16,6 @@ public class UserSearcher : ARecyclerList
     [SerializeField] protected TMP_InputField DirectInput;
     [SerializeField] protected Button DirectButton;
 
-
     // Fields related to the content lists and the actual displayed list
     public Dictionary<string, List<string>> UsernameIDDict { get; protected set; } = new(); // Verification list
     protected readonly List<UserContainer> Users = new();                 // Data list
@@ -25,18 +24,22 @@ public class UserSearcher : ARecyclerList
 
     private string _currentSearch = "";
     private bool _refreshingList = false;
+    private bool _quitting = false;
+    private IEnumerator _currentResize = null;
+    private float _resizeWaitSeconds = 0f;
 
     public static event Action<SearchUserItem, SelectionType> OnUserSelection;
     public static event Action<string, SelectionType> OnDirectUserSelection;
-
-    bool _quitting = false;
-    private IEnumerator _currentResize = null;
-    private float _resizeWaitSeconds = 0f;
 
     private void Start()
     {
         // Size of the virtual list depends on sheet size from SetupSheet
         SetupRecyclerList(true);
+    }
+
+    private void OnApplicationQuit()
+    {
+        _quitting = true;
     }
 
     public void Open()
@@ -242,10 +245,5 @@ public class UserSearcher : ARecyclerList
         Remove,
         DirectAdd,
         DirectRemove
-    }
-
-    private void OnApplicationQuit()
-    {
-        _quitting = true;
     }
 }

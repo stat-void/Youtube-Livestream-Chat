@@ -58,6 +58,9 @@ public class RemoveUserSearcher : UserSearcher
 
     public void AddUser(string username)
     {
+        if (string.IsNullOrWhiteSpace(username))
+            return;
+
         Users.Add(new("", username, false));
         RefreshUsers();
 

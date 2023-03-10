@@ -5,26 +5,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using Void.YoutubeAPI.LiveStreamChat.Messages;
 using Void.YoutubeAPI;
+using System.Drawing;
 
-public class UserListenerPresenter : AModePresenter
+public class KeywordListenerPresenter : AModePresenter
 {
     [SerializeField] protected Canvas BaseCanvas;
 
-    [Header("User Change Window")]
-    [SerializeField] protected Button AddRemoveUsersButton;
-    [SerializeField] protected Transform UserChanger;
-    [SerializeField] protected UserSearchField SearchField;
+    [Header("Keyword Window")]
+    [SerializeField] protected Button AddRemoveKeywordsButton;
+    [SerializeField] protected Transform KeywordChangerBox;
+    [SerializeField] protected KeywordChangeField KeywordField;
 
     [Header("Chat Display")]
     [SerializeField] protected ScrollRect ScrollRect;
     [SerializeField] protected ChatItem ContentPrefab;
     [SerializeField] protected Transform ChatContent;
     [SerializeField] protected Transform PoolContent;
-
+    
     private YoutubeAPITimer _apiTimer;
     private List<AListItem> _activePool = new();
     private Stack<AListItem> _objectPool = new();
-    private int _currentActives = 0;
+    private int _visibleChatMessages = 0;
 
     private IEnumerator _currentDisplay;
     private HashSet<IEnumerator> _disposables = new();
@@ -40,26 +41,34 @@ public class UserListenerPresenter : AModePresenter
     private void Start()
     {
         _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
-        AddRemoveUsersButton.onClick.AddListener(UpdateUserChanger);
-
         NotifyClassReady(this);
+    }
+
+    private void OnEnable()
+    {
+        AddRemoveKeywordsButton.onClick.AddListener(UpdateKeywordChangerBox);
+    }
+
+    private void OnDisable()
+    {
+        AddRemoveKeywordsButton.onClick.RemoveListener(UpdateKeywordChangerBox);
     }
 
     public override string GetName()
     {
-        return "User Listener";
+        return "Keyword Listener";
     }
 
     public override string GetDescription()
     {
-        return "Too much chatter? Filter out everyone instead!";
+        return "Filter messages by listening to specific keywords.";
     }
 
     public override void Open()
     {
         BaseCanvas.gameObject.SetActive(true);
         ScrollRect.verticalNormalizedPosition = 0f;
-        SearchField.OpenRefresh();
+        KeywordField.OpenRefresh();
 
         ScreenResizeListener.OnResize += OnScreenResize;
         ChatMessageListener.ChatMessages += OnNewMessages;
@@ -70,14 +79,11 @@ public class UserListenerPresenter : AModePresenter
 
     public override void Close()
     {
-        _currentActives = 0;
-        SearchField.CloseRefresh();
+        _visibleChatMessages = 0;
+        KeywordField.CloseRefresh();
 
         ScreenResizeListener.OnResize -= OnScreenResize;
         ChatMessageListener.ChatMessages -= OnNewMessages;
-
-
-
 
         // Take every item currently active and unbind them into the pool, deactivating them.
         for (int i = _activePool.Count - 1; i >= 0; i--)
@@ -100,27 +106,26 @@ public class UserListenerPresenter : AModePresenter
 
 
     /// <summary> Depending on _userChangerOpen, open or close the search field window. </summary>
-    private async void UpdateUserChanger()
+    private async void UpdateKeywordChangerBox()
     {
-        AddRemoveUsersButton.interactable = false;
+        AddRemoveKeywordsButton.interactable = false;
 
         _userChangerOpen = !_userChangerOpen;
 
-        Vector3 currentPos = UserChanger.localPosition;
+        Vector3 currentPos = KeywordChangerBox.localPosition;
 
         if (!Settings.Animations)
-            UserChanger.localPosition =
+            KeywordChangerBox.localPosition =
                 _userChangerOpen ? currentPos - new Vector3(320,0,0) : currentPos + new Vector3(320, 0, 0);
 
         else
             await Vector3Lerp(
-                UserChanger,
+                KeywordChangerBox,
                  currentPos,
                  _userChangerOpen ? currentPos - new Vector3(320, 0, 0) : currentPos + new Vector3(320, 0, 0),
                 0.5f);
-        
 
-        AddRemoveUsersButton.interactable = true;
+        AddRemoveKeywordsButton.interactable = true;
     }
 
     private async Task Vector3Lerp(Transform item, Vector3 from, Vector3 to, float duration)
@@ -166,16 +171,32 @@ public class UserListenerPresenter : AModePresenter
         float totalTimeWaitedSeconds = 0;
         bool overflowRisk = false;
 
+        bool isExcludeMode = KeywordField.GetSwitchButton().GetCurrentChoice() == "Only Match";
+
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
-            // New part for this class. If this message is not being filtered, skip it.
-            if (!SearchField.IsUserValid(newMessages[i]))
+            YoutubeChatMessage msg = newMessages[i];
+
+            (bool isValid, MultiRange ranges) = KeywordField.IsKeywordValid(msg);
+
+            if (isExcludeMode && !isValid)
                 continue;
+
+            // Get dictionary keys in reversed order
+            SortedDictionary<int, int> data = ranges.GetIndexLengthPairs();
+            foreach (int key in data.Keys)
+            {
+                int index = key;
+                int length = data[key];
+                int end = index + length;
+                string highlight = $"<color=#{ColorSettings.HighlightMessageColor}>{msg.Message.Substring(index, length)}</color>";
+                msg.Message = msg.Message[..index] + highlight + msg.Message[end..];
+            }
 
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
             if (Settings.RealTime && !overflowRisk && i < newMessages.Count - 1)
             {
-                float waitTime = (float)newMessages[i].Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
+                float waitTime = (float)msg.Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
 
                 if (totalTimeWaitedSeconds + waitTime < _apiTimer.APIRequestInterval - 0.5f)
                 {
@@ -198,10 +219,10 @@ public class UserListenerPresenter : AModePresenter
             AListItem assignable;
 
             // if not full, add a new pooling item
-            if (_currentActives < ChatMessageListener.ListMaxSize)
+            if (_visibleChatMessages < ChatMessageListener.ListMaxSize)
             {
                 assignable = GetPoolItem();
-                _currentActives++;
+                _visibleChatMessages++;
             }
 
             // Otherwise replace oldest data
@@ -213,7 +234,7 @@ public class UserListenerPresenter : AModePresenter
 
             _activePool.Add(assignable);
             assignable.transform.SetAsLastSibling();
-            assignable.Bind(newMessages[i], ChatContent);
+            assignable.Bind(msg, ChatContent);
 
             if (Settings.RealTime)
             {

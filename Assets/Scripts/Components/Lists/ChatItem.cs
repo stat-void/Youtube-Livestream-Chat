@@ -28,15 +28,6 @@ public class ChatItem : AListItem
         UpdateFit();
     }
 
-    /*public override void Bind(YoutubeChatMessage node, List<string> keywords, Transform active)
-    {
-        //TODO: This commented out code is intended for colored highlighting in user/keyword listeners
-        //TODO: Edit node.Message to include highlighted areas.
-
-        //TODO: Then call base bind.
-        Bind(node, active);
-    }*/
-
     public override void Unbind(Transform pool)
     {
         transform.SetParent(pool);
