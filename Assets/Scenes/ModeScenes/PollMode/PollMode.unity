@@ -986,6 +986,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Decay(20)
       objectReference: {fileID: 0}
+    - target: {fileID: 8366288564194161277, guid: 17e006fc68c45d448938d34856b85f54, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366288564519930886, guid: 17e006fc68c45d448938d34856b85f54, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e006fc68c45d448938d34856b85f54, type: 3}
 --- !u!224 &1093521090 stripped
@@ -1203,7 +1211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1587,7 +1595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1867,7 +1875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2108603975915540738, guid: 2377dbc201bdc4206bdb754372ff26e6, type: 3}
       propertyPath: m_LocalPosition.x
