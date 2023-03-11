@@ -18,7 +18,7 @@ For an idea on what could be done with this system, [I had an interactive game r
 - JSON Data - All settings are saved as a separate JSON document at the same folder as the program, allowing manually transferring preferences between versions.
 
 ## Installation
-[Download the Version 2 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V2/Youtube-Livestream-Chat-V2.zip), unpack it and run the executable.
+[Download the Version 3 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V3/Youtube-Livestream-Chat-V3.zip), unpack it and run the executable.
 
 ## Usage
 
