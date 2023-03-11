@@ -9,12 +9,13 @@ For an idea on what could be done with this system, [I had an interactive game r
 ***
 
 ## Features
-- Chat display - A regular chat display for a given video ID. One advantage this has over a direct chat window from Youtube is being able to (for most of the time) display messages with lower latency, as long as the request delay is equal or below the Youtube recommended polling wait time.
-- User Listener - A nearly identical chat display that can be used to filter in specific users. Current features are to filter in moderators, members, or any user by their specific username, adding them one by one.
+- Chat display - A regular chat display for a given video ID. Compared to a direct Youtube chat, it's able to display messages with lower latency, as long as the request delay is equal or below the Youtube recommended polling wait time.
+- User Listener - A nearly identical chat display that can be used to filter in or highlight specific users. Current features are to filter in moderators, members, or any user by their specific username.
 - Keyword Listener - Similar to User Listener, but you can instead listen and highlight messages that contain any desired keywords.
 - Voter - A "regular" voting system that resembles Youtube voting. Has the ability to manually write a question and a set of answers with prompts. Prompts are what users within a chat have to write to have their vote registered.. If left empty, numbers will be automatically generated as votable choices. Up to 10 answers can be tracked. An optional choice to be able to change your vote is also available.
 - Poller - A freeform voting system. Instead of giving a choice, it keeps track of what users are generally writing and shows the 10 most written things. Also, if a user has written something new, their old message and its count is removed. Messages are also automatically removed after 20 queries to keep information fresh. Good for situations where you want to quickly see what choices the chat would make.
 - Settings and Personalisation - Manual settings to customize the general appearance of the application, or alter request timers.
+- JSON Data - All settings are saved as a separate JSON document at the same folder as the program, allowing manually transferring preferences between versions.
 
 ## Installation
 [Download the Version 2 build here](https://github.com/stat-void/Youtube-Livestream-Chat/releases/download/V2/Youtube-Livestream-Chat-V2.zip), unpack it and run the executable.
@@ -50,10 +51,8 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-I've changed my mind regarding the other project, for now. I'll finish V3, then make a video about my findings.
+V3 finished, investigating API V1 and trying to make a video about all of this.
 
-- Keyword listener view - Quick test if everything works.
-- User listener view - Quick test if everything works.
 - Investigate Youtube Data API V1. Apparently it doesn't need quotas, but it also is deprecated and potentially eventually shut down?
 - Backlog - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
 - Backlog - Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit in terms of reducing Unity dependencies and making a pure C# solution. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
