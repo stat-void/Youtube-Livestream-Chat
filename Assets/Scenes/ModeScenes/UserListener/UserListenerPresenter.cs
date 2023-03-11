@@ -14,6 +14,7 @@ public class UserListenerPresenter : AModePresenter
     [SerializeField] protected Button AddRemoveUsersButton;
     [SerializeField] protected Transform UserChanger;
     [SerializeField] protected UserSearchField SearchField;
+    [SerializeField] protected SwitchButton SwitchButton;
 
     [Header("Chat Display")]
     [SerializeField] protected ScrollRect ScrollRect;
@@ -76,9 +77,6 @@ public class UserListenerPresenter : AModePresenter
         ScreenResizeListener.OnResize -= OnScreenResize;
         ChatMessageListener.ChatMessages -= OnNewMessages;
 
-
-
-
         // Take every item currently active and unbind them into the pool, deactivating them.
         for (int i = _activePool.Count - 1; i >= 0; i--)
         {
@@ -118,7 +116,6 @@ public class UserListenerPresenter : AModePresenter
                  currentPos,
                  _userChangerOpen ? currentPos - new Vector3(320, 0, 0) : currentPos + new Vector3(320, 0, 0),
                 0.5f);
-        
 
         AddRemoveUsersButton.interactable = true;
     }
@@ -165,17 +162,25 @@ public class UserListenerPresenter : AModePresenter
         IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
         bool overflowRisk = false;
+        bool isExcludeMode = SwitchButton.GetCurrentChoice() == "Only Match";
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
-            // New part for this class. If this message is not being filtered, skip it.
-            if (!SearchField.IsUserValid(newMessages[i]))
+            YoutubeChatMessage msg = newMessages[i];
+            (bool isValid, bool highlight) = SearchField.IsUserValid(msg);
+
+            // If this message is not being filtered, skip it.
+            if (!isValid && isExcludeMode)
                 continue;
+
+            // Alternatively, highlight picked out users in Highlight mode.
+            if (highlight && !isExcludeMode)
+                msg.Username = $"<color=#{ColorSettings.HighlightMessageColor}>{msg.Username}</color>";
 
             // Do (roughly) accurate waiting for messages, but only if the queue is not overflowing from waiting
             if (Settings.RealTime && !overflowRisk && i < newMessages.Count - 1)
             {
-                float waitTime = (float)newMessages[i].Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
+                float waitTime = (float)msg.Timestamp.Subtract(newMessages[i + 1].Timestamp).TotalSeconds;
 
                 if (totalTimeWaitedSeconds + waitTime < _apiTimer.APIRequestInterval - 0.5f)
                 {
@@ -213,7 +218,7 @@ public class UserListenerPresenter : AModePresenter
 
             _activePool.Add(assignable);
             assignable.transform.SetAsLastSibling();
-            assignable.Bind(newMessages[i], ChatContent);
+            assignable.Bind(msg, ChatContent);
 
             if (Settings.RealTime)
             {

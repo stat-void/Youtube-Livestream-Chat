@@ -7,7 +7,6 @@ using Void.YoutubeAPI.LiveStreamChat.Messages;
 public class KeywordChangeField : MonoBehaviour
 {
     [SerializeField] protected KeywordCollector KeywordCollector;
-    [SerializeField] protected SwitchButton SwitchButton;
     [SerializeField] protected Toggle SuperChatToggle;
     [SerializeField] protected Toggle MembershipToggle;
 
@@ -27,9 +26,6 @@ public class KeywordChangeField : MonoBehaviour
         KeywordCollector.OnDirectKeywordSelection -= OnKeywordClick;
         KeywordCollector.OnKeywordSelection -= OnKeywordSelect;
     }
-
-    public SwitchButton GetSwitchButton()
-        => SwitchButton;
 
     /// <summary> Confirm if the given YoutubeChatMessage matches the requirements for the Keyword Listener. </summary>
     /// <param name="message"> The given YoutubeChatMessage to check for validity. </param>

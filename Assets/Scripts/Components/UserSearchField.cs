@@ -29,22 +29,24 @@ public class UserSearchField : MonoBehaviour
         RemoveSearcher.Close();
     }
 
-    public bool IsUserValid(YoutubeChatMessage message)
+    /// <summary> Find out if the given username of a message is being listened to, and if it should be highlighted. </summary>
+    /// <returns> First boolean is if the check is valid, second boolean is if a SearchField user was found. </returns>
+    public (bool, bool) IsUserValid(YoutubeChatMessage message)
     {
         if (ModToggle.isOn      && (message.AuthorDetails.IsModerator || message.AuthorDetails.IsOwner) ||
             MemberToggle.isOn   &&  message.AuthorDetails.IsMember)
-            return true;
+            return (true, false);
 
         string username = message.Username;
         string id = message.ChannelID;
 
         // If no username exists, return false.
         if (!RemoveSearcher.UsernameIDDict.ContainsKey(username))
-            return false;
+            return (false, false);
 
         // Username exists, check if matching ID exists too
         if (RemoveSearcher.UsernameIDDict[username].Contains(id))
-            return true;
+            return (true, true);
 
         // Matching ID does not exist, check if username with no ID exists
         UserContainer user = RemoveSearcher.FindUnselectedUser(username);
@@ -54,10 +56,10 @@ public class UserSearchField : MonoBehaviour
             user.ID = id;
             user.Highlighted = true;
             RemoveSearcher.RefreshHighlights();
-            return true;
+            return (true, true);
         }
 
-        return false;
+        return (false, false);
     }
 
     /// <summary> Cases where add/remove was done through clicking on a SearchUserItem element. </summary>

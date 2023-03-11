@@ -858,6 +858,7 @@ MonoBehaviour:
   AddRemoveKeywordsButton: {fileID: 1720608401}
   KeywordChangerBox: {fileID: 1870239212}
   KeywordField: {fileID: 751309698}
+  SwitchButton: {fileID: 2238930342081025443}
   ScrollRect: {fileID: 284159758}
   ContentPrefab: {fileID: 4479626613289385164, guid: 67b39ce04551347aa9f0fdabb9ee697c, type: 3}
   ChatContent: {fileID: 284159757}
@@ -875,7 +876,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   KeywordCollector: {fileID: 737403136}
-  SwitchButton: {fileID: 2238930342081025443}
   SuperChatToggle: {fileID: 7580366386204648260}
   MembershipToggle: {fileID: 1995464771}
 --- !u!1001 &754241466

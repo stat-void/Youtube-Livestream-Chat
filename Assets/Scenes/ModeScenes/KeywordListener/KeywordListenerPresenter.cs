@@ -15,6 +15,7 @@ public class KeywordListenerPresenter : AModePresenter
     [SerializeField] protected Button AddRemoveKeywordsButton;
     [SerializeField] protected Transform KeywordChangerBox;
     [SerializeField] protected KeywordChangeField KeywordField;
+    [SerializeField] protected SwitchButton SwitchButton;
 
     [Header("Chat Display")]
     [SerializeField] protected ScrollRect ScrollRect;
@@ -170,8 +171,7 @@ public class KeywordListenerPresenter : AModePresenter
         IEnumerator thisCoroutine = _currentDisplay;
         float totalTimeWaitedSeconds = 0;
         bool overflowRisk = false;
-
-        bool isExcludeMode = KeywordField.GetSwitchButton().GetCurrentChoice() == "Only Match";
+        bool isExcludeMode = SwitchButton.GetCurrentChoice() == "Only Match";
 
         for (int i = newMessages.Count - 1; i >= 0; i--)
         {
