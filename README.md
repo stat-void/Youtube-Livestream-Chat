@@ -51,9 +51,9 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-V3 finished, investigating API V1 and trying to make a video about all of this.
+(Slowly) Making a video about all of this.
 
-- Investigate Youtube Data API V1. Apparently it doesn't need quotas, but it also is deprecated and potentially eventually shut down?
+- Backlog - inverted mode for User/Keyword listeners - to avoid messages from specific users or specific keywords without timing out users, as a way to avoid spoilers?
 - Backlog - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
 - Backlog - Data conversion to JSON has been made, but there was a peculiar timer bug that I want to investigate a bit in terms of reducing Unity dependencies and making a pure C# solution. For some reason, Using a custom timer that does send event notifications upon passing, causes UnityWebRequest to stop working?
 - Backlog - Custom emoji support. Probably a separate view for people to write the command, and then locally upload/associate an image that would replace that command with the image (TMP)

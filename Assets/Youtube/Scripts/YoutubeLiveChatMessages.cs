@@ -100,7 +100,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
             _nextPageToken = "";
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&liveChatId={_chatID}&key={KeyManager.APIKey}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={KeyManager.APIKey}&liveChatId={_chatID}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
                 var request = www.SendWebRequest();
@@ -128,8 +128,8 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
                 int waitTimeMilliseconds = int.Parse(data["pollingIntervalMillis"]);
                 OnIntervalUpdateMilliseconds?.Invoke(waitTimeMilliseconds);
-                Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
-                await Task.Delay(waitTimeMilliseconds);
+                //Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
+                //await Task.Delay(waitTimeMilliseconds);
 
                 Log("Youtube chat initialization done.", false);
             }
@@ -149,7 +149,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                 return;
             }
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&pageToken={_nextPageToken}&liveChatId={_chatID}&key={KeyManager.APIKey}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={KeyManager.APIKey}&liveChatId={_chatID}&pageToken={_nextPageToken}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
 

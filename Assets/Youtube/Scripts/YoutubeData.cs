@@ -29,7 +29,7 @@ namespace Void.YoutubeAPI
                 return;
 
             if (File.Exists(basePath + $"\\{_dataName}"))
-                _data.SaveToFile(basePath + $"\\{_dataName}");
+                File.WriteAllText(basePath + $"\\{_dataName}", _data.ToString());
         }
 
         public static void DeleteData()
@@ -68,11 +68,12 @@ namespace Void.YoutubeAPI
             if (!File.Exists(baseDirectory + $"\\{_dataName}"))
             {
                 _data = JSON.Parse("{}");
-                _data.SaveToFile(baseDirectory + $"\\{_dataName}");
+                File.WriteAllText(baseDirectory + $"\\{_dataName}", _data.ToString());
             }
             else
             {
-                _data = JSONNode.LoadFromFile(baseDirectory + $"\\{_dataName}");
+                string text = File.ReadAllText(baseDirectory + $"\\{_dataName}");
+                _data = JSONNode.Parse(text);
             }
 
             basePath = baseDirectory;
