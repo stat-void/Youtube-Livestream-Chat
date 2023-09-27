@@ -2,13 +2,14 @@ using SimpleJSON;
 using System;
 using System.Globalization;
 using System.Threading;
-using UnityEngine;
 
 namespace Void.YoutubeAPI
 {
     /// <summary> Class that handles the API key as well as quota usage status. </summary>
     public class YoutubeKeyManager
     {
+        private static YoutubeKeyManager Instance;
+
         public event Action<int> OnQuotaUpdate;
         
         public int CurrentQuota { get; private set; }
@@ -16,12 +17,16 @@ namespace Void.YoutubeAPI
         internal string APIKey  { get; private set; }
 
         private Timer _newDayTimer;
-
         private readonly JSONNode _apiData;
 
         public YoutubeKeyManager()
         {
-            _apiData = YoutubeData.GetData();
+            if (Instance == null)
+                Instance = this;
+            else
+                throw new ArgumentException("There should not be more than 1 instance of YoutubeKeyManager. Have you only instantiated one YoutubeDataAPI?");
+
+            _apiData = YoutubeSaveData.GetData();
 
             // If JSON data exists, use it, otherwise set default values.
             CurrentQuota = !string.IsNullOrEmpty(_apiData["YT"]["currentQuota"]) ? _apiData["YT"]["currentQuota"].AsInt : 0;
@@ -85,16 +90,13 @@ namespace Void.YoutubeAPI
         -----------------------
         */
 
-        internal void AddQuota(int change)
+        public static void AddQuota(int change)
         {
             if (change < 0)
-            {
-                Debug.LogWarning("AddQuota - Quotas can't go smaller when they're used.");
                 return;
-            }
 
-            CurrentQuota += change;
-            OnQuotaUpdate?.Invoke(CurrentQuota);
+            Instance.CurrentQuota += change;
+            Instance.OnQuotaUpdate?.Invoke(Instance.CurrentQuota);
         }
 
         private void ResetQuota()

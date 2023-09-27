@@ -13,17 +13,15 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
     ///
     /// Does not require OAuth 2.0 authentication.
     /// </summary>
-    public class YoutubeLiveChatMessages : MonoBehaviour
+    public class YoutubeLiveChatMessages
     {
+
         public static event Action<List<YoutubeChatMessage>> ChatMessages;
         public static event Action<int> OnIntervalUpdateMilliseconds;
         public static event Action<string> Feedback;
 
-        // Quota and APIKey handler
-        public YoutubeKeyManager KeyManager { get; private set; }
-        [SerializeField] public YoutubeAPITimer APITimer;
-
         // Chat ID collected from the video ID and tokens to keep updating chat polls
+        private string _apiKey = "";
         private string _chatID = "";
         private string _nextPageToken = "";
 
@@ -34,29 +32,52 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         // Usernames/Messages to invoke when extracted from polling.
         private List<YoutubeChatMessage> _fullMessages = new List<YoutubeChatMessage>();
 
-        private void Awake()
-        {
-            KeyManager = new YoutubeKeyManager();
 
-            YoutubeAPITimer.OnRequest += GetChatMessages;
+        public YoutubeLiveChatMessages()
+        {
+            YoutubeDataAPI.OnRequest += GetChatMessages;
+            YoutubeDataAPI.OnQuit += QuitCalled;
         }
 
-        private void OnApplicationQuit()
+
+        /// <summary>
+        /// Attempt to connect to a Youtube Livestream Chat
+        /// </summary>
+        /// <param name="videoID">The video ID of the stream to connect to.</param>
+        /// <param name="apiKey"></param>
+        /// <returns>Was the call successful and the explanation for it.</returns>
+        public async Task<(bool, string)> Connect(string videoID, string apiKey)
         {
-            QuitCalled();
+            if (string.IsNullOrWhiteSpace(apiKey))
+                return (false, "No valid API Key provided.");
+
+            _apiKey = apiKey;
+
+            _nextPageToken = "";
+
+            (bool idFetched, string reason) = await GetChatIDAsync(videoID);
+            if (!idFetched)
+                return (idFetched, reason);
+
+            (bool connected, string reason2) = await InitializeChatAsync();
+            return (connected, reason2);
         }
+
 
         /// <summary>
         /// Get the livestream Chat ID based on the given Video ID.
         /// If successful, Chat ID is stored locally in this class.
         /// Youtube API Query - 1 point.
         /// </summary>
-        /// <returns> bool -  Was the call successful? </returns>
-        public async Task<bool> GetChatIDAsync(string videoID)
+        /// <returns>
+        /// bool - Was fetching the Chat ID successful?
+        /// string - Chat ID fetch case explanation.
+        /// </returns>
+        private async Task<(bool, string)> GetChatIDAsync(string videoID)
         {
             _chatID = "";
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&key={KeyManager.APIKey}&id={videoID}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&key={_apiKey}&id={videoID}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
                 var request = www.SendWebRequest();
@@ -64,24 +85,19 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     await Task.Yield();
 
                 if (www.result != UnityWebRequest.Result.Success)
-                {
-                    LogError(www);
-                    return false;
-                }
+                    return (false, GetErrorReason(www));
 
-                KeyManager.AddQuota(1);
+                YoutubeKeyManager.AddQuota(1);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 _chatID = data["items"][0]["liveStreamingDetails"]["activeLiveChatId"];
 
                 if (string.IsNullOrWhiteSpace(_chatID))
-                {
-                    Log("No livestream chat was found on the given video ID. Check if you typed it in correctly.", true);
-                    return false;
-                }
+                    return (false, "No livestream chat was found on the given video ID. Check if you typed it in correctly.");
+                
             }
-            Log("Youtube Chat ID successfully found and stored.", false);
-            return true;
+
+            return (true, "Youtube Chat ID successfully found and stored. Use YoutubeLiveChatMessages.GetChatMessages to get all the messages since the last call.");
         }
 
         /// <summary>
@@ -90,17 +106,15 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         /// Youtube API Query - 5 points.
         /// </summary>
         /// <returns> bool - Was the call successful? </returns>
-        public async Task<bool> InitializeChatAsync()
+        /// >returns> string - Was the call successful? </returns>
+        private async Task<(bool, string)> InitializeChatAsync()
         {
             if (string.IsNullOrWhiteSpace(_chatID))
-            {
-                Log("No Chat ID detected to initialize. use YoutubeLiveStreamChat.GetChatID first.", true);
-                return false;
-            }
+                return (false, "No Chat ID detected to initialize. use YoutubeLiveStreamChat.GetChatID first.");
 
             _nextPageToken = "";
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={KeyManager.APIKey}&liveChatId={_chatID}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={_apiKey}&liveChatId={_chatID}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
                 var request = www.SendWebRequest();
@@ -108,12 +122,9 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
                     await Task.Yield();
 
                 if (www.result != UnityWebRequest.Result.Success)
-                {
-                    LogError(www);
-                    return false;
-                }
+                    return (false, GetErrorReason(www));
 
-                KeyManager.AddQuota(5);
+                YoutubeKeyManager.AddQuota(5);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 JSONNode content = data["items"].AsArray[^1];           // arg[arg.Count - 1]
@@ -128,12 +139,9 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
                 int waitTimeMilliseconds = int.Parse(data["pollingIntervalMillis"]);
                 OnIntervalUpdateMilliseconds?.Invoke(waitTimeMilliseconds);
-                //Log($"Youtube chat initialization successful, waiting required amount of polling interval - {waitTimeMilliseconds}ms.", false);
-                //await Task.Delay(waitTimeMilliseconds);
-
-                Log("Youtube chat initialization done.", false);
             }
-            return true;
+
+            return (true, "Youtube chat initialization successful.");
         }
 
         /// <summary>
@@ -145,11 +153,10 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         {
             if (string.IsNullOrWhiteSpace(_nextPageToken))
             {
-                Log("Chat ID has not been initialized", true);
-                return;
+                throw new MissingFieldException("");
             }
 
-            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={KeyManager.APIKey}&liveChatId={_chatID}&pageToken={_nextPageToken}");
+            Uri URL = new Uri($"https://www.googleapis.com/youtube/v3/liveChat/messages?part=snippet,authorDetails&key={_apiKey}&liveChatId={_chatID}&pageToken={_nextPageToken}");
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
             {
 
@@ -159,14 +166,15 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
                 if (www.result != UnityWebRequest.Result.Success)
                 {
-                    LogError(www);
+                    // String here doesn't need to be returned error, but unless dealing with the too many messages error, the feedback should still be invoked somewhere.
+                    GetErrorReason(www);
+
                     _fullMessages.Clear();
                     ChatMessages?.Invoke(_fullMessages);
-
                     return;
                 }
 
-                KeyManager.AddQuota(5);
+                YoutubeKeyManager.AddQuota(5);
 
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 JSONArray arg = data["items"].AsArray;
@@ -211,7 +219,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             Feedback?.Invoke(message);
         }
 
-        private void LogError(UnityWebRequest www)
+        private string GetErrorReason(UnityWebRequest www)
         {
             UnityWebRequest.Result error = www.result;
 
@@ -222,7 +230,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
             else if (error == UnityWebRequest.Result.DataProcessingError)
             {
-                KeyManager.AddQuota(5);
+                YoutubeKeyManager.AddQuota(5);
                 answer = "Server communication successful, but error processing received data";
             }
 
@@ -231,29 +239,26 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
             else if (error == UnityWebRequest.Result.ProtocolError)
             {
-                KeyManager.AddQuota(5);
+                YoutubeKeyManager.AddQuota(5);
                 JSONNode data = JSON.Parse(www.downloadHandler.text);
                 string cause = data["error"]["errors"].AsArray[0]["message"];
 
                 // This occurs if interval is less than Youtube wants and no messages are found for the first time on this loop.
                 if (cause.Contains("The request was sent too soon after the previous one."))
-                    return;
+                    return "";
 
                 answer = $"{www.error} - {cause}";
             }
-            Debug.LogError(answer);
-            //HTTP/1.1 403 Forbidden - The request cannot be completed because you have exceeded your quota.
+
+            // Example: "HTTP/1.1 403 Forbidden - The request cannot be completed because you have exceeded your quota."
             Feedback?.Invoke(answer);
+            return answer;
         }
 
         private void QuitCalled()
         {
-            YoutubeAPITimer.OnRequest -= GetChatMessages;
-
-            KeyManager.QuitCalled();
-            APITimer.QuitCalled();
-            
-            YoutubeData.SaveData();
+            YoutubeDataAPI.OnRequest -= GetChatMessages;
+            YoutubeDataAPI.OnQuit -= QuitCalled;
         }
     }
 }

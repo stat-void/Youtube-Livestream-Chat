@@ -62,7 +62,7 @@ public class VoteManager : MonoBehaviour
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        _apiTimer = FindObjectOfType<YoutubeDataAPI>().APITimer;
         OnlyPromptToVote.SetIsOnWithoutNotify(true);
     }
 

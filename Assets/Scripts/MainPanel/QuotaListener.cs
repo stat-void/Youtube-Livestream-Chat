@@ -16,7 +16,7 @@ public class QuotaListener : MonoBehaviour
 
     private void Start()
     {
-        _keyManager = FindObjectOfType<YoutubeLiveChatMessages>().KeyManager;
+        _keyManager = FindObjectOfType<YoutubeDataAPI>().KeyManager;
 
         QuotaUsed.text = _keyManager.CurrentQuota.ToString();
         _keyManager.OnQuotaUpdate += OnQuotaUpdate;

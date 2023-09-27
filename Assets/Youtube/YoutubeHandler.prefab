@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2607957321277513236}
-  - component: {fileID: 2607957321277513237}
+  - component: {fileID: 3096886786171220511}
   - component: {fileID: 9032105269338602165}
   m_Layer: 0
   m_Name: YoutubeHandler
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2607957321277513237
+--- !u!114 &3096886786171220511
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2607957321277513256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 761f688acdba4cb419d22d5e1b787929, type: 3}
+  m_Script: {fileID: 11500000, guid: eec75965e3cdf3141a1efdc6da88695e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   APITimer: {fileID: 9032105269338602165}

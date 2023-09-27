@@ -6,7 +6,7 @@ using TMPro;
 
 public class TimerListener : MonoBehaviour
 {
-    [SerializeField] protected YoutubeLiveChatMessages Messager;
+    [SerializeField] protected YoutubeDataAPI Messager;
     [SerializeField] protected SlicedFilledImage TimerFill;
     [SerializeField] protected TMP_Text WaitTimeText;
 

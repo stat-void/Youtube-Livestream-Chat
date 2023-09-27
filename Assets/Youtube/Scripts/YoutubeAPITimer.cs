@@ -71,7 +71,7 @@ namespace Void.YoutubeAPI
         private void Awake()
         {
             YoutubeLiveChatMessages.OnIntervalUpdateMilliseconds += RecommendedWaitUpdate;
-            _apiData = YoutubeData.GetData();
+            _apiData = YoutubeSaveData.GetData();
 
             // If JSON data exists, use it, otherwise set default values.
             _useYTInterval = !string.IsNullOrEmpty(_apiData["YT"]["useInterval"]) ? _apiData["YT"]["useInterval"].AsBool : _useYTIntervalDefault;

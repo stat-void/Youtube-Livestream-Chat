@@ -31,7 +31,7 @@ public class ChatDisplayPresenter : AModePresenter
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        _apiTimer = FindObjectOfType<YoutubeDataAPI>().APITimer;
         NotifyClassReady(this);
     }
 

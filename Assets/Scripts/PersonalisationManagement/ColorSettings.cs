@@ -67,7 +67,7 @@ public class ColorSettings : MonoBehaviour
 
     public void RefreshColors()
     {
-        JSONNode data = YoutubeData.GetData();
+        JSONNode data = YoutubeSaveData.GetData();
         JSONNode colorNode = data["personalisation"]["colors"];
 
         MainColor = !string.IsNullOrEmpty(colorNode["main"])
@@ -156,7 +156,7 @@ public class ColorSettings : MonoBehaviour
 
     public void SaveColors()
     {
-        JSONNode data = YoutubeData.GetData();
+        JSONNode data = YoutubeSaveData.GetData();
         data["personalisation"]["colors"]["main"] = MainColor;
         data["personalisation"]["colors"]["secondary"] = SecondaryColor;
         data["personalisation"]["colors"]["objectBackground"] = ObjectBackgroundColor;

@@ -7,8 +7,8 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
     /// <summary> Container class for the contents of a Youtube chat message. </summary>
     public class YoutubeChatMessage
     {
-        /// <summary> Message type, such as regular text message, Super Chat, Membership etc. </summary>
-        public MessageEventType Type; 
+        /// <summary> What kind of message was found, such as regular text message, Super Chat, Membership etc. </summary>
+        public MessageType Type; 
 
         /// <summary> The ID value of the given user. </summary>
         public string ChannelID;
@@ -71,31 +71,31 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             // Initialization of type-specific fields:
             switch (Type)
             {
-                case MessageEventType.TextMessageEvent:
+                case MessageType.TextMessageEvent:
                     Message = item["snippet"]["displayMessage"];
                     break;
 
-                case MessageEventType.SuperChatEvent:
+                case MessageType.SuperChatEvent:
                     SetupSuperEvent(item, "superChatDetails");
                     break;
 
-                case MessageEventType.SuperStickerEvent:
+                case MessageType.SuperStickerEvent:
                     SetupSuperEvent(item, "superStickerDetails");
                     break;
 
-                case MessageEventType.NewMemberEvent:
+                case MessageType.NewMemberEvent:
                     SetupMemberUpdateEvent(item, "newSponsorDetails");
                     break;
 
-                case MessageEventType.MemberMilestoneChatEvent:
+                case MessageType.MemberMilestoneChatEvent:
                     SetupMemberUpdateEvent(item, "memberMilestoneChatDetails");
                     break;
 
-                case MessageEventType.MembershipGiftingEvent:
+                case MessageType.MembershipGiftingEvent:
                     SetupMemberUpdateEvent(item, "membershipGiftingDetails");
                     break;
 
-                case MessageEventType.GiftMembershipReceivedEvent:
+                case MessageType.GiftMembershipReceivedEvent:
                     SetupMemberUpdateEvent(item, "giftMembershipReceivedDetails");
                     break;
 
@@ -105,24 +105,24 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
             }
         }
 
-        private MessageEventType ParseTypeString(string type)
+        private MessageType ParseTypeString(string type)
         {
             return type switch
             {
-                "textMessageEvent"              => MessageEventType.TextMessageEvent,
-                "superChatEvent"                => MessageEventType.SuperChatEvent,
-                "superStickerEvent"             => MessageEventType.SuperStickerEvent,
-                "newSponsorEvent"               => MessageEventType.NewMemberEvent,
-                "memberMilestoneChatEvent"      => MessageEventType.MemberMilestoneChatEvent,
-                "membershipGiftingEvent"        => MessageEventType.MembershipGiftingEvent,
-                "giftMembershipReceivedEvent"   => MessageEventType.GiftMembershipReceivedEvent,
-                "sponsorOnlyModeStartedEvent"   => MessageEventType.MemberOnlyModeStartedEvent,
-                "sponsorOnlyModeEndedEvent"     => MessageEventType.MemberOnlyModeEndedEvent,
-                "messageDeletedEvent"           => MessageEventType.MessageDeletedEvent,
-                "userBannedEvent"               => MessageEventType.UserBannedEvent,
-                "chatEndedEvent"                => MessageEventType.ChatEndedEvent,
-                "tombstone"                     => MessageEventType.Tombstone,
-                _                               => MessageEventType.Unknown
+                "textMessageEvent"              => MessageType.TextMessageEvent,
+                "superChatEvent"                => MessageType.SuperChatEvent,
+                "superStickerEvent"             => MessageType.SuperStickerEvent,
+                "newSponsorEvent"               => MessageType.NewMemberEvent,
+                "memberMilestoneChatEvent"      => MessageType.MemberMilestoneChatEvent,
+                "membershipGiftingEvent"        => MessageType.MembershipGiftingEvent,
+                "giftMembershipReceivedEvent"   => MessageType.GiftMembershipReceivedEvent,
+                "sponsorOnlyModeStartedEvent"   => MessageType.MemberOnlyModeStartedEvent,
+                "sponsorOnlyModeEndedEvent"     => MessageType.MemberOnlyModeEndedEvent,
+                "messageDeletedEvent"           => MessageType.MessageDeletedEvent,
+                "userBannedEvent"               => MessageType.UserBannedEvent,
+                "chatEndedEvent"                => MessageType.ChatEndedEvent,
+                "tombstone"                     => MessageType.Tombstone,
+                _                               => MessageType.Unknown
             };
         }
 
@@ -212,7 +212,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         public string AmountDisplayString;
         public string Currency;
         public ulong AmountMicros;
-        public int Tier;                    // Tier color, starts at 1 to 7
+        public int Tier;                    // Tier color, goes from 1 to 7
     }
 
     /// <summary> Representation of membership related events. </summary>
@@ -225,7 +225,7 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
         public bool MembershipUpgraded = false;
     }
 
-    public enum MessageEventType
+    public enum MessageType
     {
         TextMessageEvent,               // A user has sent a text message.
 
@@ -259,33 +259,9 @@ namespace Void.YoutubeAPI.LiveStreamChat.Messages
 
 /*
 Chat things that I have never seen, but could be used here:
-https://developers.google.com/youtube/v3/live/docs/liveChatMessages#snippet.type
-
 ----------------------------------------------------------------------
 
 Direct access to polls from Youtube, so you can visualize its results either here, or build your own custom polling
-The main question is, where do you get information on the actual voting contents (question, poll strings) here?
-
-Also note that this information is not available in Youtube's own data set
-
-These should be prompts to recognize that these events were started... But, does the "owner" do these?
-items[].snippet.pollOpenedDetails 	        OBJECT 	
-items[].snippet.pollOpenedDetails.id 	    STRING 	
-items[].snippet.pollOpenedDetails.prompt 	STRING 	
-items[].snippet.pollClosedDetails 	        OBJECT 	
-items[].snippet.pollClosedDetails.pollId 	STRING 	The id of the poll that was closed
-
-
-These events are to directly see what users voted on, or if they edited results... is that possible?
-items[].snippet.pollEditedDetails 	        OBJECT 	
-items[].snippet.pollEditedDetails.id 	    STRING 	
-items[].snippet.pollEditedDetails.prompt 	STRING
-
-items[].snippet.pollVotedDetails 	        OBJECT 	
-items[].snippet.pollVotedDetails.itemId 	STRING 	 The poll item the user chose
-items[].snippet.pollVotedDetails.pollId 	STRING 	 The poll the user voted on
-
-
 {
   "kind": "youtube#liveChatMessage",
   "etag": etag,

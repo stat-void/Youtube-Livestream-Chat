@@ -7,8 +7,9 @@ namespace Void.YoutubeAPI
 {
     /// <summary>
     /// Class to recall the location where data should be stored.
+    /// Note that currently it's only designed to properly address Windows desktop builds.
     /// </summary>
-    public static class YoutubeData
+    public static class YoutubeSaveData
     {
         private static string basePath = "";
         private const string _dataName = "YT_API_Data.json";

@@ -36,8 +36,8 @@ public class SettingsPresenter : AModePresenter
     
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
-        _keyManager = FindObjectOfType<YoutubeLiveChatMessages>().KeyManager;
+        _apiTimer = FindObjectOfType<YoutubeDataAPI>().APITimer;
+        _keyManager = FindObjectOfType<YoutubeDataAPI>().KeyManager;
         _settings = FindObjectOfType<Settings>();
 
         RealTime.isOn = Settings.RealTime;
@@ -126,10 +126,10 @@ public class SettingsPresenter : AModePresenter
 
 
     private void OnAPIKeyDeleteRequest() =>
-        YoutubeData.GetData()["YT"]["apiKey"] = "";
+        YoutubeSaveData.GetData()["YT"]["apiKey"] = "";
 
     private void OnDeleteAllRequest() =>
-        YoutubeData.DeleteData();
+        YoutubeSaveData.DeleteData();
     
         
 }

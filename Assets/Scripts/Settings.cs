@@ -22,7 +22,7 @@ public class Settings : MonoBehaviour
 
     private void Awake()
     {
-        JSONNode apiData = YoutubeData.GetData();
+        JSONNode apiData = YoutubeSaveData.GetData();
 
         _realTime = !string.IsNullOrEmpty(apiData["settings"]["realTime"]) ? apiData["settings"]["realTime"].AsBool : true;
         _animations = !string.IsNullOrEmpty(apiData["settings"]["animations"]) ? apiData["settings"]["animations"].AsBool : true;
@@ -31,12 +31,12 @@ public class Settings : MonoBehaviour
     public void SetRealTime(bool value)
     {
         _realTime = value;
-        YoutubeData.GetData()["settings"]["realTime"] = _realTime ? "true" : "false";
+        YoutubeSaveData.GetData()["settings"]["realTime"] = _realTime ? "true" : "false";
     }
 
     public void SetAnimations(bool value)
     {
         _animations = value;
-        YoutubeData.GetData()["settings"]["animations"] = _animations ? "true" : "false";
+        YoutubeSaveData.GetData()["settings"]["animations"] = _animations ? "true" : "false";
     }
 }

@@ -26,7 +26,7 @@ public class StartupDisplayPresenter : AModePresenter
     [SerializeField] protected TMP_Text FeedbackPlaceHolder;
 
     [Header("Youtube Chat Connectors")]
-    [SerializeField] protected YoutubeLiveChatMessages Chatter;
+    [SerializeField] protected YoutubeDataAPI YTDataAPI;
 
     public override string GetName()
     {
@@ -45,7 +45,7 @@ public class StartupDisplayPresenter : AModePresenter
         ConnectionButton.onClick.AddListener(AttemptInit);
         YoutubeLiveChatMessages.Feedback += OnFeedback;
 
-        if (!string.IsNullOrWhiteSpace(Chatter.KeyManager.APIKey))
+        if (!string.IsNullOrWhiteSpace(YTDataAPI.KeyManager.APIKey))
         {
             API_InputField.placeholder.GetComponent<TMP_Text>().text = "API Key found. Write new if you want to override (Hidden)";
         }
@@ -64,14 +64,10 @@ public class StartupDisplayPresenter : AModePresenter
 
     private async void AttemptInit()
     {
-        Chatter.KeyManager.SetAPIKey(API_InputField.text, SaveAPIKeyToggle.isOn);
+        YTDataAPI.KeyManager.SetAPIKey(API_InputField.text, SaveAPIKeyToggle.isOn);
+        bool success = await YTDataAPI.ConnectToLivestreamChat(VideoID_InputField.text);
 
-        if (!await Chatter.GetChatIDAsync(VideoID_InputField.text))
-            return;
-
-        var res = await Chatter.InitializeChatAsync();
-
-        if (res)
+        if (success)
         {
             ModeManager.ShowAddModeButton();
 

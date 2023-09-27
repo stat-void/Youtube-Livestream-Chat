@@ -40,7 +40,7 @@ public class UserListenerPresenter : AModePresenter
 
     private void Start()
     {
-        _apiTimer = FindObjectOfType<YoutubeLiveChatMessages>().APITimer;
+        _apiTimer = FindObjectOfType<YoutubeDataAPI>().APITimer;
         AddRemoveUsersButton.onClick.AddListener(UpdateUserChanger);
 
         NotifyClassReady(this);

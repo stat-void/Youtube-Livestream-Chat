@@ -364,17 +364,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Image: {fileID: 14182066}
   Type: 0
---- !u!114 &66694242 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2607957321277513237, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
-  m_PrefabInstance: {fileID: 2607957320990867701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 761f688acdba4cb419d22d5e1b787929, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &73725832
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,7 +483,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1076851590}
   m_HandleRect: {fileID: 1076851589}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5023,7 +5012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38f8af3dc32a248de99810aa990a68e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Messager: {fileID: 66694242}
+  Messager: {fileID: 2607957320990867702}
   TimerFill: {fileID: 1881547840}
   WaitTimeText: {fileID: 1013185321}
   PlayButton: {fileID: 507659877}
@@ -5528,7 +5517,7 @@ MonoBehaviour:
   ConnectionButton: {fileID: 1808470321}
   FeedbackField: {fileID: 715306809}
   FeedbackPlaceHolder: {fileID: 487567941}
-  Chatter: {fileID: 66694242}
+  YTDataAPI: {fileID: 2607957320990867702}
 --- !u!1 &1136024438
 GameObject:
   m_ObjectHideFlags: 0
@@ -11006,6 +10995,17 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2067420539986051737, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
+--- !u!114 &2607957320990867702 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3096886786171220511, guid: 21e5f8e6f34bc4d96ba90e2b1e42992d, type: 3}
+  m_PrefabInstance: {fileID: 2607957320990867701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec75965e3cdf3141a1efdc6da88695e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4074293836000709992
 PrefabInstance:
   m_ObjectHideFlags: 0

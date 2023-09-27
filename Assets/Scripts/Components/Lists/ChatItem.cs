@@ -54,7 +54,7 @@ public class ChatItem : AListItem
     private string GetUserColor(YoutubeChatMessage node)
     {
         // Superchat override case
-        if (node.Type == MessageEventType.SuperChatEvent || node.Type == MessageEventType.SuperStickerEvent)
+        if (node.Type == MessageType.SuperChatEvent || node.Type == MessageType.SuperStickerEvent)
         {
             return ColorSettings.UserSuperColors[node.SuperEvent.Tier - 1];
         } 
@@ -77,13 +77,13 @@ public class ChatItem : AListItem
     {
         return node.Type switch
         {
-            MessageEventType.SuperChatEvent     => ColorSettings.MessageSuperColors[node.SuperEvent.Tier - 1],
-            MessageEventType.SuperStickerEvent  => ColorSettings.MessageSuperColors[node.SuperEvent.Tier - 1],
+            MessageType.SuperChatEvent     => ColorSettings.MessageSuperColors[node.SuperEvent.Tier - 1],
+            MessageType.SuperStickerEvent  => ColorSettings.MessageSuperColors[node.SuperEvent.Tier - 1],
 
-            MessageEventType.NewMemberEvent                 => ColorSettings.MemberColor,
-            MessageEventType.MemberMilestoneChatEvent       => ColorSettings.MemberColor,
-            MessageEventType.MembershipGiftingEvent         => ColorSettings.MemberColor,
-            MessageEventType.GiftMembershipReceivedEvent    => ColorSettings.MemberColor,
+            MessageType.NewMemberEvent                 => ColorSettings.MemberColor,
+            MessageType.MemberMilestoneChatEvent       => ColorSettings.MemberColor,
+            MessageType.MembershipGiftingEvent         => ColorSettings.MemberColor,
+            MessageType.GiftMembershipReceivedEvent    => ColorSettings.MemberColor,
             _                                               => ColorSettings.RegularMessageColor,
         };
     }

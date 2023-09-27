@@ -73,7 +73,7 @@ public class PersonalisationManager : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
-        JSONNode data = YoutubeData.GetData();
+        JSONNode data = YoutubeSaveData.GetData();
 
         // Bloom
         if (Volume.profile.TryGet(out _bloom)) 
@@ -213,7 +213,7 @@ public class PersonalisationManager : MonoBehaviour
     /// <summary> Overwrite all personalisation settings to a JSONNode. </summary>
     public void SavePersonalisationData()
     {
-        JSONNode data = YoutubeData.GetData();
+        JSONNode data = YoutubeSaveData.GetData();
         data["personalisation"]["bloom"]["active"]     = _bloom.active ? "true" : "false";
         data["personalisation"]["bloom"]["intensity"]  = _bloom.intensity.value.ToString();
         data["personalisation"]["bloom"]["scatter"]    = _bloom.scatter.value.ToString();

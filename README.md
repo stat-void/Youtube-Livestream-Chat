@@ -4,8 +4,6 @@
 
 Unity and C# implementation of displaying a Youtube livestream chat, as well as additional features that can help with filtering or interactivity. Done with [Youtube Data API V3](https://developers.google.com/youtube/v3/), this can be used as an alternative Youtube chat displayer with a Google API Key and a video ID of the current livestream. Future iterations will give additional functionality that's currently lacking on Youtube.
 
-For an idea on what could be done with this system, [I had an interactive game running every day that has been paused indefinitely for now](https://www.youtube.com/channel/UCRcljlI4ACjc5VWZVr4WdnA).
-
 ***
 
 ## Features
@@ -51,7 +49,8 @@ For more information on quotas and requesting increases to the quota cap (might 
 * Low latency -> 5 to 15 seconds
 
 ## Project Status (Roadmap)
-(Slowly) Making a video about all of this.
+
+If I ever find time to feel like updating this project instead of working on a new one.
 
 - Backlog - inverted mode for User/Keyword listeners - to avoid messages from specific users or specific keywords without timing out users, as a way to avoid spoilers?
 - Backlog - Submenus for the general tab picker - So that all of these ideas can be better grouped? For example, a general option for "chat", that opens a submenu to pick between 3 actual choices - the regular chat, focus mode, or the new keyword listener view?
